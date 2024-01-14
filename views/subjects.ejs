@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Subjects</title>
+</head>
+
+<body>
+
+    <h1>Subjects: </h1>
+    <% subjects.forEach(function(item) { %>
+        <div>
+            <h2>
+                <%= item.name %>
+            </h2>
+            <p>Subject Id:
+                <%= item.id %>
+            </p>
+            <p>Type: <%= item.type %>
+            </p>
+            <div></div>
+        </div>
+        <% }); %>
+
+</body>
+
+</html>

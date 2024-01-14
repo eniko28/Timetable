@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+</head>
+
+<body>
+    <h1>Welcome to the Timetable Planning Website!</h1>
+    <h2>Log in to the site:</h2>
+    <form action="/login" method="POST" enctype="multipart/form-data">
+        <label for="userId">User Id:</label>
+        <input type="text" name="userId"><br>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password"><br>
+
+        <label for="user">User Type:</label>
+        <select name="userTypeLogin" id="user">
+            <option value="Student">Student</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Admin">Admin</option>
+        </select>
+        <br>
+        <input type="submit" value="Login">
+    </form>
+</body>
+
+</html>
