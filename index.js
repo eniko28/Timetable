@@ -11,6 +11,7 @@ import createVertices from "./db/createVertices.js";
 import createEdges from "./db/createEdges.js";
 import createProperties from "./db/createProperties.js";
 import home from "./routes/home.js";
+import userRoutes from "./routes/userRoutes.js";
 import adminMainPage from "./routes/adminMainPage.js";
 
 const app = express();
@@ -36,6 +37,7 @@ setupDatabase()
     app.use("/", teachingRoutes);
     app.use("/", groupRoutes);
     app.use("/", home);
+    app.use("/", userRoutes);
     app.use("/", adminMainPage);
 
     app.listen(port, () => {
