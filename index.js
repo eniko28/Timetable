@@ -10,6 +10,7 @@ import teachingRoutes from "./routes/teachingRoutes.js";
 import createVertices from "./db/createVertices.js";
 import createEdges from "./db/createEdges.js";
 import createProperties from "./db/createProperties.js";
+import home from "./routes/home.js";
 
 const app = express();
 const port = 3000;
@@ -33,6 +34,7 @@ setupDatabase()
     app.use("/", teacherRoutes);
     app.use("/", teachingRoutes);
     app.use("/", groupRoutes);
+    app.use("/", home);
 
     app.listen(port, () => {
       console.log(`App listening at http://localhost:${port}`);

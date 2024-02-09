@@ -69,11 +69,78 @@ function createPropertySubjects(db, className) {
       return Promise.all([
         createPropertyIfNotExists(classObj, "id", "String"),
         createPropertyIfNotExists(classObj, "name", "String"),
-        createPropertyIfNotExists(classObj, "type", "String"),
+        createPropertyIfNotExists(classObj, "type", "Linkset", "SubjectTypes"),
       ]);
     })
     .catch(function (error) {
       console.error("Error creating properties for Subjects:", error);
+    });
+}
+
+function createPropertySubjectTypes(db, className) {
+  return db.class
+    .get(`${className}`)
+    .then(function (classObj) {
+      return Promise.all([
+        createPropertyIfNotExists(classObj, "id", "String"),
+        createPropertyIfNotExists(classObj, "type", "String"),
+      ]);
+    })
+    .then(function (properties) {
+      const subjectTypesData = [
+        { id: "eloadas01", type: "Előadás" },
+        { id: "szeminarium01", type: "Szeminárium" },
+        { id: "labor01", type: "Labor" },
+      ];
+      const subjectTypesPromises = subjectTypesData.map((subjectTypes) => {
+        return createDataIfNotExistsSubjectTypes(
+          db,
+          className,
+          subjectTypes,
+          "id",
+          subjectTypes.id
+        );
+      });
+
+      return Promise.all(subjectTypesPromises);
+    })
+    .catch(function (error) {
+      console.error("Error creating properties for SubjectTypes:", error);
+      return Promise.reject(error); // Propagate error further
+    });
+}
+
+function createDataIfNotExistsSubjectTypes(
+  db,
+  className,
+  data,
+  keyName,
+  keyValue
+) {
+  return db
+    .select()
+    .from(className)
+    .where({ [keyName]: keyValue })
+    .one()
+    .then((existingData) => {
+      if (!existingData) {
+        const insertQuery = `INSERT INTO ${className} SET ${keyName}='${keyValue}', type ='${data.type}'`;
+
+        return db
+          .query(insertQuery)
+          .then(() => {})
+          .catch((error) => {
+            console.error(
+              `Error inserting data: ${JSON.stringify(data)}`,
+              error
+            );
+            return Promise.reject(error);
+          });
+      }
+    })
+    .catch((error) => {
+      console.error("Error checking existing data:", error);
+      return Promise.reject(error);
     });
 }
 
@@ -191,16 +258,25 @@ function createDataIfNotExistsGroups(db, className, data, keyName, keyValue) {
     });
 }
 
-function createPropertyIfNotExists(classObj, propertyName, propertyType) {
+function createPropertyIfNotExists(
+  classObj,
+  propertyName,
+  propertyType,
+  linkedClassName = null
+) {
   return classObj.property
     .get(propertyName)
     .then((existingProperty) => {
       if (existingProperty === null) {
+        const propertyConfig = {
+          name: propertyName,
+          type: propertyType,
+        };
+        if (propertyType === "Linkset" && linkedClassName) {
+          propertyConfig.linkedClass = linkedClassName;
+        }
         return classObj.property
-          .create({
-            name: propertyName,
-            type: propertyType,
-          })
+          .create(propertyConfig)
           .then((createdProperty) => createdProperty);
       }
       return existingProperty;
@@ -215,6 +291,7 @@ function createProperty(db) {
   return Promise.all([
     createPropertyTeachers(db, "Teachers"),
     createPropertySubjects(db, "Subjects"),
+    createPropertySubjectTypes(db, "SubjectTypes"),
     createPropertyGroups(db, "Groups"),
     createPropertyTeachings(db, "Teachings"),
     createPropertyClassroom(db, "Classrooms"),
