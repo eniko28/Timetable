@@ -12,7 +12,7 @@ export async function insertTeaching(
     await db.query(
       `INSERT INTO Teachings SET 
           teachingId = ${teachingId}, 
-          teacherId = ${teacherCode}, 
+          teacherId = '${teacherCode}', 
           subjectId = '${subjectCode}', 
           groupId = '${groupCode}', 
           day = '${day}', 

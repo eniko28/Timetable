@@ -1,7 +1,7 @@
 export async function insertSubject(db, code, name, type) {
   try {
     await db.query(
-      `INSERT INTO Subjects SET id = ${code}, name = '${name}', type = '${type}'`
+      `INSERT INTO Subjects SET id = '${code}', name = '${name}', type = '${type}'`
     );
   } catch (error) {
     console.error("Error inserting subject:", error);

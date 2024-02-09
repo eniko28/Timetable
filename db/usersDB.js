@@ -2,7 +2,7 @@ export async function insertUsers(db, userName, userId, password, type) {
   try {
     await db.query(
       `INSERT INTO Users SET 
-              userId = ${userId}, 
+              userId = '${userId}', 
               name = '${userName}', 
               password = '${password}',
               type = '${type}' 

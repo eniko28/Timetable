@@ -1,7 +1,7 @@
 export async function insertTeacherNameAndId(db, teacherCode, name) {
   try {
     await db.query(
-      `INSERT INTO Teachers SET id = ${teacherCode}, name = '${name}'`
+      `INSERT INTO Teachers SET id = '${teacherCode}', name = '${name}'`
     );
   } catch (error) {
     console.error("Error inserting teacher:", error);

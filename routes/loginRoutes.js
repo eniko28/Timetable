@@ -53,13 +53,14 @@ router.post("/login", async (req, res) => {
     } else {
       const users = await usersDB.getAllUserIds(db, userId);
 
-      const exists = users.indexOf(parseInt(userId, 10)) !== -1;
+      const exists = users.includes(userId);
       if (!exists) {
         res.status(400).render("error", {
           message: "No user registered with the provided id!",
         });
         return;
       }
+
       const typeFromDatabase = await usersDB.getType(db, userId);
 
       if (typeFromDatabase !== type) {
