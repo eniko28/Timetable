@@ -77,7 +77,11 @@ router.post("/login", async (req, res) => {
           expiresIn: "356d",
         });
         res.cookie("Token", token);
-        res.render("addSubjects.ejs");
+        res.render("admin.ejs", { userId });
+      } else {
+        res.status(400).render("error", {
+          message: "Wrong password!",
+        });
       }
     }
   } catch (err) {

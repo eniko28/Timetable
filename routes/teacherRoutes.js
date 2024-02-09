@@ -19,7 +19,6 @@ setupDatabase()
 router.get("/addTeachers", async (req, res) => {
   try {
     const teachers = await usersDB.getTeachers(db);
-    console.log(teachers);
     res.render("addTeachers", { teachers });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);

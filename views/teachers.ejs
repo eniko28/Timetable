@@ -17,9 +17,11 @@
             <p>Teacher Id:
                 <%= item.id %>
             </p>
-            <p>Subject Id: <%= item.subjectId %>
-            </p>
-            <div></div>
+            <% if (item.subjectId) { %>
+                <p>Subject Id: <%= item.subjectId %>
+                </p>
+                <% } %>
+                    <div></div>
         </div>
         <% }); %>
 
