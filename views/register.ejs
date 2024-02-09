@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8" />
     <title>User</title>
+    <link rel="stylesheet" href="adminStyle.css">
 </head>
 
 <body>
-    <h1>Welcome to the Timetable Planning Website!</h1>
-    <h2>Register to the page! </h2>
+    <h2>Register a new user to the page! </h2>
     <form action="/register" method="POST" enctype="multipart/form-data">
         <label for="name">Name:</label>
         <input type="text" name="name"><br>
@@ -17,7 +17,7 @@
         <input type="password" name="password"><br>
 
         <label for="userId">User Id:</label>
-        <input type="userId" name="userId"><br>
+        <input type="userId" name="userId"><br> <br>
 
         <label for="type">User Type:</label>
         <select id="type" name="type">

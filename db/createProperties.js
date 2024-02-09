@@ -88,9 +88,9 @@ function createPropertySubjectTypes(db, className) {
     })
     .then(function (properties) {
       const subjectTypesData = [
-        { id: "eloadas01", type: "Előadás" },
-        { id: "szeminarium01", type: "Szeminárium" },
-        { id: "labor01", type: "Labor" },
+        { id: "course01", type: "Course" },
+        { id: "seminar01", type: "Seminar" },
+        { id: "laboratory01", type: "Laboratory" },
       ];
       const subjectTypesPromises = subjectTypesData.map((subjectTypes) => {
         return createDataIfNotExistsSubjectTypes(

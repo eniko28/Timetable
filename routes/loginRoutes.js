@@ -1,7 +1,7 @@
 import express from "express";
+import session from "express-session";
 import setupDatabase from "../db/dbSetup.js";
 import dotenv from "dotenv";
-import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import * as usersDB from "../db/usersDB.js";
@@ -10,9 +10,11 @@ const router = express.Router();
 
 router.use(express.urlencoded({ extended: true }));
 
-router.use(cookieParser());
 let db;
 
+dotenv.config();
+const secret = process.env.SECRET;
+
 setupDatabase()
   .then((database) => {
     db = database;
@@ -30,6 +32,14 @@ setupDatabase()
     console.error("Error setting up database:", error);
     process.exit(1);
   });
+
+router.use(
+  session({
+    secret: secret,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 router.get("/", (req, res) => {
   try {
@@ -38,9 +48,6 @@ router.get("/", (req, res) => {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
-
-dotenv.config();
-const secret = process.env.SECRET;
 
 router.post("/login", async (req, res) => {
   const password = req.fields.password;
@@ -74,11 +81,15 @@ router.post("/login", async (req, res) => {
       const match = await bcrypt.compare(password, passwordFromDatabase);
 
       if (match) {
+        req.session.userId = userId;
+        req.session.type = type;
+
         const token = jwt.sign({ userId, type }, secret, {
           expiresIn: "356d",
         });
-        res.cookie("Token", token);
-        res.render("admin.ejs", { userId });
+        if (type === "Admin") {
+          res.redirect("/admin");
+        }
       } else {
         res.status(400).render("error", {
           message: "Wrong password!",

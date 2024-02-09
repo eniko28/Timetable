@@ -1,0 +1,27 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #E4D2BA;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 50px;
+    color: #72542D;
+}
+
+h4 {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#username {
+    font-weight: bold;
+    color: #A0763F;
+}
+
+#usertype {
+    font-style: italic;
+    color: #A0763F; 
+}

@@ -41,7 +41,7 @@ router.post("/addSubjects", async (req, res) => {
 
     await subjectsDB.insertSubject(db, code, name, type);
 
-    res.redirect("/subjects");
+    res.redirect("/addSubjects");
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }
