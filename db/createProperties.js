@@ -67,7 +67,7 @@ function createPropertySubjects(db, className) {
     .get(`${className}`)
     .then(function (classObj) {
       return Promise.all([
-        createPropertyIfNotExists(classObj, "id", "Integer"),
+        createPropertyIfNotExists(classObj, "id", "String"),
         createPropertyIfNotExists(classObj, "name", "String"),
         createPropertyIfNotExists(classObj, "type", "String"),
       ]);
@@ -82,7 +82,7 @@ function createPropertyTeachers(db, className) {
     .get(`${className}`)
     .then(function (classObj) {
       return Promise.all([
-        createPropertyIfNotExists(classObj, "id", "Integer"),
+        createPropertyIfNotExists(classObj, "id", "String"),
         createPropertyIfNotExists(classObj, "name", "String"),
         createPropertyIfNotExists(classObj, "subjectId", "Integer"),
       ]);
@@ -98,8 +98,8 @@ function createPropertyTeachings(db, className) {
     .then(function (classObj) {
       return Promise.all([
         createPropertyIfNotExists(classObj, "teachingId", "Integer"),
-        createPropertyIfNotExists(classObj, "teacherId", "Integer"),
-        createPropertyIfNotExists(classObj, "subjectId", "Integer"),
+        createPropertyIfNotExists(classObj, "teacherId", "String"),
+        createPropertyIfNotExists(classObj, "subjectId", "String"),
         createPropertyIfNotExists(classObj, "groupId", "Integer"),
         createPropertyIfNotExists(classObj, "day", "String"),
         createPropertyIfNotExists(classObj, "start", "String"),
@@ -115,7 +115,7 @@ function createPropertyUser(db, className) {
     .get(`${className}`)
     .then(function (classObj) {
       return Promise.all([
-        createPropertyIfNotExists(classObj, "userId", "Integer"),
+        createPropertyIfNotExists(classObj, "userId", "String"),
         createPropertyIfNotExists(classObj, "name", "String"),
         createPropertyIfNotExists(classObj, "password", "String"),
         createPropertyIfNotExists(classObj, "type", "String"),
@@ -123,8 +123,8 @@ function createPropertyUser(db, className) {
     })
     .then(function (property) {
       const userData = {
-        userId: 1,
-        name: "admin01",
+        userId: "admin01",
+        name: "Admin",
         password:
           "$2b$10$PWTYAlbeqyHwbbMxgrGsB.kgk.IeukIce0dcAMkRjfY861u8iHLRS",
         type: "Admin",
@@ -135,7 +135,7 @@ function createPropertyUser(db, className) {
         className,
         userData,
         "userId",
-        userData.userId
+        "admin01"
       );
     })
     .catch(function (error) {
@@ -151,7 +151,7 @@ function createDataIfNotExists(db, className, data, keyName, keyValue) {
     .one()
     .then((existingData) => {
       if (!existingData) {
-        const insertQuery = `INSERT INTO ${className} SET ${keyName}=${keyValue}, name='${data.name}', password='${data.password}', type='${data.type}'`;
+        const insertQuery = `INSERT INTO ${className} SET userId='${keyValue}', name='${data.name}', password='${data.password}', type='${data.type}'`;
 
         return db
           .query(insertQuery)
