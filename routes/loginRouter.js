@@ -89,6 +89,10 @@ router.post("/login", async (req, res) => {
         });
         if (type === "Admin") {
           res.redirect("/admin");
+        } else {
+          if (type === "Teacher") {
+            res.redirect("/teacher");
+          }
         }
       } else {
         res.status(400).render("error", {

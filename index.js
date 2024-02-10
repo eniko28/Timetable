@@ -3,7 +3,6 @@ import setupDatabase from "./db/dbSetup.js";
 import formidable from "express-formidable";
 import subjectRoutes from "./routes/subjectRouter.js";
 import groupRoutes from "./routes/groupRouter.js";
-import teacherRoutes from "./routes/teacherRouter.js";
 import loginRoutes from "./routes/loginRouter.js";
 import registerRoutes from "./routes/registerRouter.js";
 import teachingRoutes from "./routes/teachingRouter.js";
@@ -12,7 +11,10 @@ import createEdges from "./db/createEdges.js";
 import createProperties from "./db/createProperties.js";
 import home from "./routes/homeRouter.js";
 import userRoutes from "./routes/userRouter.js";
-import adminMainPage from "./routes/adminRouter.js";
+import assignTeacherRouter from "./routes/assignTeacherRouter.js";
+import assignGroupRouter from "./routes/assignGroupRouter.js";
+import adminRouter from "./routes/adminRouter.js";
+import teacherRouter from "./routes/teacherRouter.js";
 
 const app = express();
 const port = 3000;
@@ -33,12 +35,14 @@ setupDatabase()
     app.use("/", registerRoutes);
     app.use("/", loginRoutes);
     app.use("/", subjectRoutes);
-    app.use("/", teacherRoutes);
     app.use("/", teachingRoutes);
     app.use("/", groupRoutes);
     app.use("/", home);
     app.use("/", userRoutes);
-    app.use("/", adminMainPage);
+    app.use("/", assignTeacherRouter);
+    app.use("/", assignGroupRouter);
+    app.use("/", adminRouter);
+    app.use("/", teacherRouter);
 
     app.listen(port, () => {
       console.log(`App listening at http://localhost:${port}`);

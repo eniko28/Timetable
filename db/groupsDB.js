@@ -21,3 +21,14 @@ export async function getGroupById(db, groupId) {
     throw error;
   }
 }
+
+export async function insertGroupSubjectId(db, groupCode, subjectCode) {
+  try {
+    await db.query(
+      `UPDATE Groups ADD subjectId = ['${subjectCode}'] WHERE id = '${groupCode}'`
+    );
+  } catch (error) {
+    console.error("Error inserting subjectId into Groups:", error);
+    throw error;
+  }
+}

@@ -20,6 +20,7 @@ function createPropertyGroups(db, className) {
       return Promise.all([
         createPropertyIfNotExists(classObj, "id", "Integer"),
         createPropertyIfNotExists(classObj, "gradeLevel", "Integer"),
+        createPropertyIfNotExists(classObj, "subjectId", "EmbeddedList"),
       ]);
     })
     .then(function (properties) {
@@ -151,7 +152,7 @@ function createPropertyTeachers(db, className) {
       return Promise.all([
         createPropertyIfNotExists(classObj, "id", "String"),
         createPropertyIfNotExists(classObj, "name", "String"),
-        createPropertyIfNotExists(classObj, "subjectId", "Integer"),
+        createPropertyIfNotExists(classObj, "subjectId", "EmbeddedList"),
       ]);
     })
     .catch(function (error) {

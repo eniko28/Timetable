@@ -21,55 +21,27 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/addTeachings", async (req, res) => {
+router.get("/assignGroup", async (req, res) => {
   try {
-    const id = req.session.userId;
-    const subjects = await teacherDB.getTeacherSubjects(db, id);
     const groups = await groupDB.getAllGroups(db);
-    res.render("addTeachings", { id, subjects, groups });
+    const subjects = await subjectDB.getAllSubjects(db);
+    res.render("assignGroup", { groups, subjects });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
 
-router.post("/addTeachings", async (req, res) => {
+router.post("/assignGroup", async (req, res) => {
   try {
-    const { teachingId, teacherCode, subjectCode, groupCode, day, start, end } =
-      req.fields;
+    const { groupCode, subjectCode } = req.fields;
 
-    if (
-      !teachingId ||
-      !teacherCode ||
-      !groupCode ||
-      !subjectCode ||
-      !day ||
-      !start ||
-      !end
-    ) {
+    if (!groupCode || !subjectCode) {
       return res.status(400).send("Missing required data.");
     }
 
-    await teachingDB.insertTeaching(
-      db,
-      teachingId,
-      teacherCode,
-      groupCode,
-      subjectCode,
-      day,
-      start,
-      end
-    );
+    await groupDB.insertGroupSubjectId(db, groupCode, subjectCode);
 
-    const teacher = await teacherDB.getTeacherById(db, teacherCode);
-    const group = await groupDB.getGroupById(db, groupCode);
-    const teachings = await teachingDB.getTeachingById(db, teachingId);
-    const subject = await subjectDB.getSubjectById(db, subjectCode);
-
-    createEdgeTeacherTeachings(db, teacher, teachings);
-    createEdgeGroupTeachings(db, group, teachings);
-    createEdgesSubjectTeachings(db, subject, teachings);
-
-    res.redirect("/teachings");
+    res.redirect("/assignGroup");
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }

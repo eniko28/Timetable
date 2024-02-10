@@ -32,15 +32,17 @@ router.post("/addSubjects", async (req, res) => {
     }
 
     const existingSubject = await subjectsDB.getSubjectById(db, code);
+    const existingNameAndType = await subjectsDB.getAllSubjectsByNameAndType(
+      db,
+      name,
+      type
+    );
 
-    if (existingSubject) {
-      return res
-        .status(409)
-        .send("Subject with the provided id already exists.");
+    if (existingSubject !== undefined || existingNameAndType.length !== 0) {
+      return res.status(409).send("Subject already exists.");
     }
 
     await subjectsDB.insertSubject(db, code, name, type);
-
     res.redirect("/addSubjects");
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);

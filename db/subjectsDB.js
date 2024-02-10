@@ -1,4 +1,8 @@
-import { getSubjectType, getTypesByRID } from "./subjectTypes.js";
+import {
+  getSubjectType,
+  getTypesByRID,
+  getRIDByNameAndType,
+} from "./subjectTypes.js";
 
 export async function insertSubject(db, code, name, type) {
   try {
@@ -36,15 +40,34 @@ export async function getAllSubjects(db) {
   }
 }
 
+export async function getAllSubjectsByNameAndType(db, name, type) {
+  try {
+    const typeFromDb = await getRIDByNameAndType(db, type);
+    const subjects = await db.query(
+      `SELECT FROM Subjects WHERE name = '${name}' AND type = ${typeFromDb.rid.toString()}`
+    );
+
+    for (let subject of subjects) {
+      const result = await getTypesByRID(db, subject.type.toString());
+      subject.type = result.type;
+    }
+
+    return subjects;
+  } catch (error) {
+    console.error("Error getting subjects from the database:", error);
+    throw error;
+  }
+}
+
 export async function getSubjectById(db, subjectId) {
   try {
-    const group = await db
+    const subject = await db
       .select()
       .from("Subjects")
       .where({ id: subjectId })
       .one();
 
-    return group;
+    return subject;
   } catch (error) {
     console.error(
       `Error getting subject with ID ${subjectId} from the database:`,

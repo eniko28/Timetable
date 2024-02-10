@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Assign teachers to subjects</title>
+    <link rel="stylesheet" href="adminStyle.css">
+</head>
+
+<body>
+    <div>
+        <h1>Assign teachers to subjects!</h1>
+        <form action="/assignTeacher" method="POST" enctype="multipart/form-data">
+
+            <label for="teacherCode">Teacher Id:</label>
+            <select id="teacherCode" name="teacherCode">
+                <% teachers.forEach(function(item) { %>
+                    <option value="<%= item.id %>">
+                        <%= item.id %>
+                    </option>
+                    <% }); %>
+            </select> <br>
+
+            <label for="subjectCode">Subject Id:</label>
+            <select id="subjectCode" name="subjectCode">
+                <% subjects.forEach(function(item) { %>
+                    <option value="<%= item.id %>">
+                        <%= item.id %>
+                    </option>
+                    <% }); %>
+            </select> <br>
+
+
+            <input class="submit-button" type="submit" value="Assign teacher">
+        </form>
+    </div>
+    <a href="/admin" class="back-button">Back</a>
+</body>
+
+</html>

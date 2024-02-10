@@ -17,21 +17,21 @@
 
             <label for="teacherCode">Teacher Id:</label>
             <select id="teacherCode" name="teacherCode">
-                <% teachers.forEach(function(item) { %>
-                    <option value="<%= item.id %>">
-                        <%= item.id %>
-                    </option>
-                    <% }); %>
+                <option value="<%= id %>">
+                    <%= id %>
+                </option>
+            </select>
             </select> <br>
 
             <label for="subjectCode">Subject Id:</label>
             <select id="subjectCode" name="subjectCode">
-                <% subjects.forEach(function(item) { %>
-                    <option value="<%= item.id %>">
-                        <%= item.id %>
+                <% subjects[0].subjectId.forEach(function(subject) { %>
+                    <option value="<%= subject %>">
+                        <%= subject %>
                     </option>
                     <% }); %>
             </select> <br>
+
 
             <label for="groupCode">Group Id:</label>
             <select id="groupCode" name="groupCode">

@@ -12,7 +12,7 @@ export async function insertTeacherNameAndId(db, teacherCode, name) {
 export async function insertTeachersSubjectId(db, teacherCode, subjectCode) {
   try {
     await db.query(
-      `UPDATE Teachers SET subjectId = '${subjectCode}' WHERE id = '${teacherCode}'`
+      `UPDATE Teachers ADD subjectId = '${subjectCode}' WHERE id = '${teacherCode}'`
     );
   } catch (error) {
     console.error("Error inserting teacher:", error);
@@ -44,6 +44,26 @@ export async function getTeacherById(db, teacherId) {
   } catch (error) {
     console.error(
       `Error getting teacher with ID ${teacherId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}
+
+export async function getTeacherSubjects(db, teacherId) {
+  try {
+    const subjects = await db
+      .select("subjectId")
+      .from("Teachers")
+      .where({
+        id: teacherId,
+      })
+      .all();
+
+    return subjects;
+  } catch (error) {
+    console.error(
+      `Error getting subjects for teacher with ID ${teacherId} from the database:`,
       error
     );
     throw error;
