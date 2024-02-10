@@ -4,15 +4,19 @@
 <head>
     <meta charset="UTF-8" />
     <title>Subjects</title>
-    <link rel="stylesheet" href="subjectsStyle.css">
+    <link rel="stylesheet" href="adminStyle.css">
 </head>
 
 <body>
 
     <h1>Introduced subjects: </h1>
+    <div class="filter-container">
+        <label for="subjectNameFilter">Filter by Subject Name:</label>
+        <input type="text" id="subjectNameFilter" class="filter" placeholder="Enter subject name...">
+    </div>
     <div class="container">
         <% subjects.sort((a, b)=> a.name.localeCompare(b.name)).forEach(function(item) { %>
-            <div class="sub-cont">
+            <div class="sub-cont" data-name="<%= item.name %>">
                 <h2>
                     <%= item.name %>
                 </h2>
@@ -26,7 +30,8 @@
             <% }); %>
     </div>
 
-
+    <script src="filterSubjects.js" defer></script>
+    <a href="/admin" class="back-button">Back</a>
 </body>
 
 </html>

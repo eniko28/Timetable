@@ -7,13 +7,14 @@ body {
 
 h1, h2 {
     text-align: center;
+    color: #72542D;
     margin-top: 20px;
 }
 
 form {
     width: 300px;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: #F4E5D3;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -22,6 +23,7 @@ form {
 label {
     display: block;
     margin-bottom: 5px;
+    color: #72542D;
 }
 
 input[type="text"],
@@ -33,6 +35,7 @@ select {
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
+    color: #72542D
 }
 
 input[type="submit"] {

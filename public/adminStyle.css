@@ -8,6 +8,23 @@ body {
 h1, h2 {
     text-align: center;
     color: #72542D;
+    margin-bottom: 20px;
+
+}
+
+h4 {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#username {
+    font-weight: bold;
+    color: #A0763F;
+}
+
+#usertype {
+    font-style: italic;
+    color: #A0763F; 
 }
 
 form {
@@ -28,8 +45,20 @@ label {
 input[type="text"],
 input[type="password"],
 input[type="userId"],
+input[id="type"],
 select {
     width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    color: #72542D
+}
+
+input[class="filter"], 
+select.filter {
+    width: 45%;
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
@@ -51,4 +80,98 @@ select {
 
 .submit-button:hover {
     background-color: #72542D;
+}
+
+.sub-cont {
+    width: calc(33.33% - 20px);
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    box-sizing: border-box;
+    transition: transform 0.3s ease;
+}
+
+.sub-cont:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.sub-cont h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #72542D;
+}
+
+.sub-cont p {
+    margin: 0;
+    color: #A0763F;
+}
+
+.filter-container label {
+    font-size: 18px;
+    color: #72542D;
+    margin-right: 10px;
+}
+
+.filter-container select {
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #72542D;
+    transition: border-color 0.3s ease;
+}
+
+.filter-container select:hover {
+    border-color: #A0763F;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+.filter-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.navbar {
+    background-color: #D2B48C;
+    overflow: hidden;
+}
+
+
+.navbar button {
+    float: left;
+    display: block;
+    color: #D2B48C;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+a.back-button {
+    position: fixed; 
+    top: 20px; 
+    left: 20px; 
+    background-color: #72542D; 
+    color: white; 
+    padding: 10px 20px; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    transition: background-color 0.3s ease; 
+}
+
+a.back-button:hover {
+    background-color: #A0763F; 
 }

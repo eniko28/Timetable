@@ -4,15 +4,24 @@
 <head>
     <meta charset="UTF-8" />
     <title>Subjects</title>
-    <link rel="stylesheet" href="subjectsStyle.css">
+    <link rel="stylesheet" href="adminStyle.css">
 </head>
 
 <body>
 
     <h1>Registered users: </h1>
+    <div class="filter-container">
+        <label for="userTypeFilter">Filter by User Type:</label>
+        <select id="userTypeFilter" class="filter">
+            <option value="all">All Users</option>
+            <option value="Teacher">Teachers Only</option>
+            <option value="Student">Students Only</option>
+        </select>
+    </div>
+
     <div class="container">
         <% users.sort((a, b)=> a.name.localeCompare(b.name)).forEach(function(item) { %>
-            <div class="sub-cont">
+            <div class="sub-cont user-type-<%= item.type %>">
                 <h2>
                     <%= item.name %>
                 </h2>
@@ -26,6 +35,8 @@
             <% }); %>
     </div>
 
+    <script src="filterUsers.js" defer></script>
+    <a href="/admin" class="back-button">Back</a>
 
 </body>
 
