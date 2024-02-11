@@ -111,40 +111,6 @@ function createPropertySubjectTypes(db, className) {
     });
 }
 
-function createDataIfNotExistsSubjectTypes(
-  db,
-  className,
-  data,
-  keyName,
-  keyValue
-) {
-  return db
-    .select()
-    .from(className)
-    .where({ [keyName]: keyValue })
-    .one()
-    .then((existingData) => {
-      if (!existingData) {
-        const insertQuery = `INSERT INTO ${className} SET ${keyName}='${keyValue}', type ='${data.type}'`;
-
-        return db
-          .query(insertQuery)
-          .then(() => {})
-          .catch((error) => {
-            console.error(
-              `Error inserting data: ${JSON.stringify(data)}`,
-              error
-            );
-            return Promise.reject(error);
-          });
-      }
-    })
-    .catch((error) => {
-      console.error("Error checking existing data:", error);
-      return Promise.reject(error);
-    });
-}
-
 function createPropertyTeachers(db, className) {
   return db.class
     .get(`${className}`)
@@ -165,7 +131,7 @@ function createPropertyTeachings(db, className) {
     .get(`${className}`)
     .then(function (classObj) {
       return Promise.all([
-        createPropertyIfNotExists(classObj, "teachingId", "Integer"),
+        createPropertyIfNotExists(classObj, "teachingId", "String"),
         createPropertyIfNotExists(classObj, "teacherId", "String"),
         createPropertyIfNotExists(classObj, "subjectId", "String"),
         createPropertyIfNotExists(classObj, "groupId", "Integer"),
@@ -298,6 +264,40 @@ function createProperty(db) {
     createPropertyClassroom(db, "Classrooms"),
     createPropertyUser(db, "Users"),
   ]);
+}
+
+function createDataIfNotExistsSubjectTypes(
+  db,
+  className,
+  data,
+  keyName,
+  keyValue
+) {
+  return db
+    .select()
+    .from(className)
+    .where({ [keyName]: keyValue })
+    .one()
+    .then((existingData) => {
+      if (!existingData) {
+        const insertQuery = `INSERT INTO ${className} SET ${keyName}='${keyValue}', type ='${data.type}'`;
+
+        return db
+          .query(insertQuery)
+          .then(() => {})
+          .catch((error) => {
+            console.error(
+              `Error inserting data: ${JSON.stringify(data)}`,
+              error
+            );
+            return Promise.reject(error);
+          });
+      }
+    })
+    .catch((error) => {
+      console.error("Error checking existing data:", error);
+      return Promise.reject(error);
+    });
 }
 
 export default createProperty;

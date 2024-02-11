@@ -9,7 +9,8 @@
     "express-formidable": "^1.2.0",
     "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
-    "orientjs": "^3.2.0"
+    "orientjs": "^3.2.0",
+    "uuid": "^9.0.1"
   },
   "scripts": {
     "start": "nodemon index.js"

@@ -7,6 +7,7 @@ import { createEdgeTeacherTeachings } from "../db/createEdges.js";
 import { createEdgeGroupTeachings } from "../db/createEdges.js";
 import { createEdgesSubjectTeachings } from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
+import { v4 as uuidv4 } from "uuid";
 
 const router = express.Router();
 
@@ -34,20 +35,27 @@ router.get("/addTeachings", async (req, res) => {
 
 router.post("/addTeachings", async (req, res) => {
   try {
-    const { teachingId, teacherCode, subjectCode, groupCode, day, start, end } =
-      req.fields;
+    const { teacherCode, subjectCode, groupCode, day, start, end } = req.fields;
 
-    if (
-      !teachingId ||
-      !teacherCode ||
-      !groupCode ||
-      !subjectCode ||
-      !day ||
-      !start ||
-      !end
-    ) {
+    if (!teacherCode || !groupCode || !subjectCode || !day || !start || !end) {
       return res.status(400).send("Missing required data.");
     }
+
+    const timeFormat = /^(?:0[89]|1[0-9]|20):[0-5][0-9]$/;
+    if (!start.match(timeFormat) || !end.match(timeFormat)) {
+      return res
+        .status(400)
+        .send("Invalid time format. Please use HH:mm between 8:00 and 20:00.");
+    }
+
+    const startTime = new Date(`2000-01-01T${start}:00Z`);
+    const endTime = new Date(`2000-01-01T${end}:00Z`);
+
+    if (startTime > endTime) {
+      return res.status(400).send("Start time must be before end time.");
+    }
+
+    const teachingId = uuidv4();
 
     await teachingDB.insertTeaching(
       db,
@@ -69,7 +77,7 @@ router.post("/addTeachings", async (req, res) => {
     createEdgeGroupTeachings(db, group, teachings);
     createEdgesSubjectTeachings(db, subject, teachings);
 
-    res.redirect("/teachings");
+    res.redirect("/addTeachings");
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }

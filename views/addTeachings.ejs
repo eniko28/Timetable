@@ -4,16 +4,13 @@
 <head>
     <meta charset="UTF-8" />
     <title>Add Teachings</title>
+    <link rel="stylesheet" href="teacherStyle.css">
 </head>
 
 <body>
     <div>
         <h1>Add a new teaching!</h1>
         <form action="/addTeachings" method="POST" enctype="multipart/form-data">
-
-
-            <label for="teachingId">Teaching Id:</label>
-            <input type="number" name="teachingId"><br>
 
             <label for="teacherCode">Teacher Id:</label>
             <select id="teacherCode" name="teacherCode">
@@ -57,9 +54,10 @@
             <label for="end">End:</label>
             <input type="text" name="end" placeholder="HH:mm"><br>
 
-            <input class="submit-button" type="submit" value="Add Teaching">
+            <input class="submit-button" type="submit" value="Send">
         </form>
     </div>
+    <a href="/teacher" class="back-button">Back</a>
 </body>
 
 </html>
