@@ -1,11 +1,7 @@
 import express from "express";
 import * as teachingDB from "../db/teachingsDB.js";
-import * as teacherDB from "../db/teachersDB.js";
 import * as subjectDB from "../db/subjectsDB.js";
 import * as groupDB from "../db/groupsDB.js";
-import { createEdgeTeacherTeachings } from "../db/createEdges.js";
-import { createEdgeGroupTeachings } from "../db/createEdges.js";
-import { createEdgesSubjectTeachings } from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
 
 const router = express.Router();
