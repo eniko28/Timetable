@@ -5,7 +5,7 @@ import subjectRouter from "./routes/subjectRouter.js";
 import groupRouter from "./routes/groupRouter.js";
 import loginRouter from "./routes/loginRouter.js";
 import registerRouter from "./routes/registerRouter.js";
-import teachingRouter from "./routes/teachingRouter.js";
+import wishlistRouter from "./routes/wishlistRouter.js";
 import createVertices from "./db/createVertices.js";
 import createEdges from "./db/createEdges.js";
 import createProperties from "./db/createProperties.js";
@@ -15,6 +15,8 @@ import assignTeacherRouter from "./routes/assignTeacherRouter.js";
 import assignGroupRouter from "./routes/assignGroupRouter.js";
 import adminRouter from "./routes/adminRouter.js";
 import teacherRouter from "./routes/teacherRouter.js";
+import logout from "./routes/logout.js";
+import wishlist from "./routes/wishlist.js";
 
 const app = express();
 const port = 3000;
@@ -35,7 +37,7 @@ setupDatabase()
     app.use("/", registerRouter);
     app.use("/", loginRouter);
     app.use("/", subjectRouter);
-    app.use("/", teachingRouter);
+    app.use("/", wishlistRouter);
     app.use("/", groupRouter);
     app.use("/", homeRouter);
     app.use("/", userRouter);
@@ -43,6 +45,8 @@ setupDatabase()
     app.use("/", assignGroupRouter);
     app.use("/", adminRouter);
     app.use("/", teacherRouter);
+    app.use("/", logout);
+    app.use("/", wishlist);
 
     app.listen(port, () => {
       console.log(`App listening at http://localhost:${port}`);

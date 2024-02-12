@@ -2,7 +2,7 @@ import {
   getSubjectType,
   getTypesByRID,
   getRIDByNameAndType,
-} from "./subjectTypes.js";
+} from "./subjectTypesDB.js";
 
 export async function insertSubject(db, code, name, type) {
   try {

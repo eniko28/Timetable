@@ -29,6 +29,7 @@ function createVertices(db) {
     createVertex(db, "Teachings"),
     createVertex(db, "Classrooms"),
     createVertex(db, "Users"),
+    createVertex(db, "Wishlists"),
   ]);
 }
 

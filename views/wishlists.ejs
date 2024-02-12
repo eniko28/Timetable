@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Wishlists</title>
+</head>
+
+<body>
+
+    <h1>Wishlists: </h1>
+    <% wishlists.forEach(function(item) { %>
+        <form action="/wishlists" method="post" enctype="multipart/form-data">
+            <div>
+                <p>Teacher Id:
+                    <%= item.teacherId %>
+                </p>
+                <p>Subject Id:
+                    <%= item.subjectId %>
+                </p>
+                <p>Group Id:
+                    <%= item.groupId %>
+                </p>
+                <p>Day:
+                    <%= item.day %>
+                </p>
+                <p>Start:
+                    <%= item.start %>
+                </p>
+                <p>End:
+                    <%= item.end %>
+                </p>
+                <label for="approved">Approval status:</label>
+                <select id="approved" name="approved">
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+                <input type="hidden" name="day" value="<%= item.day %>">
+                <input type="hidden" name="start" value="<%= item.start %>">
+                <input type="hidden" name="end" value="<%= item.end %>">
+                <input type="hidden" name="teacherId" value="<%= item.teacherId %>">
+                <input type="hidden" name="subjectId" value="<%= item.subjectId %>">
+                <input type="hidden" name="groupId" value="<%= item.groupId %>">
+                <button type="submit">Send</button>
+            </div>
+        </form>
+        <% }); %>
+
+</body>
+
+</html>

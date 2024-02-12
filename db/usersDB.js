@@ -9,7 +9,7 @@ export async function insertUsers(db, userName, userId, password, type) {
             `
     );
   } catch (error) {
-    console.error("Error inserting teaching:", error);
+    console.error("Error inserting user:", error);
     throw error;
   }
 }

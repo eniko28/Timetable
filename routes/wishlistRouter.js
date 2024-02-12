@@ -1,11 +1,8 @@
 import express from "express";
-import * as teachingDB from "../db/teachingsDB.js";
+import * as wishlistDB from "../db/wishlistsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
-import * as subjectDB from "../db/subjectsDB.js";
+import * as teachingDB from "../db/teachingsDB.js";
 import * as groupDB from "../db/groupsDB.js";
-import { createEdgeTeacherTeachings } from "../db/createEdges.js";
-import { createEdgeGroupTeachings } from "../db/createEdges.js";
-import { createEdgesSubjectTeachings } from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -22,18 +19,18 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/addTeachings", async (req, res) => {
+router.get("/addWishlists", async (req, res) => {
   try {
     const id = req.session.userId;
     const subjects = await teacherDB.getTeacherSubjects(db, id);
     const groups = await groupDB.getAllGroups(db);
-    res.render("addTeachings", { id, subjects, groups });
+    res.render("addWishlist", { id, subjects, groups });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
 
-router.post("/addTeachings", async (req, res) => {
+router.post("/addWishlists", async (req, res) => {
   try {
     const { teacherCode, subjectCode, groupCode, day, start, end } = req.fields;
 
@@ -55,11 +52,11 @@ router.post("/addTeachings", async (req, res) => {
       return res.status(400).send("Start time must be before end time.");
     }
 
-    const teachingId = uuidv4();
+    const wishlistId = uuidv4();
 
-    await teachingDB.insertTeaching(
+    await wishlistDB.insertWishlist(
       db,
-      teachingId,
+      wishlistId,
       teacherCode,
       groupCode,
       subjectCode,
@@ -68,27 +65,7 @@ router.post("/addTeachings", async (req, res) => {
       end
     );
 
-    const teacher = await teacherDB.getTeacherById(db, teacherCode);
-    const group = await groupDB.getGroupById(db, groupCode);
-    const teachings = await teachingDB.getTeachingById(db, teachingId);
-    const subject = await subjectDB.getSubjectById(db, subjectCode);
-
-    createEdgeTeacherTeachings(db, teacher, teachings);
-    createEdgeGroupTeachings(db, group, teachings);
-    createEdgesSubjectTeachings(db, subject, teachings);
-
-    res.redirect("/addTeachings");
-  } catch (error) {
-    res.status(500).send(`Internal Server Error: ${error.message}`);
-  }
-});
-
-router.use("/teachings", async (req, res) => {
-  try {
-    const teachings = await teachingDB.getAllTeachings(db);
-    res.render("teachings", {
-      teachings: teachings,
-    });
+    res.redirect("/addWishlists");
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }

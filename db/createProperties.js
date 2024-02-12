@@ -107,7 +107,7 @@ function createPropertySubjectTypes(db, className) {
     })
     .catch(function (error) {
       console.error("Error creating properties for SubjectTypes:", error);
-      return Promise.reject(error); // Propagate error further
+      return Promise.reject(error);
     });
 }
 
@@ -126,24 +126,26 @@ function createPropertyTeachers(db, className) {
     });
 }
 
-function createPropertyTeachings(db, className) {
+function createPropertyWishlists(db, className) {
   return db.class
     .get(`${className}`)
     .then(function (classObj) {
       return Promise.all([
-        createPropertyIfNotExists(classObj, "teachingId", "String"),
+        createPropertyIfNotExists(classObj, "wishlistId", "String"),
         createPropertyIfNotExists(classObj, "teacherId", "String"),
         createPropertyIfNotExists(classObj, "subjectId", "String"),
         createPropertyIfNotExists(classObj, "groupId", "Integer"),
         createPropertyIfNotExists(classObj, "day", "String"),
         createPropertyIfNotExists(classObj, "start", "String"),
         createPropertyIfNotExists(classObj, "end", "String"),
+        createPropertyIfNotExists(classObj, "approved", "Boolean"),
       ]);
     })
     .catch(function (error) {
-      console.error("Error creating properties for Teachings:", error);
+      console.error("Error creating properties for Wishlists:", error);
     });
 }
+
 function createPropertyUser(db, className) {
   return db.class
     .get(`${className}`)
@@ -254,16 +256,23 @@ function createPropertyIfNotExists(
     });
 }
 
-function createProperty(db) {
-  return Promise.all([
-    createPropertyTeachers(db, "Teachers"),
-    createPropertySubjects(db, "Subjects"),
-    createPropertySubjectTypes(db, "SubjectTypes"),
-    createPropertyGroups(db, "Groups"),
-    createPropertyTeachings(db, "Teachings"),
-    createPropertyClassroom(db, "Classrooms"),
-    createPropertyUser(db, "Users"),
-  ]);
+function createPropertyTeachings(db, className) {
+  return db.class
+    .get(`${className}`)
+    .then(function (classObj) {
+      return Promise.all([
+        createPropertyIfNotExists(classObj, "id", "String"),
+        createPropertyIfNotExists(classObj, "teacherId", "String"),
+        createPropertyIfNotExists(classObj, "subjectId", "String"),
+        createPropertyIfNotExists(classObj, "groupId", "Integer"),
+        createPropertyIfNotExists(classObj, "day", "String"),
+        createPropertyIfNotExists(classObj, "start", "String"),
+        createPropertyIfNotExists(classObj, "end", "String"),
+      ]);
+    })
+    .catch(function (error) {
+      console.error("Error creating properties for Subjects:", error);
+    });
 }
 
 function createDataIfNotExistsSubjectTypes(
@@ -298,6 +307,19 @@ function createDataIfNotExistsSubjectTypes(
       console.error("Error checking existing data:", error);
       return Promise.reject(error);
     });
+}
+
+function createProperty(db) {
+  return Promise.all([
+    createPropertyTeachers(db, "Teachers"),
+    createPropertySubjects(db, "Subjects"),
+    createPropertySubjectTypes(db, "SubjectTypes"),
+    createPropertyGroups(db, "Groups"),
+    createPropertyWishlists(db, "Wishlists"),
+    createPropertyClassroom(db, "Classrooms"),
+    createPropertyUser(db, "Users"),
+    createPropertyTeachings(db, "Teachings"),
+  ]);
 }
 
 export default createProperty;

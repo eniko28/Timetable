@@ -1,5 +1,5 @@
 import express from "express";
-import * as teachingDB from "../db/teachingsDB.js";
+import * as wishlistDB from "../db/wishlistsDB.js";
 import * as subjectDB from "../db/subjectsDB.js";
 import * as groupDB from "../db/groupsDB.js";
 import setupDatabase from "../db/dbSetup.js";
@@ -38,17 +38,6 @@ router.post("/assignGroup", async (req, res) => {
     await groupDB.insertGroupSubjectId(db, groupCode, subjectCode);
 
     res.redirect("/assignGroup");
-  } catch (error) {
-    res.status(500).send(`Internal Server Error: ${error.message}`);
-  }
-});
-
-router.use("/teachings", async (req, res) => {
-  try {
-    const teachings = await teachingDB.getAllTeachings(db);
-    res.render("teachings", {
-      teachings: teachings,
-    });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }

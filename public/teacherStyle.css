@@ -72,3 +72,20 @@ a.back-button {
 a.back-button:hover {
     background-color: #A0763F; 
 }
+
+.navbar button.logout-button {
+    float: right; 
+    background-color: #A0763F; 
+    color: white; 
+    border: none; 
+    padding: 14px 20px; 
+    font-size: 16px;
+    cursor: pointer; 
+    border-radius: 5px;
+    margin-left: 10px; 
+    transition: background-color 0.3s ease; 
+}
+
+.navbar button.logout-button:hover {
+    background-color: #72542D; 
+}
