@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Wishlists</title>
+    <link rel="stylesheet" href="adminStyle.css">
 </head>
 
 <body>
@@ -41,11 +42,11 @@
                 <input type="hidden" name="teacherId" value="<%= item.teacherId %>">
                 <input type="hidden" name="subjectId" value="<%= item.subjectId %>">
                 <input type="hidden" name="groupId" value="<%= item.groupId %>">
-                <button type="submit">Send</button>
+                <button type="submit" class="submit-button">Send</button>
             </div>
         </form>
         <% }); %>
-
+            <a href="/admin" class="back-button">Back</a>
 </body>
 
 </html>
