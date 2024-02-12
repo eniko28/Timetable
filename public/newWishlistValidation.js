@@ -4,24 +4,30 @@ document
     var start = document.getElementsByName("start")[0].value.trim();
     var end = document.getElementsByName("end")[0].value.trim();
 
+    var startError = document.getElementById("startError");
+    var endError = document.getElementById("endError");
+
+    startError.textContent = "";
+    endError.textContent = "";
+
     if (start === "" || end === "") {
-      alert("Please fill in all fields");
+      startError.textContent = "Please fill in all fields";
       event.preventDefault();
     }
     if (!isValidTime(start) || !isValidTime(end)) {
-      alert("Please enter valid start and end times (HH:mm)");
+      startError.textContent = "Please enter valid start and end times (HH:mm)";
       event.preventDefault();
     }
     if (!isWithinWorkingHours(start) || !isWithinWorkingHours(end)) {
-      alert("Please enter times between 08:00 and 20:00");
+      startError.textContent = "Please enter times between 08:00 and 20:00";
       event.preventDefault();
     }
     if (!isStartBeforeEnd(start, end)) {
-      alert("Start time must be before end time");
+      startError.textContent = "Start time must be before end time";
       event.preventDefault();
     }
     if (!isValidDay(day)) {
-      alert("Please select a valid day");
+      startError.textContent = "Please select a valid day";
       event.preventDefault();
     }
   });

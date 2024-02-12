@@ -9,25 +9,31 @@
 
 <body>
     <h2>Register a new user to the page! </h2>
-    <form action="/register" method="POST" enctype="multipart/form-data">
+    <form id="register" action="/register" method="POST" enctype="multipart/form-data">
         <label for="name">Name:</label>
-        <input type="text" name="name"><br>
+        <input type="text" name="name" id="name">
+        <span class="error-message" id="nameError"></span><br>
 
         <label for="password">Password:</label>
-        <input type="password" name="password"><br>
+        <input type="password" name="password" id="password">
+        <span class="error-message" id="passwordError"></span><br>
 
         <label for="userId">User Id:</label>
-        <input type="userId" name="userId"><br> <br>
+        <input type="text" name="userId" id="userId">
+        <span class="error-message" id="userIdError"></span><br><br>
 
         <label for="type">User Type:</label>
         <select id="type" name="type">
             <option value="Student">Student</option>
             <option value="Teacher">Teacher</option>
         </select>
-        <br>
+        <span class="error-message" id="typeError"></span><br>
+
         <input class="submit-button" type="submit" value="Add">
     </form>
     <a href="/admin" class="back-button">Back</a>
+
+    <script src="registerValidation.js" defer></script>
 </body>
 
 </html>

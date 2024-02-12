@@ -192,3 +192,8 @@ a.back-button:hover {
 .navbar button.logout-button:hover {
     background-color: #72542D; 
 }
+
+.error-message {
+    color: red;
+    font-size: 12px;
+}

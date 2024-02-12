@@ -5,18 +5,19 @@
     <meta charset="UTF-8" />
     <title>Login</title>
     <link rel="stylesheet" href="loginStyle.css">
-
 </head>
 
 <body>
     <h1>Welcome to the Timetable Planning Website!</h1>
     <h2>Log in to the site:</h2>
-    <form action="/login" method="POST" enctype="multipart/form-data">
+    <form id="login" action="/login" method="POST" enctype="multipart/form-data">
         <label for="userId">User Id:</label>
-        <input type="text" name="userId"><br>
+        <input type="text" name="userId" id="userId">
+        <span class="error-message" id="userIdError"></span><br>
 
         <label for="password">Password:</label>
-        <input type="password" name="password"><br>
+        <input type="password" name="password" id="password">
+        <span class="error-message" id="passwordError"></span><br>
 
         <label for="user">User Type:</label>
         <select name="userTypeLogin" id="user">
@@ -24,9 +25,12 @@
             <option value="Teacher">Teacher</option>
             <option value="Admin">Admin</option>
         </select>
-        <br>
+        <span class="error-message" id="userTypeError"></span><br>
+
         <input type="submit" value="Login">
     </form>
+
+    <script src="loginValidation.js"></script>
 </body>
 
 </html>
