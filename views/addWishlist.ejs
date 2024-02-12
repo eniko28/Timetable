@@ -5,12 +5,13 @@
     <meta charset="UTF-8" />
     <title>Create Wishlist</title>
     <link rel="stylesheet" href="teacherStyle.css">
+    <script src="newWishlistValidation.js" defer></script>
 </head>
 
 <body>
     <div>
         <h1>Create a wishlist!</h1>
-        <form action="/addWishlists" method="POST" enctype="multipart/form-data">
+        <form id="addWishlists" action="/addWishlists" method="POST" enctype="multipart/form-data">
 
             <label for="teacherCode">Teacher Id:</label>
             <select id="teacherCode" name="teacherCode">

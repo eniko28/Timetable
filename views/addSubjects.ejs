@@ -5,12 +5,13 @@
     <meta charset="UTF-8" />
     <title>Add Subject</title>
     <link rel="stylesheet" href="adminStyle.css">
+    <script src="newSubjectValidation.js" defer></script>
 </head>
 
 <body>
     <div>
         <h1>Add a new subject to the timetable!</h1>
-        <form action="/addSubjects" method="POST" enctype="multipart/form-data">
+        <form id='addSubjects' action="/addSubjects" method="POST" enctype="multipart/form-data">
             <label for="code">Subject Id:</label>
             <input type="text" id="code" name="code"><br>
 
