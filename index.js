@@ -17,6 +17,7 @@ import adminRouter from "./routes/adminRouter.js";
 import teacherRouter from "./routes/teacherRouter.js";
 import logoutRouter from "./routes/logoutRouter.js";
 import teachingRouter from "./routes/teachingRouter.js";
+import onlyAssignedGroups from "./routes/onlyAssignedGroups.js";
 
 const app = express();
 const port = 3000;
@@ -47,6 +48,7 @@ setupDatabase()
     app.use("/", teacherRouter);
     app.use("/", teachingRouter);
     app.use("/", logoutRouter);
+    app.use("/", onlyAssignedGroups);
 
     app.listen(port, () => {
       console.log(`App listening at http://localhost:${port}`);

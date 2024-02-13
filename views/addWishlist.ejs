@@ -18,8 +18,7 @@
                 <option value="<%= id %>">
                     <%= id %>
                 </option>
-            </select>
-            </select> <br>
+            </select><br>
 
             <label for="subjectCode">Subject Id:</label>
             <select id="subjectCode" name="subjectCode">
@@ -30,18 +29,10 @@
                         </option>
                         <% }); %>
                             <% } %>
-
-            </select> <br>
-
+            </select><br>
 
             <label for="groupCode">Group Id:</label>
-            <select id="groupCode" name="groupCode">
-                <% groups.forEach(function(item) { %>
-                    <option value="<%= item.id %>">
-                        <%= item.id %>
-                    </option>
-                    <% }); %>
-            </select> <br>
+            <select id="groupCode" name="groupCode"></select><br>
 
             <label for="day">Day:</label>
             <select name="day">

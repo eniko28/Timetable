@@ -32,3 +32,19 @@ export async function insertGroupSubjectId(db, groupCode, subjectCode) {
     throw error;
   }
 }
+
+export async function getGroupsBySubjectId(db, subjectId) {
+  try {
+    const groups = await db.query(
+      `SELECT id FROM Groups WHERE subjectId contains '${subjectId}'`
+    );
+
+    return groups;
+  } catch (error) {
+    console.error(
+      `Error getting group with SubjectID ${subjectId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}

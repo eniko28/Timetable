@@ -60,3 +60,24 @@ function isValidDay(day) {
   var daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
   return daysOfWeek.includes(day);
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  var subjectCodeSelect = document.getElementById("subjectCode");
+  var groupCodeSelect = document.getElementById("groupCode");
+
+  subjectCodeSelect.addEventListener("change", function () {
+    var subjectId = this.value;
+    fetch("/getGroupsBySubject?subjectId=" + subjectId)
+      .then((response) => response.json())
+      .then((groups) => {
+        groupCodeSelect.innerHTML = ""; // Töröljük a korábbi elemeket
+        groups.forEach(function (group) {
+          var option = document.createElement("option");
+          option.value = group.id;
+          option.textContent = group.id;
+          groupCodeSelect.appendChild(option);
+        });
+      })
+      .catch((error) => console.error("Error fetching groups:", error));
+  });
+});
