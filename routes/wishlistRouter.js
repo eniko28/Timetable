@@ -1,7 +1,7 @@
 import express from "express";
 import * as wishlistDB from "../db/wishlistsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
-import * as teachingDB from "../db/teachingsDB.js";
+import { createEdgeTeachersWishlists } from "../db/createEdges.js";
 import * as groupDB from "../db/groupsDB.js";
 import setupDatabase from "../db/dbSetup.js";
 import { v4 as uuidv4 } from "uuid";
@@ -64,6 +64,11 @@ router.post("/addWishlists", async (req, res) => {
       start,
       end
     );
+
+    const teacher = await teacherDB.getTeacherById(db, teacherCode);
+    const wishlists = await wishlistDB.getWishlistById(db, wishlistId);
+
+    await createEdgeTeachersWishlists(db, wishlists, teacher);
 
     res.redirect("/addWishlists");
   } catch (error) {

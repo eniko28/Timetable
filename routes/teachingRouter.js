@@ -7,15 +7,19 @@ import {
   getFreeGroup,
   getTeachingsByGroupAndSubjectId,
 } from "../db/teachingsDB.js";
-import { createEdgeTeacherTeachings } from "../db/createEdges.js";
-import { createEdgeGroupTeachings } from "../db/createEdges.js";
-import { createEdgesSubjectTeachings } from "../db/createEdges.js";
+import {
+  createEdgeSubjectsClassrooms,
+  createEdgeTeacherTeachings,
+  createEdgeGroupTeachings,
+  createEdgesSubjectTeachings,
+} from "../db/createEdges.js";
 import * as teachingDB from "../db/teachingsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
 import * as subjectDB from "../db/subjectsDB.js";
 import * as groupDB from "../db/groupsDB.js";
 import { v4 as uuidv4 } from "uuid";
 import { deleteWishlist } from "../db/wishlistsDB.js";
+import { getAllClassrooms, getClassroomByName } from "../db/classroomDB.js";
 
 const router = express.Router();
 let db;
@@ -32,8 +36,10 @@ setupDatabase()
 router.get("/wishlists", async (req, res) => {
   try {
     const wishlists = await wishlistDB.getAllWishlists(db);
+    const classrooms = await getAllClassrooms(db);
     res.render("wishlists", {
       wishlists: wishlists,
+      classrooms: classrooms,
     });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
@@ -42,9 +48,16 @@ router.get("/wishlists", async (req, res) => {
 
 router.post("/wishlists", async (req, res) => {
   try {
-    const { teacherId, subjectId, groupId, day, start, end, approved } =
-      req.fields;
-
+    const {
+      teacherId,
+      subjectId,
+      groupId,
+      day,
+      start,
+      end,
+      approved,
+      classroomName,
+    } = req.fields;
     if (
       !groupId ||
       !subjectId ||
@@ -52,11 +65,11 @@ router.post("/wishlists", async (req, res) => {
       !day ||
       !start ||
       !end ||
-      !approved
+      !approved ||
+      !classroomName
     ) {
       return res.status(400).send("Missing required data.");
     }
-
     if (approved === "approved") {
       const existsTeacher = await getFreeTeacher(
         db,
@@ -99,11 +112,14 @@ router.post("/wishlists", async (req, res) => {
         start,
         end
       );
+
       const teacher = await teacherDB.getTeacherById(db, teacherId);
       const group = await groupDB.getGroupById(db, groupId);
       const teachings = await teachingDB.getTeachingById(db, teachingId);
       const subject = await subjectDB.getSubjectById(db, subjectId);
+      const classroom = await getClassroomByName(db, classroomName);
 
+      createEdgeSubjectsClassrooms(db, classroom, subject);
       createEdgeTeacherTeachings(db, teacher, teachings);
       createEdgeGroupTeachings(db, group, teachings);
       createEdgesSubjectTeachings(db, subject, teachings);

@@ -8,6 +8,40 @@ function createPropertyClassroom(db, className) {
         createPropertyIfNotExists(classObj, "type", "String"),
       ]);
     })
+    .then(function (properties) {
+      const classroomData = [
+        { classroomId: 1, name: "Gamma", type: "Seminar" },
+        { classroomId: 2, name: "Pi", type: "Seminar" },
+        { classroomId: 3, name: "Lambda", type: "Seminar" },
+        { classroomId: 4, name: "E", type: "Seminar" },
+        { classroomId: 5, name: "Multimedia", type: "Seminar" },
+        { classroomId: 6, name: "A320", type: "Seminar" },
+        { classroomId: 7, name: "A321", type: "Seminar" },
+        { classroomId: 8, name: "A323", type: "Seminar" },
+        { classroomId: 9, name: "A324", type: "Seminar" },
+        { classroomId: 10, name: "L320", type: "Laboratory" },
+        { classroomId: 11, name: "L321", type: "Laboratory" },
+        { classroomId: 12, name: "L322", type: "Laboratory" },
+        { classroomId: 13, name: "L323", type: "Laboratory" },
+        { classroomId: 14, name: "2/I", type: "Course" },
+        { classroomId: 15, name: "5/I", type: "Course" },
+        { classroomId: 16, name: "7/I", type: "Course" },
+        { classroomId: 17, name: "9/I", type: "Course" },
+        { classroomId: 18, name: "6/II", type: "Course" },
+      ];
+
+      const classroomPromises = classroomData.map((classroom) => {
+        return createDataIfNotExistsClassrooms(
+          db,
+          className,
+          classroom,
+          "classroomId",
+          classroom.classroomId
+        );
+      });
+
+      return Promise.all(classroomPromises);
+    })
     .catch(function (error) {
       console.error("Error creating properties for Classroom:", error);
     });
@@ -320,6 +354,36 @@ function createProperty(db) {
     createPropertyUser(db, "Users"),
     createPropertyTeachings(db, "Teachings"),
   ]);
+}
+
+function createDataIfNotExistsClassrooms(
+  db,
+  className,
+  data,
+  keyName,
+  keyValue
+) {
+  return db
+    .select()
+    .from(className)
+    .where({ [keyName]: keyValue })
+    .one()
+    .then((existingData) => {
+      if (!existingData) {
+        const insertQuery = `INSERT INTO ${className} SET ${keyName}=${keyValue}, classroomId='${data.classroomId}', name='${data.name}', type = '${data.type}'`;
+
+        return db
+          .query(insertQuery)
+          .then(() => {})
+          .catch((error) => {
+            console.error(
+              `Error inserting data: ${JSON.stringify(data)}`,
+              error
+            );
+          });
+      } else {
+      }
+    });
 }
 
 export default createProperty;

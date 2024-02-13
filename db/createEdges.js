@@ -25,6 +25,8 @@ function createEdges(db) {
     createEdge(db, "TeacherTeachings"),
     createEdge(db, "SubjectTeachings"),
     createEdge(db, "GroupTeachings"),
+    createEdge(db, "TeachersWishlists"),
+    createEdge(db, "SubjectsClassrooms"),
   ]);
 }
 
@@ -63,6 +65,32 @@ export async function createEdgesSubjectTeachings(db, subject, teaching) {
       .one();
   } catch (error) {
     console.error("Error creating SubjectTeachings edge:", error);
+    throw error;
+  }
+}
+
+export async function createEdgeTeachersWishlists(db, wishlists, teacher) {
+  try {
+    await db
+      .create("EDGE", "TeachersWishlists")
+      .from(wishlists["@rid"])
+      .to(teacher["@rid"])
+      .one();
+  } catch (error) {
+    console.error("Error creating TeachersWishlists edge:", error);
+    throw error;
+  }
+}
+
+export async function createEdgeSubjectsClassrooms(db, classroom, subject) {
+  try {
+    await db
+      .create("EDGE", "SubjectsClassrooms")
+      .from(subject["@rid"])
+      .to(classroom["@rid"])
+      .one();
+  } catch (error) {
+    console.error("Error creating SubjectsClassrooms edge:", error);
     throw error;
   }
 }

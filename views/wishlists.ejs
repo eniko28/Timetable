@@ -31,6 +31,14 @@
                 <p>End:
                     <%= item.end %>
                 </p>
+                <label for="classroomName">Assign a classrom:</label>
+                <select id="classroomName" name="classroomName">
+                    <% classrooms.forEach(function(item) { %>
+                        <option value="<%= item.name %>">
+                            <%= item.name %>
+                        </option>
+                        <% }); %>
+                </select> <br>
                 <label for="approved">Approval status:</label>
                 <select id="approved" name="approved">
                     <option value="approved">Approved</option>

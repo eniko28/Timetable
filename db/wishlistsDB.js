@@ -40,7 +40,7 @@ export async function getWishlistById(db, wishlistId) {
   try {
     const teacher = await db
       .select()
-      .from("Wishlist")
+      .from("Wishlists")
       .where({
         wishlistId: wishlistId,
       })
