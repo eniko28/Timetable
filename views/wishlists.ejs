@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <title>Wishlists</title>
     <link rel="stylesheet" href="adminStyle.css">
+    <script src="classtypes.js" defer></script>
 </head>
 
 <body>
@@ -33,11 +34,7 @@
                 </p>
                 <label for="classroomName">Assign a classrom:</label>
                 <select id="classroomName" name="classroomName">
-                    <% classrooms.forEach(function(item) { %>
-                        <option value="<%= item.name %>">
-                            <%= item.name %>
-                        </option>
-                        <% }); %>
+
                 </select> <br>
                 <label for="approved">Approval status:</label>
                 <select id="approved" name="approved">
@@ -47,8 +44,8 @@
                 <input type="hidden" name="day" value="<%= item.day %>">
                 <input type="hidden" name="start" value="<%= item.start %>">
                 <input type="hidden" name="end" value="<%= item.end %>">
-                <input type="hidden" name="teacherId" value="<%= item.teacherId %>">
-                <input type="hidden" name="subjectId" value="<%= item.subjectId %>">
+                <input type="hidden" name="teacherId" value="<%= item.teacherId %>" id="<%= item.teacherId %>">
+                <input type="hidden" name="subjectId" value="<%= item.subjectId %>" id="<%= item.subjectId %>">
                 <input type="hidden" name="groupId" value="<%= item.groupId %>">
                 <button type="submit" class="submit-button">Send</button>
             </div>

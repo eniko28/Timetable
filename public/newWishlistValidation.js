@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch("/getGroupsBySubject?subjectId=" + subjectId)
       .then((response) => response.json())
       .then((groups) => {
-        groupCodeSelect.innerHTML = ""; // Töröljük a korábbi elemeket
+        groupCodeSelect.innerHTML = "";
         groups.forEach(function (group) {
           var option = document.createElement("option");
           option.value = group.id;

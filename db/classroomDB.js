@@ -25,3 +25,21 @@ export async function getClassroomByName(db, classroomName) {
     throw error;
   }
 }
+
+export async function getClassroomByType(db, classroomType) {
+  try {
+    const classroom = await db
+      .select("name")
+      .from("Classrooms")
+      .where({ type: classroomType })
+      .all();
+
+    return classroom;
+  } catch (error) {
+    console.error(
+      `Error getting classroom with name: ${subjectId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}
