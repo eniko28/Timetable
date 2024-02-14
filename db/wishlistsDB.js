@@ -9,17 +9,8 @@ export async function insertWishlist(
   end
 ) {
   try {
-    await db.query(
-      `INSERT INTO Wishlists SET 
-          wishlistId = '${wishlistId}', 
-          teacherId = '${teacherCode}', 
-          subjectId = '${subjectCode}', 
-          groupId = '${groupCode}', 
-          day = '${day}', 
-          start = '${start}', 
-          end = '${end}'
-        `
-    );
+    const query = `INSERT INTO Wishlists SET wishlistId = '${wishlistId}', teacherId = '${teacherCode}', subjectId = '${subjectCode}', groupId = '${groupCode}', day = '${day}', start = '${start}', end = '${end}'`;
+    await db.query(query);
   } catch (error) {
     console.error("Error inserting wishlist:", error);
     throw error;
@@ -28,25 +19,20 @@ export async function insertWishlist(
 
 export async function getAllWishlists(db) {
   try {
-    const wishlists = await db.select().from("Wishlists").all();
+    const query = "SELECT FROM Wishlists";
+    const wishlists = await db.query(query);
     return wishlists;
   } catch (error) {
-    console.error("Error getting teachers from the database:", error);
+    console.error("Error getting wishlists from the database:", error);
     throw error;
   }
 }
 
 export async function getWishlistById(db, wishlistId) {
   try {
-    const teacher = await db
-      .select()
-      .from("Wishlists")
-      .where({
-        wishlistId: wishlistId,
-      })
-      .one();
-
-    return teacher;
+    const query = `SELECT FROM Wishlists WHERE wishlistId = '${wishlistId}'`;
+    const wishlist = await db.query(query);
+    return wishlist.length > 0 ? wishlist[0] : null;
   } catch (error) {
     console.error(
       `Error getting wishlist with ID ${wishlistId} from the database:`,
@@ -58,22 +44,19 @@ export async function getWishlistById(db, wishlistId) {
 
 export async function getWishlistByDayandTime(db, day, start, end) {
   try {
-    const wishlist = await db.query(
-      `SELECT FROM Wishlists WHERE day = '${day}' AND start = '${start}' AND end = '${end}'`
-    );
-
+    const query = `SELECT FROM Wishlists WHERE day = '${day}' AND start = '${start}' AND end = '${end}'`;
+    const wishlist = await db.query(query);
     return wishlist;
   } catch (error) {
-    console.error("Error getting subjects from the database:", error);
+    console.error("Error getting wishlists from the database:", error);
     throw error;
   }
 }
 
 export async function deleteWishlist(db, day, start, end) {
   try {
-    await db.query(
-      `DELETE VERTEX FROM Wishlists WHERE day = '${day}' AND start = '${start}' AND end = '${end}'`
-    );
+    const query = `DELETE VERTEX FROM Wishlists WHERE day = '${day}' AND start = '${start}' AND end = '${end}'`;
+    await db.query(query);
   } catch (error) {
     console.error("Error deleting wishlist:", error);
     throw error;

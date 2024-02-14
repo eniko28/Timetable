@@ -1,6 +1,7 @@
 export async function getAllClassrooms(db) {
   try {
-    const classrooms = await db.select().from("Classrooms").all();
+    const query = "SELECT FROM Classrooms";
+    const classrooms = await db.query(query);
     return classrooms;
   } catch (error) {
     console.error("Error getting classrooms from the database:", error);
@@ -10,16 +11,12 @@ export async function getAllClassrooms(db) {
 
 export async function getClassroomByName(db, classroomName) {
   try {
-    const classroom = await db
-      .select()
-      .from("Classrooms")
-      .where({ name: classroomName })
-      .one();
-
-    return classroom;
+    const query = `SELECT FROM Classrooms WHERE name = '${classroomName}'`;
+    const classroom = await db.query(query);
+    return classroom.length > 0 ? classroom[0] : null;
   } catch (error) {
     console.error(
-      `Error getting classroom with name: ${subjectId} from the database:`,
+      `Error getting classroom with name: ${classroomName} from the database:`,
       error
     );
     throw error;
@@ -28,16 +25,12 @@ export async function getClassroomByName(db, classroomName) {
 
 export async function getClassroomByType(db, classroomType) {
   try {
-    const classroom = await db
-      .select("name")
-      .from("Classrooms")
-      .where({ type: classroomType })
-      .all();
-
-    return classroom;
+    const query = `SELECT name FROM Classrooms WHERE type = '${classroomType}'`;
+    const classrooms = await db.query(query);
+    return classrooms;
   } catch (error) {
     console.error(
-      `Error getting classroom with name: ${subjectId} from the database:`,
+      `Error getting classroom with type: ${classroomType} from the database:`,
       error
     );
     throw error;

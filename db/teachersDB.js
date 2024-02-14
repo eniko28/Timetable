@@ -1,8 +1,7 @@
 export async function insertTeacherNameAndId(db, teacherCode, name) {
   try {
-    await db.query(
-      `INSERT INTO Teachers SET id = '${teacherCode}', name = '${name}'`
-    );
+    const query = `INSERT INTO Teachers SET id = '${teacherCode}', name = '${name}'`;
+    await db.query(query);
   } catch (error) {
     console.error("Error inserting teacher:", error);
     throw error;
@@ -11,18 +10,18 @@ export async function insertTeacherNameAndId(db, teacherCode, name) {
 
 export async function insertTeachersSubjectId(db, teacherCode, subjectCode) {
   try {
-    await db.query(
-      `UPDATE Teachers ADD subjectId = '${subjectCode}' WHERE id = '${teacherCode}'`
-    );
+    const query = `UPDATE Teachers ADD subjectId = '${subjectCode}' WHERE id = '${teacherCode}'`;
+    await db.query(query);
   } catch (error) {
-    console.error("Error inserting teacher:", error);
+    console.error("Error updating teacher:", error);
     throw error;
   }
 }
 
 export async function getAllTeachers(db) {
   try {
-    const teachers = await db.select().from("Teachers").all();
+    const query = "SELECT FROM Teachers";
+    const teachers = await db.query(query);
     return teachers;
   } catch (error) {
     console.error("Error getting teachers from the database:", error);
@@ -32,15 +31,9 @@ export async function getAllTeachers(db) {
 
 export async function getTeacherById(db, teacherId) {
   try {
-    const teacher = await db
-      .select()
-      .from("Teachers")
-      .where({
-        id: teacherId,
-      })
-      .one();
-
-    return teacher;
+    const query = `SELECT FROM Teachers WHERE id = '${teacherId}'`;
+    const teacher = await db.query(query);
+    return teacher.length > 0 ? teacher[0] : null;
   } catch (error) {
     console.error(
       `Error getting teacher with ID ${teacherId} from the database:`,
@@ -52,14 +45,8 @@ export async function getTeacherById(db, teacherId) {
 
 export async function getTeacherSubjects(db, teacherId) {
   try {
-    const subjects = await db
-      .select("subjectId")
-      .from("Teachers")
-      .where({
-        id: teacherId,
-      })
-      .all();
-
+    const query = `SELECT subjectId FROM Teachers WHERE id = '${teacherId}'`;
+    const subjects = await db.query(query);
     return subjects;
   } catch (error) {
     console.error(

@@ -38,7 +38,7 @@ router.post("/addSubjects", async (req, res) => {
       type
     );
 
-    if (existingSubject !== undefined || existingNameAndType.length !== 0) {
+    if (existingSubject !== null || existingNameAndType.length !== 0) {
       return res.status(409).send("Subject already exists.");
     }
 

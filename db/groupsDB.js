@@ -1,6 +1,17 @@
+export async function insertGroupSubjectId(db, groupCode, subjectCode) {
+  try {
+    const query = `UPDATE Groups ADD subjectId = ['${subjectCode}'] WHERE id = '${groupCode}'`;
+    await db.query(query);
+  } catch (error) {
+    console.error("Error inserting subjectId into Groups:", error);
+    throw error;
+  }
+}
+
 export async function getAllGroups(db) {
   try {
-    const groups = await db.select().from("Groups").all();
+    const query = "SELECT FROM Groups";
+    const groups = await db.query(query);
     return groups;
   } catch (error) {
     console.error("Error getting groups from the database:", error);
@@ -10,9 +21,9 @@ export async function getAllGroups(db) {
 
 export async function getGroupById(db, groupId) {
   try {
-    const group = await db.select().from("Groups").where({ id: groupId }).one();
-
-    return group;
+    const query = `SELECT FROM Groups WHERE id = '${groupId}'`;
+    const group = await db.query(query);
+    return group.length > 0 ? group[0] : null;
   } catch (error) {
     console.error(
       `Error getting group with ID ${groupId} from the database:`,
@@ -22,23 +33,10 @@ export async function getGroupById(db, groupId) {
   }
 }
 
-export async function insertGroupSubjectId(db, groupCode, subjectCode) {
-  try {
-    await db.query(
-      `UPDATE Groups ADD subjectId = ['${subjectCode}'] WHERE id = '${groupCode}'`
-    );
-  } catch (error) {
-    console.error("Error inserting subjectId into Groups:", error);
-    throw error;
-  }
-}
-
 export async function getGroupsBySubjectId(db, subjectId) {
   try {
-    const groups = await db.query(
-      `SELECT id FROM Groups WHERE subjectId contains '${subjectId}'`
-    );
-
+    const query = `SELECT id FROM Groups WHERE subjectId contains '${subjectId}'`;
+    const groups = await db.query(query);
     return groups;
   } catch (error) {
     console.error(
@@ -51,14 +49,12 @@ export async function getGroupsBySubjectId(db, subjectId) {
 
 export async function getGroupIdByRid(db, groupRid) {
   try {
-    const groups = await db.query(
-      `SELECT id FROM Groups WHERE @rid = '${groupRid}'`
-    );
-
+    const query = `SELECT id FROM Groups WHERE @rid = '${groupRid}'`;
+    const groups = await db.query(query);
     return groups;
   } catch (error) {
     console.error(
-      `Error getting group with SubjectID ${subjectId} from the database:`,
+      `Error getting group with RID ${groupRid} from the database:`,
       error
     );
     throw error;

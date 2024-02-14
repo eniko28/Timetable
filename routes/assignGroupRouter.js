@@ -1,5 +1,4 @@
 import express from "express";
-import * as wishlistDB from "../db/wishlistsDB.js";
 import * as subjectDB from "../db/subjectsDB.js";
 import * as groupDB from "../db/groupsDB.js";
 import setupDatabase from "../db/dbSetup.js";
