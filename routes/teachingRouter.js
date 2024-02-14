@@ -119,7 +119,13 @@ router.post("/wishlists", async (req, res) => {
       const subject = await subjectDB.getSubjectById(db, subjectId);
       const classroom = await getClassroomByName(db, classroomName);
 
-      createEdgeSubjectsClassrooms(db, classroom, subject);
+      createEdgeSubjectsClassrooms(
+        db,
+        classroom,
+        subject,
+        subjectId,
+        classroomName
+      );
       createEdgeTeacherTeachings(db, teacher, teachings);
       createEdgeGroupTeachings(db, group, teachings);
       createEdgesSubjectTeachings(db, subject, teachings);

@@ -82,12 +82,22 @@ export async function createEdgeTeachersWishlists(db, wishlists, teacher) {
   }
 }
 
-export async function createEdgeSubjectsClassrooms(db, classroom, subject) {
+export async function createEdgeSubjectsClassrooms(
+  db,
+  classroom,
+  subject,
+  subjectId,
+  classroomName
+) {
   try {
     await db
       .create("EDGE", "SubjectsClassrooms")
       .from(subject["@rid"])
       .to(classroom["@rid"])
+      .set({
+        subjectId: subjectId,
+        classroomName: classroomName,
+      })
       .one();
   } catch (error) {
     console.error("Error creating SubjectsClassrooms edge:", error);

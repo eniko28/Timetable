@@ -15,9 +15,10 @@
             <th>Day</th>
             <th>Start</th>
             <th>End</th>
-            <th>Teacher</th>
-            <th>Subject</th>
+            <th>Classroom</th>
             <th>Group</th>
+            <th>Subject</th>
+            <th>Teacher</th>
             <% teachings.sort((a, b)=> {
                 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
                 return days.indexOf(a.day) - days.indexOf(b.day);
@@ -33,15 +34,19 @@
                 <%= item.end %>
             </td>
             <td>
-                <%= item.teacherId %>
-            </td>
-            <td>
-                <%= item.subjectId %>
-                    <%= item.subjectRid %>
+                <%= item.classroomName %>
             </td>
             <td>
                 <%= item.groupId %>
             </td>
+            <td>
+                <%= item.subjectId %>
+                    <%= item.subjectType %>
+            </td>
+            <td>
+                <%= item.teacherId %>
+            </td>
+
         </tr>
         <% }); %>
 
