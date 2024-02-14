@@ -23,11 +23,36 @@
         <span class="error-message" id="userIdError"></span><br><br>
 
         <label for="type">User Type:</label>
-        <select id="type" name="type">
+        <select id="type" name="type" onchange="showAdditionalFields()">
             <option value="Student">Student</option>
             <option value="Teacher">Teacher</option>
         </select>
         <span class="error-message" id="typeError"></span><br>
+
+        <div id="additionalFields" style="display: none;">
+            <label for="groupId">Group:</label>
+            <select id="groupId" name="groupId">
+                <option value="611">611</option>
+                <option value="621">621</option>
+                <option value="631">631</option>
+                <option value="411">411</option>
+                <option value="421">421</option>
+                <option value="431">431</option>
+                <option value="511">511</option>
+                <option value="512">512</option>
+                <option value="513">513</option>
+                <option value="514">514</option>
+                <option value="521">521</option>
+                <option value="522">522</option>
+                <option value="523">523</option>
+                <option value="524">524</option>
+                <option value="531">531</option>
+                <option value="532">532</option>
+                <option value="533">533</option>
+                <option value="534">534</option>
+
+            </select><br><br>
+        </div>
 
         <input class="submit-button" type="submit" value="Add">
     </form>

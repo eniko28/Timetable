@@ -76,3 +76,19 @@ export async function getSubjectById(db, subjectId) {
     throw error;
   }
 }
+
+export async function getSubjectRidById(db, subjectId) {
+  try {
+    const subjects = await db.query(
+      `SELECT type FROM Subjects WHERE id = '${subjectId}'`
+    );
+    if (subjects.length > 0) {
+      return subjects[0].type;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting subjects from the database:", error);
+    throw error;
+  }
+}

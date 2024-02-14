@@ -48,3 +48,19 @@ export async function getGroupsBySubjectId(db, subjectId) {
     throw error;
   }
 }
+
+export async function getGroupIdByRid(db, groupRid) {
+  try {
+    const groups = await db.query(
+      `SELECT id FROM Groups WHERE @rid = '${groupRid}'`
+    );
+
+    return groups;
+  } catch (error) {
+    console.error(
+      `Error getting group with SubjectID ${subjectId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}

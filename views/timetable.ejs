@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Timetable</title>
+    <link rel="stylesheet" href="studentStyle.css">
+</head>
+
+<body>
+
+    <h1>Timetable: </h1>
+    <table class="timetable">
+        <tr>
+            <th>Day</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Teacher</th>
+            <th>Subject</th>
+            <th>Group</th>
+            <% teachings.sort((a, b)=> {
+                const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                return days.indexOf(a.day) - days.indexOf(b.day);
+                }).forEach(function(item) { %>
+        <tr>
+            <td>
+                <%= item.day %>
+            </td>
+            <td>
+                <%= item.start %>
+            </td>
+            <td>
+                <%= item.end %>
+            </td>
+            <td>
+                <%= item.teacherId %>
+            </td>
+            <td>
+                <%= item.subjectId %>
+                    <%= item.subjectRid %>
+            </td>
+            <td>
+                <%= item.groupId %>
+            </td>
+        </tr>
+        <% }); %>
+
+    </table>
+    <a href="/student" class="back-button">Back</a>
+</body>
+
+</html>

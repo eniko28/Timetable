@@ -92,6 +92,10 @@ router.post("/login", async (req, res) => {
         } else {
           if (type === "Teacher") {
             res.redirect("/teacher");
+          } else {
+            if (type === "Student") {
+              res.redirect("/student");
+            }
           }
         }
       } else {

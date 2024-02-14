@@ -33,3 +33,14 @@ document
       event.preventDefault();
     }
   });
+
+function showAdditionalFields() {
+  var type = document.getElementById("type").value;
+  var additionalFields = document.getElementById("additionalFields");
+
+  if (type === "Student") {
+    additionalFields.style.display = "block";
+  } else {
+    additionalFields.style.display = "none";
+  }
+}

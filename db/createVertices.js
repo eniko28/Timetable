@@ -23,6 +23,7 @@ function createVertex(db, className) {
 function createVertices(db) {
   return Promise.all([
     createVertex(db, "Teachers"),
+    createVertex(db, "Students"),
     createVertex(db, "Subjects"),
     createVertex(db, "SubjectTypes"),
     createVertex(db, "Groups"),

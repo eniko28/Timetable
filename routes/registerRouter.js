@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import bcrypt from "bcrypt";
 import * as usersDB from "../db/usersDB.js";
 import * as teachersDB from "../db/teachersDB.js";
+import * as studentsDB from "../db/studentsDB.js";
 import setupDatabase from "../db/dbSetup.js";
 
 const router = express.Router();
@@ -50,6 +51,10 @@ router.post("/register", async (req, res) => {
     await usersDB.insertUsers(db, name, userId, hashWithSalt, type);
     if (type === "Teacher") {
       await teachersDB.insertTeacherNameAndId(db, userId, name);
+    }
+    if (type === "Student") {
+      const groupId = req.fields.groupId;
+      await studentsDB.insertStudent(db, userId, name, groupId);
     }
 
     res.redirect("/register");

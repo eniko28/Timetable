@@ -160,6 +160,21 @@ function createPropertyTeachers(db, className) {
     });
 }
 
+function createPropertyStudents(db, className) {
+  return db.class
+    .get(`${className}`)
+    .then(function (classObj) {
+      return Promise.all([
+        createPropertyIfNotExists(classObj, "id", "String"),
+        createPropertyIfNotExists(classObj, "name", "String"),
+        createPropertyIfNotExists(classObj, "group", "Linkset", "Groups"),
+      ]);
+    })
+    .catch(function (error) {
+      console.error("Error creating properties for Students:", error);
+    });
+}
+
 function createPropertyWishlists(db, className) {
   return db.class
     .get(`${className}`)
@@ -343,19 +358,6 @@ function createDataIfNotExistsSubjectTypes(
     });
 }
 
-function createProperty(db) {
-  return Promise.all([
-    createPropertyTeachers(db, "Teachers"),
-    createPropertySubjects(db, "Subjects"),
-    createPropertySubjectTypes(db, "SubjectTypes"),
-    createPropertyGroups(db, "Groups"),
-    createPropertyWishlists(db, "Wishlists"),
-    createPropertyClassroom(db, "Classrooms"),
-    createPropertyUser(db, "Users"),
-    createPropertyTeachings(db, "Teachings"),
-  ]);
-}
-
 function createDataIfNotExistsClassrooms(
   db,
   className,
@@ -384,6 +386,20 @@ function createDataIfNotExistsClassrooms(
       } else {
       }
     });
+}
+
+function createProperty(db) {
+  return Promise.all([
+    createPropertyTeachers(db, "Teachers"),
+    createPropertySubjects(db, "Subjects"),
+    createPropertySubjectTypes(db, "SubjectTypes"),
+    createPropertyGroups(db, "Groups"),
+    createPropertyWishlists(db, "Wishlists"),
+    createPropertyClassroom(db, "Classrooms"),
+    createPropertyUser(db, "Users"),
+    createPropertyTeachings(db, "Teachings"),
+    createPropertyStudents(db, "Students"),
+  ]);
 }
 
 export default createProperty;
