@@ -8,15 +8,16 @@
 </head>
 
 <body>
-
-    <h1>Timetable: </h1>
     <table class="timetable">
+        <h1>
+            Timetable for <%= group %> group
+        </h1>
         <tr>
             <th>Day</th>
-            <th>Start</th>
-            <th>End</th>
+            <th>Hours</th>
             <th>Classroom</th>
             <th>Group</th>
+            <th>Type</th>
             <th>Subject</th>
             <th>Teacher</th>
             <% teachings.sort((a, b)=> {
@@ -28,10 +29,7 @@
                 <%= item.day %>
             </td>
             <td>
-                <%= item.start %>
-            </td>
-            <td>
-                <%= item.end %>
+                <%= item.start %> - <%= item.end %>
             </td>
             <td>
                 <%= item.classroomName %>
@@ -40,8 +38,10 @@
                 <%= item.groupId %>
             </td>
             <td>
+                <%= item.subjectType %>
+            </td>
+            <td>
                 <%= item.subjectId %>
-                    <%= item.subjectType %>
             </td>
             <td>
                 <%= item.teacherId %>

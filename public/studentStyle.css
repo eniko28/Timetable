@@ -9,13 +9,13 @@ h1, h2 {
     text-align: center;
     color: #72542D;
     margin-bottom: 20px;
-
 }
 
 .timetable {
-    width: 100%;
-    border-collapse: collapse;
-}
+    width: 80%; 
+    margin: 0 auto; 
+    border: 2px solid black;
+    border-collapse: collapse;}
 
 .timetable th,
 .timetable td {
@@ -28,7 +28,7 @@ h1, h2 {
     background-color: #f2f2f2;
 }
 
-.timetable tr:nth-child(even) {
+.timetable tr:nth-child(odd) {
     background-color: #f2f2f2;
 }
 

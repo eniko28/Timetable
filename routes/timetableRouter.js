@@ -43,7 +43,8 @@ router.get("/timetable", async (req, res) => {
       const teacher = await teacherDB.getTeacherById(db, teaching.teacherId);
       teaching.teacherId = teacher.name;
     }
-    res.render("timetable", { teachings });
+    const group = groupId[0].id;
+    res.render("timetable", { teachings, group });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }
