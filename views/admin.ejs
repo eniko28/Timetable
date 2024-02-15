@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <title>Admin Page</title>
     <link rel="stylesheet" href="adminStyle.css">
+
 </head>
 
 <body>
@@ -20,7 +21,12 @@
         <button onclick="window.location.href='/logout'" class="logout-button">Log out</button>
     </div>
     <h1>
-        Welcome to the main page, admin!
+        <div class="links-container">
+            <a href="/groupTimetable">Group's timetable</a>
+            <a href="/teacherTimetable">Teacher's timetable</a>
+            <a href="/subjectTimetable">Subject's timetable</a>
+            <a href="/classroomTimetable">Classroom's timetable</a>
+        </div>
     </h1>
 </body>
 

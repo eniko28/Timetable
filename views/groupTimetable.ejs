@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Group's Timetable</title>
+    <link rel="stylesheet" type="text/css" href="groupTimetableStyle.css">
+</head>
+
+<body>
+
+    <h1>Group's timetable: </h1>
+    <table class="timetable">
+        <thead>
+            <tr>
+                <th>Group Name</th>
+                <th>Grade Level</th>
+                <th>Grade Level</th>
+                <th>Grade Level</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% var uniqueNames={}; groups.forEach(function(item) { uniqueNames[item.name]=true; }); var
+                uniqueNamesArray=Object.keys(uniqueNames); uniqueNamesArray.sort();
+                uniqueNamesArray.forEach(function(name) { %>
+                <tr>
+                    <td>
+                        <%= name %>
+                    </td>
+                    <td><button onclick="window.location.href='/group?name=<%= name %>&gradeLevel=1'">1</button></td>
+                    <td><button onclick="window.location.href='/group?name=<%= name %>&gradeLevel=2'">2</button></td>
+                    <td><button onclick="window.location.href='/group?name=<%= name %>&gradeLevel=3'">3</button></td>
+                </tr>
+                <% }); %>
+        </tbody>
+    </table>
+    <a href="javascript:history.go(-1)" class="back-button">Back</a>
+</body>
+
+</html>

@@ -74,3 +74,28 @@ export async function getGroupsNameById(db, groupId) {
     throw error;
   }
 }
+
+export async function getAllGroupIds(db) {
+  try {
+    const query = `SELECT id FROM Groups `;
+    const groups = await db.query(query);
+    return groups;
+  } catch (error) {
+    console.error(`Error getting groupNames from the database:`, error);
+    throw error;
+  }
+}
+
+export async function getGroupsByNameAndGradeLevel(db, name, gradeLevel) {
+  try {
+    const query = `SELECT FROM Groups WHERE name = '${name}' AND gradeLevel = '${gradeLevel}'`;
+    const groups = await db.query(query);
+    return groups;
+  } catch (error) {
+    console.error(
+      `Error getting group with name ${name}  AND gradeLevel ${gradeLevel}from the database:`,
+      error
+    );
+    throw error;
+  }
+}

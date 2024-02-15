@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Groups timetable</title>
+    <link rel="stylesheet" type="text/css" href="groupTimetableStyle.css">
+</head>
+
+<body>
+    <% groups.forEach(function(group) { %>
+        <h2>Group ID: <%= group.id %>
+        </h2>
+        <table class="timetable">
+            <thead>
+                <tr>
+                    <th>Teacher ID</th>
+                    <th>Subject ID</th>
+                    <th>Day</th>
+                    <th>Start</th>
+                    <th>End</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% group.teacherIds.forEach(function(teacherId, index) { %>
+                    <tr>
+                        <td>
+                            <%= teacherId %>
+                        </td>
+                        <td>
+                            <%= group.subjectId[index] %>
+                        </td>
+                        <td>
+                            <%= group.day[index] %>
+                        </td>
+                        <td>
+                            <%= group.start[index] %>
+                        </td>
+                        <td>
+                            <%= group.end[index] %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+        <% }); %>
+            <a href="javascript:history.go(-1)" class="back-button">Back</a>
+</body>
+
+</html>
