@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Groups timetable</title>
+    <link rel="stylesheet" type="text/css" href="adminStyle.css">
+</head>
+
+<body>
+    <table class="timetable">
+        <h1>
+            <%= name %>
+        </h1>
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Hours</th>
+                <th>Classroom</th>
+                <th>Type</th>
+                <th>Subject</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% const days=['Monday', 'Tuesday' , 'Wednesday' , 'Thursday' , 'Friday' ]; days.forEach(function(day) {
+                const dayTeachings=teachings.filter(teaching=> teaching.day === day);
+                dayTeachings.forEach(function(teaching) { %>
+                <tr>
+                    <td>
+                        <%= teaching.day %>
+                    </td>
+                    <td>
+                        <%= teaching.start %> - <%= teaching.end %>
+                    </td>
+                    <td>
+                        <%= teaching.classroomName %>
+                    </td>
+                    <td>
+                        <%= teaching.subjectType %>
+                    </td>
+                    <td>
+                        <%= teaching.subjectId %>
+                    </td>
+                </tr>
+                <% }); }); %>
+        </tbody>
+    </table>
+    <a href="javascript:history.go(-1)" class="back-button">Back</a>
+</body>
+
+</html>

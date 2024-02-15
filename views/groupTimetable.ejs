@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Group's Timetable</title>
-    <link rel="stylesheet" type="text/css" href="groupTimetableStyle.css">
+    <link rel="stylesheet" type="text/css" href="adminStyle.css">
 </head>
 
 <body>
@@ -27,9 +27,12 @@
                     <td>
                         <%= name %>
                     </td>
-                    <td><button onclick="window.location.href='/group?name=<%= name %>&gradeLevel=1'">1</button></td>
-                    <td><button onclick="window.location.href='/group?name=<%= name %>&gradeLevel=2'">2</button></td>
-                    <td><button onclick="window.location.href='/group?name=<%= name %>&gradeLevel=3'">3</button></td>
+                    <td><button class="timetableButton"
+                            onclick="window.location.href='/group?name=<%= name %>&gradeLevel=1'">1</button></td>
+                    <td><button class="timetableButton"
+                            onclick="window.location.href='/group?name=<%= name %>&gradeLevel=2'">2</button></td>
+                    <td><button class="timetableButton"
+                            onclick="window.location.href='/group?name=<%= name %>&gradeLevel=3'">3</button></td>
                 </tr>
                 <% }); %>
         </tbody>

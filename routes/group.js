@@ -1,11 +1,11 @@
 import express from "express";
-import * as studentDB from "../db/studentsDB.js";
-import * as teachingDB from "../db/teachingsDB.js";
+import * as timetableDB from "../db/timetableDB.js";
 import * as groupDB from "../db/groupsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
-import * as subjectDB from "../db/subjectsDB.js";
-import * as subjectTypeDB from "../db/subjectTypesDB.js";
+import * as subjectBD from "../db/subjectsDB.js";
 import * as subjectClassrooms from "../db/subjectsclassesDB.js";
+import * as subjectTypeDB from "../db/subjectTypesDB.js";
+
 import setupDatabase from "../db/dbSetup.js";
 
 const router = express.Router();
@@ -23,8 +23,7 @@ setupDatabase()
 
 router.get("/group", async (req, res) => {
   try {
-    const name = req.query.name;
-    const gradeLevel = req.query.gradeLevel;
+    const { name, gradeLevel } = req.query;
     const groups = await groupDB.getGroupsByNameAndGradeLevel(
       db,
       name,
@@ -32,12 +31,29 @@ router.get("/group", async (req, res) => {
     );
 
     for (const group of groups) {
-      const teachings = await teachingDB.getTeachingByGroupId(db, group.id);
-      group.teacherIds = teachings.map((teaching) => teaching.teacherId);
-      group.subjectId = teachings.map((teaching) => teaching.subjectId);
-      group.day = teachings.map((teaching) => teaching.day);
-      group.start = teachings.map((teaching) => teaching.start);
-      group.end = teachings.map((teaching) => teaching.end);
+      const teachings = await timetableDB.selectTimetableByGroupId(
+        db,
+        group.id
+      );
+      for (const teaching of teachings) {
+        const teacher = await teacherDB.getTeacherNameById(
+          db,
+          teaching.teacherId
+        );
+        const subject = await subjectBD.getSubjectById(db, teaching.subjectId);
+        const rid = await subjectBD.getSubjectRidById(db, teaching.subjectId);
+        const classroomName = await subjectClassrooms.getSubjectClassroom(
+          db,
+          teaching.subjectId
+        );
+        const type = await subjectTypeDB.getTypesByRID(db, rid.toString());
+
+        teaching.teacherName = teacher;
+        teaching.subjectId = subject.name;
+        teaching.subjectType = type.type;
+        teaching.classroomName = classroomName[0].classroomName;
+      }
+      group.teachings = teachings;
     }
 
     res.render("group", { groups });

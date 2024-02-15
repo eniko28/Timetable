@@ -1,5 +1,5 @@
 import express from "express";
-import * as groupDB from "../db/groupsDB.js";
+import * as teacherDB from "../db/teachersDB.js";
 import setupDatabase from "../db/dbSetup.js";
 
 const router = express.Router();
@@ -15,10 +15,10 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/groupTimetable", async (req, res) => {
+router.get("/teacherTimetable", async (req, res) => {
   try {
-    const groups = await groupDB.getAllGroups(db);
-    res.render("groupTimetable", { groups });
+    const teachers = await teacherDB.getAllTeachers(db);
+    res.render("teacherTimetable", { teachers });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }

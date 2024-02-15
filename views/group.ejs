@@ -4,43 +4,50 @@
 <head>
     <meta charset="UTF-8" />
     <title>Groups timetable</title>
-    <link rel="stylesheet" type="text/css" href="groupTimetableStyle.css">
+    <link rel="stylesheet" type="text/css" href="adminStyle.css">
 </head>
 
 <body>
     <% groups.forEach(function(group) { %>
-        <h2>Group ID: <%= group.id %>
+        <h2>
+            <%= group.id %>
         </h2>
         <table class="timetable">
             <thead>
                 <tr>
-                    <th>Teacher ID</th>
-                    <th>Subject ID</th>
                     <th>Day</th>
-                    <th>Start</th>
-                    <th>End</th>
+                    <th>Hours</th>
+                    <th>Classroom</th>
+                    <th>Type</th>
+                    <th>Subject</th>
+                    <th>Teacher</th>
                 </tr>
             </thead>
             <tbody>
-                <% group.teacherIds.forEach(function(teacherId, index) { %>
+                <% const days=['Monday', 'Tuesday' , 'Wednesday' , 'Thursday' , 'Friday' ]; days.forEach(function(day) {
+                    const dayTeachings=group.teachings.filter(teaching=> teaching.day === day);
+                    dayTeachings.forEach(function(teaching) { %>
                     <tr>
                         <td>
-                            <%= teacherId %>
+                            <%= teaching.day %>
                         </td>
                         <td>
-                            <%= group.subjectId[index] %>
+                            <%= teaching.start %> - <%= teaching.end %>
                         </td>
                         <td>
-                            <%= group.day[index] %>
+                            <%= teaching.classroomName %>
                         </td>
                         <td>
-                            <%= group.start[index] %>
+                            <%= teaching.subjectType %>
                         </td>
                         <td>
-                            <%= group.end[index] %>
+                            <%= teaching.subjectId %>
+                        </td>
+                        <td>
+                            <%= teaching.teacherName %>
                         </td>
                     </tr>
-                    <% }); %>
+                    <% }); }); %>
             </tbody>
         </table>
         <% }); %>

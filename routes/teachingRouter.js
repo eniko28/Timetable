@@ -20,6 +20,7 @@ import * as groupDB from "../db/groupsDB.js";
 import { v4 as uuidv4 } from "uuid";
 import { deleteWishlist } from "../db/wishlistsDB.js";
 import { getAllClassrooms, getClassroomByName } from "../db/classroomDB.js";
+import { insertTimetable } from "../db/timetableDB.js";
 
 const router = express.Router();
 let db;
@@ -111,6 +112,18 @@ router.post("/wishlists", async (req, res) => {
         day,
         start,
         end
+      );
+      const timetableId = uuidv4();
+      await insertTimetable(
+        db,
+        timetableId,
+        teacherId,
+        subjectId,
+        groupId,
+        day,
+        start,
+        end,
+        classroomName
       );
 
       const teacher = await teacherDB.getTeacherById(db, teacherId);

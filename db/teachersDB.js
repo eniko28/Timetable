@@ -56,3 +56,17 @@ export async function getTeacherSubjects(db, teacherId) {
     throw error;
   }
 }
+
+export async function getTeacherNameById(db, teacherId) {
+  try {
+    const query = `SELECT name FROM Teachers WHERE id = '${teacherId}'`;
+    const teacher = await db.query(query);
+    return teacher.length > 0 ? teacher[0].name : null;
+  } catch (error) {
+    console.error(
+      `Error getting teacher with id ${teacherId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}

@@ -77,7 +77,7 @@ function createPropertyGroups(db, className) {
         { id: 534, gradeLevel: 3, name: "Computer Science" },
         { id: 411, gradeLevel: 1, name: "Mathematics" },
         { id: 421, gradeLevel: 2, name: "Mathematics" },
-        { id: 423, gradeLevel: 3, name: "Mathematics" },
+        { id: 431, gradeLevel: 3, name: "Mathematics" },
       ];
 
       const groupPromises = groupData.map((group) => {
@@ -325,6 +325,26 @@ function createPropertyTeachings(db, className) {
     });
 }
 
+function createPropertyTimetable(db, className) {
+  return db.class
+    .get(`${className}`)
+    .then(function (classObj) {
+      return Promise.all([
+        createPropertyIfNotExists(classObj, "timetableId", "String"),
+        createPropertyIfNotExists(classObj, "teacherId", "String"),
+        createPropertyIfNotExists(classObj, "subjectId", "String"),
+        createPropertyIfNotExists(classObj, "groupId", "Integer"),
+        createPropertyIfNotExists(classObj, "day", "String"),
+        createPropertyIfNotExists(classObj, "start", "String"),
+        createPropertyIfNotExists(classObj, "end", "String"),
+        createPropertyIfNotExists(classObj, "classroomName", "String"),
+      ]);
+    })
+    .catch(function (error) {
+      console.error("Error creating properties for Subjects:", error);
+    });
+}
+
 function createDataIfNotExistsSubjectTypes(
   db,
   className,
@@ -400,6 +420,7 @@ function createProperty(db) {
     createPropertyUser(db, "Users"),
     createPropertyTeachings(db, "Teachings"),
     createPropertyStudents(db, "Students"),
+    createPropertyTimetable(db, "Timetable"),
   ]);
 }
 

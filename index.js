@@ -22,7 +22,9 @@ import appropiateClassrooms from "./routes/appropiateClassrooms.js";
 import studentRouter from "./routes/studentRouter.js";
 import timetableRouter from "./routes/timetableRouter.js";
 import groupTimetable from "./routes/groupTimetable.js";
+import teacherTimetable from "./routes/teacherTimetable.js";
 import group from "./routes/group.js";
+import teachers from "./routes/teachers.js";
 
 const app = express();
 const port = 3000;
@@ -58,7 +60,9 @@ setupDatabase()
     app.use("/", studentRouter);
     app.use("/", timetableRouter);
     app.use("/", groupTimetable);
+    app.use("/", teacherTimetable);
     app.use("/", group);
+    app.use("/", teachers);
 
     app.listen(port, () => {
       console.log(`App listening at http://localhost:${port}`);
