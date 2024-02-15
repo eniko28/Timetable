@@ -54,29 +54,30 @@ function createPropertyGroups(db, className) {
       return Promise.all([
         createPropertyIfNotExists(classObj, "id", "Integer"),
         createPropertyIfNotExists(classObj, "gradeLevel", "Integer"),
+        createPropertyIfNotExists(classObj, "name", "String"),
         createPropertyIfNotExists(classObj, "subjectId", "EmbeddedList"),
       ]);
     })
     .then(function (properties) {
       const groupData = [
-        { id: 611, gradeLevel: 1 },
-        { id: 621, gradeLevel: 2 },
-        { id: 631, gradeLevel: 3 },
-        { id: 511, gradeLevel: 1 },
-        { id: 512, gradeLevel: 1 },
-        { id: 513, gradeLevel: 1 },
-        { id: 514, gradeLevel: 1 },
-        { id: 521, gradeLevel: 2 },
-        { id: 522, gradeLevel: 2 },
-        { id: 523, gradeLevel: 2 },
-        { id: 524, gradeLevel: 2 },
-        { id: 531, gradeLevel: 3 },
-        { id: 532, gradeLevel: 3 },
-        { id: 533, gradeLevel: 3 },
-        { id: 534, gradeLevel: 3 },
-        { id: 411, gradeLevel: 1 },
-        { id: 421, gradeLevel: 2 },
-        { id: 423, gradeLevel: 3 },
+        { id: 611, gradeLevel: 1, name: "Mathematics Computer Science" },
+        { id: 621, gradeLevel: 2, name: "Mathematics Computer Science" },
+        { id: 631, gradeLevel: 3, name: "Mathematics Computer Science" },
+        { id: 511, gradeLevel: 1, name: "Computer Science" },
+        { id: 512, gradeLevel: 1, name: "Computer Science" },
+        { id: 513, gradeLevel: 1, name: "Computer Science" },
+        { id: 514, gradeLevel: 1, name: "Computer Science" },
+        { id: 521, gradeLevel: 2, name: "Computer Science" },
+        { id: 522, gradeLevel: 2, name: "Computer Science" },
+        { id: 523, gradeLevel: 2, name: "Computer Science" },
+        { id: 524, gradeLevel: 2, name: "Computer Science" },
+        { id: 531, gradeLevel: 3, name: "Computer Science" },
+        { id: 532, gradeLevel: 3, name: "Computer Science" },
+        { id: 533, gradeLevel: 3, name: "Computer Science" },
+        { id: 534, gradeLevel: 3, name: "Computer Science" },
+        { id: 411, gradeLevel: 1, name: "Mathematics" },
+        { id: 421, gradeLevel: 2, name: "Mathematics" },
+        { id: 423, gradeLevel: 3, name: "Mathematics" },
       ];
 
       const groupPromises = groupData.map((group) => {
@@ -260,7 +261,7 @@ function createDataIfNotExistsGroups(db, className, data, keyName, keyValue) {
     .one()
     .then((existingData) => {
       if (!existingData) {
-        const insertQuery = `INSERT INTO ${className} SET ${keyName}=${keyValue}, id='${data.id}', gradeLevel='${data.gradeLevel}'`;
+        const insertQuery = `INSERT INTO ${className} SET ${keyName}=${keyValue}, id='${data.id}', gradeLevel='${data.gradeLevel}', name = '${data.name}'`;
 
         return db
           .query(insertQuery)

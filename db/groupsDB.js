@@ -60,3 +60,17 @@ export async function getGroupIdByRid(db, groupRid) {
     throw error;
   }
 }
+
+export async function getGroupsNameById(db, groupId) {
+  try {
+    const query = `SELECT name FROM Groups WHERE id = '${groupId}'`;
+    const groups = await db.query(query);
+    return groups;
+  } catch (error) {
+    console.error(
+      `Error getting group with Id ${groupId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}

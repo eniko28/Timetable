@@ -3,6 +3,8 @@ document
   .addEventListener("submit", function (event) {
     var start = document.getElementsByName("start")[0].value.trim();
     var end = document.getElementsByName("end")[0].value.trim();
+    var groupId = document.getElementsByName("groupCode")[0].value;
+    var subjectId = document.getElementsByName("subjectCode")[0].value;
 
     var startError = document.getElementById("startError");
     var endError = document.getElementById("endError");
@@ -10,7 +12,7 @@ document
     startError.textContent = "";
     endError.textContent = "";
 
-    if (start === "" || end === "") {
+    if (start === "" || end === "" || groupId === "" || subjectId === "") {
       startError.textContent = "Please fill in all fields";
       event.preventDefault();
     }

@@ -25,7 +25,7 @@ router.get("/timetable", async (req, res) => {
   try {
     const userId = req.session.userId;
     const groupRid = await studentDB.getGroupIdByStudentId(db, userId);
-    const groupId = await groupDB.getGroupIdByRid(db, groupRid);
+    const groupId = await groupDB.getGroupIdByRid(db, groupRid.toString());
     const teachings = await teachingDB.getTeachingByGroupId(db, groupId[0].id);
     for (const teaching of teachings) {
       const subject = await subjectDB.getSubjectById(db, teaching.subjectId);
@@ -44,7 +44,9 @@ router.get("/timetable", async (req, res) => {
       teaching.teacherId = teacher.name;
     }
     const group = groupId[0].id;
-    res.render("timetable", { teachings, group });
+    const groupName = await groupDB.getGroupsNameById(db, group);
+    const groupsName = groupName[0].name;
+    res.render("timetable", { teachings, groupsName, group });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }

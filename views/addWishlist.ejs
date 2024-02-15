@@ -22,6 +22,7 @@
 
             <label for="subjectCode">Subject Id:</label>
             <select id="subjectCode" name="subjectCode">
+                <option value="">Choose...</option>
                 <% if (subjects && subjects[0] && subjects[0].subjectId) { %>
                     <% subjects[0].subjectId.forEach(function(subject) { %>
                         <option value="<%= subject %>">
@@ -30,9 +31,12 @@
                         <% }); %>
                             <% } %>
             </select><br>
+            <span class="error-message" id="startError"></span><br>
 
             <label for="groupCode">Group Id:</label>
             <select id="groupCode" name="groupCode"></select><br>
+            <span class="error-message" id="startError"></span><br>
+
 
             <label for="day">Day:</label>
             <select name="day">
