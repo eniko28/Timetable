@@ -84,3 +84,17 @@ export async function getSubjectRidById(db, subjectId) {
     throw error;
   }
 }
+
+export async function getSubjectsByName(db, subjectName) {
+  try {
+    const query = `SELECT id FROM Subjects WHERE name = '${subjectName}'`;
+    const subjects = await db.query(query);
+    return subjects;
+  } catch (error) {
+    console.error(
+      `Error getting subjects with name ${subjectName} from the database:`,
+      error
+    );
+    throw error;
+  }
+}

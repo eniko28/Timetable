@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Teacher's timetable</title>
+    <title>Subject's timetable</title>
     <link rel="stylesheet" type="text/css" href="adminStyle.css">
 </head>
 
@@ -18,7 +18,7 @@
                 <th>Hours</th>
                 <th>Classroom</th>
                 <th>Type</th>
-                <th>Subject</th>
+                <th>Group</th>
             </tr>
         </thead>
         <tbody>
@@ -39,7 +39,7 @@
                         <%= teaching.subjectType %>
                     </td>
                     <td>
-                        <%= teaching.subjectId %>
+                        <%= teaching.groupId %>
                     </td>
                 </tr>
                 <% }); }); %>

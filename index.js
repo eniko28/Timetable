@@ -23,8 +23,10 @@ import studentRouter from "./routes/studentRouter.js";
 import timetableRouter from "./routes/timetableRouter.js";
 import groupTimetable from "./routes/groupTimetable.js";
 import teacherTimetable from "./routes/teacherTimetable.js";
+import subjectTimetable from "./routes/subjectTimetable.js";
 import group from "./routes/group.js";
 import teachers from "./routes/teachers.js";
+import subject from "./routes/subject.js";
 
 const app = express();
 const port = 3000;
@@ -61,8 +63,10 @@ setupDatabase()
     app.use("/", timetableRouter);
     app.use("/", groupTimetable);
     app.use("/", teacherTimetable);
+    app.use("/", subjectTimetable);
     app.use("/", group);
     app.use("/", teachers);
+    app.use("/", subject);
 
     app.listen(port, () => {
       console.log(`App listening at http://localhost:${port}`);

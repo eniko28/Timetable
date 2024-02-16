@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Subjects's Timetable</title>
+    <link rel="stylesheet" type="text/css" href="adminStyle.css">
+</head>
+
+<body>
+
+    <h1>Subjects's timetable: </h1>
+    <table class="timetable">
+        <thead>
+            <tr>
+                <th>Subject</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% var displayedSubjects=[]; subjects.forEach(function(subject) {
+                if(!displayedSubjects.includes(subject.name)) { displayedSubjects.push(subject.name); %>
+                <tr>
+                    <td><button class="timetableButton"
+                            onclick="window.location.href='/subject?name=<%= subject.name %> %>'">
+                            <%= subject.name %>
+                        </button>
+                    </td>
+                </tr>
+                <% } }); %>
+        </tbody>
+    </table>
+    <a href="javascript:history.go(-1)" class="back-button">Back</a>
+</body>
+
+</html>
