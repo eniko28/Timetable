@@ -1,9 +1,6 @@
 import express from "express";
 import * as timetableDB from "../db/timetableDB.js";
-import * as groupDB from "../db/groupsDB.js";
-import * as teacherDB from "../db/teachersDB.js";
 import * as subjectBD from "../db/subjectsDB.js";
-import * as subjectClassrooms from "../db/subjectsclassesDB.js";
 import * as subjectTypeDB from "../db/subjectTypesDB.js";
 
 import setupDatabase from "../db/dbSetup.js";

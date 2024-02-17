@@ -17,8 +17,9 @@
                 <th>Day</th>
                 <th>Hours</th>
                 <th>Classroom</th>
-                <th>Type</th>
                 <th>Group</th>
+                <th>Type</th>
+                <th>Teacher</th>
             </tr>
         </thead>
         <tbody>
@@ -36,10 +37,13 @@
                         <%= teaching.classroomName %>
                     </td>
                     <td>
+                        <%= teaching.groupId %>
+                    </td>
+                    <td>
                         <%= teaching.subjectType %>
                     </td>
                     <td>
-                        <%= teaching.groupId %>
+                        <%= teaching.teacherName %>
                     </td>
                 </tr>
                 <% }); }); %>
