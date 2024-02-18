@@ -47,6 +47,20 @@ export async function getGroupsBySubjectId(db, subjectId) {
   }
 }
 
+export async function getGroupsByIdAndSubjectId(db, groupId, subjectId) {
+  try {
+    const query = `SELECT FROM Groups WHERE id = '${groupId}' AND subjectId contains '${subjectId}'`;
+    const groups = await db.query(query);
+    return groups;
+  } catch (error) {
+    console.error(
+      `Error getting group with SubjectID ${subjectId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}
+
 export async function getGroupIdByRid(db, groupRid) {
   try {
     const query = `SELECT id FROM Groups WHERE @rid = '${groupRid}'`;

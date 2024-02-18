@@ -34,6 +34,17 @@ router.post("/assignGroup", async (req, res) => {
       return res.status(400).send("Missing required data.");
     }
 
+    const exists = await groupDB.getGroupsByIdAndSubjectId(
+      db,
+      groupCode,
+      subjectCode
+    );
+    if (exists.length !== 0) {
+      res.status(400).render("error", {
+        message: "Group already assigned to subject.",
+      });
+      return;
+    }
     await groupDB.insertGroupSubjectId(db, groupCode, subjectCode);
 
     res.redirect("/assignGroup");

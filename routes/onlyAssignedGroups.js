@@ -1,6 +1,6 @@
 import express from "express";
 import setupDatabase from "../db/dbSetup.js";
-import { getGroupsBySubjectId } from "../db/groupsDB.js";
+import * as groupDB from "../db/groupsDB.js";
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ setupDatabase()
 router.get("/getGroupsBySubject", async (req, res) => {
   try {
     var subjectId = req.query.subjectId;
-    const result = await getGroupsBySubjectId(db, subjectId);
+    const result = await groupDB.getGroupsBySubjectId(db, subjectId);
     res.send(result);
   } catch (error) {
     console.error("Error getting groups by subject from database:", error);

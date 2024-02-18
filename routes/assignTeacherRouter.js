@@ -34,6 +34,17 @@ router.post("/assignTeacher", async (req, res) => {
       return res.status(400).send("Missing required data.");
     }
 
+    const exists = await teacherDB.getTeacherByIdandSubjectId(
+      db,
+      subjectCode,
+      teacherCode
+    );
+    if (exists.length !== 0) {
+      res.status(400).render("error", {
+        message: "Teacher already assigned to group.",
+      });
+      return;
+    }
     await teacherDB.insertTeachersSubjectId(db, teacherCode, subjectCode);
 
     res.redirect("/assignTeacher");

@@ -1,30 +1,14 @@
 import express from "express";
 import setupDatabase from "../db/dbSetup.js";
-import * as wishlistDB from "../db/wishlistsDB.js";
-import {
-  insertTeaching,
-  getFreeTeacher,
-  getFreeGroup,
-  getTeachingsByGroupAndSubjectId,
-} from "../db/teachingsDB.js";
-import {
-  createEdgeSubjectsClassrooms,
-  createEdgeTeacherTeachings,
-  createEdgeGroupTeachings,
-  createEdgesSubjectTeachings,
-  createEdgeTeachingsWishlists,
-  createEdgeTeachingsTimetable,
-} from "../db/createEdges.js";
+import * as createEdge from "../db/createEdges.js";
 import * as teachingDB from "../db/teachingsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
 import * as subjectDB from "../db/subjectsDB.js";
 import * as groupDB from "../db/groupsDB.js";
+import * as classroomDB from "../db/classroomDB.js";
+import * as wishlistDB from "../db/wishlistsDB.js";
+import * as timetableDB from "../db/timetableDB.js";
 import { v4 as uuidv4 } from "uuid";
-import { deleteWishlist } from "../db/wishlistsDB.js";
-import { getAllClassrooms, getClassroomByName } from "../db/classroomDB.js";
-import { insertTimetable } from "../db/timetableDB.js";
-import { getWishlistById } from "../db/wishlistsDB.js";
-import { getTimetableById } from "../db/timetableDB.js";
 
 const router = express.Router();
 let db;
@@ -41,7 +25,7 @@ setupDatabase()
 router.get("/wishlists", async (req, res) => {
   try {
     const wishlists = await wishlistDB.getAllWishlists(db);
-    const classrooms = await getAllClassrooms(db);
+    const classrooms = await classroomDB.getAllClassrooms(db);
     res.render("wishlists", {
       wishlists: wishlists,
       classrooms: classrooms,
@@ -77,7 +61,7 @@ router.post("/wishlists", async (req, res) => {
       return res.status(400).send("Missing required data.");
     }
     if (approved === "approved") {
-      const existsTeacher = await getFreeTeacher(
+      const existsTeacher = await timetableDB.getFreeTeacher(
         db,
         teacherId,
         day,
@@ -89,13 +73,19 @@ router.post("/wishlists", async (req, res) => {
           .status(400)
           .send("The teacher already has a class scheduled for that time.");
       }
-      const existsGroup = await getFreeGroup(db, groupId, day, start, end);
+      const existsGroup = await timetableDB.getFreeGroup(
+        db,
+        groupId,
+        day,
+        start,
+        end
+      );
       if (existsGroup.length !== 0) {
         return res
           .status(400)
           .send("The group already has a class scheduled for that time.");
       }
-      const existingSubject = await getTeachingsByGroupAndSubjectId(
+      const existingSubject = await teachingDB.getTeachingsByGroupAndSubjectId(
         db,
         groupId,
         subjectId
@@ -108,7 +98,7 @@ router.post("/wishlists", async (req, res) => {
           );
       }
       const teachingId = uuidv4();
-      await insertTeaching(
+      await teachingDB.insertTeaching(
         db,
         teachingId,
         teacherId,
@@ -119,7 +109,7 @@ router.post("/wishlists", async (req, res) => {
         end
       );
       const timetableId = uuidv4();
-      await insertTimetable(
+      await timetableDB.insertTimetable(
         db,
         timetableId,
         teacherId,
@@ -135,20 +125,20 @@ router.post("/wishlists", async (req, res) => {
       const group = await groupDB.getGroupById(db, groupId);
       const teachings = await teachingDB.getTeachingById(db, teachingId);
       const subject = await subjectDB.getSubjectById(db, subjectId);
-      const classroom = await getClassroomByName(db, classroomName);
-      const wishlists = await getWishlistById(db, wishlistId);
-      const timetable = await getTimetableById(db, timetableId);
+      const classroom = await classroomDB.getClassroomByName(db, classroomName);
+      const wishlists = await wishlistDB.getWishlistById(db, wishlistId);
+      const timetable = await timetableDB.getTimetableById(db, timetableId);
 
-      await createEdgeSubjectsClassrooms(db, classroom, subject);
-      await createEdgeTeacherTeachings(db, teacher, teachings);
-      await createEdgeGroupTeachings(db, group, teachings);
-      await createEdgesSubjectTeachings(db, subject, teachings);
-      await createEdgeTeachingsWishlists(db, wishlists, teachings);
-      await createEdgeTeachingsTimetable(db, timetable, teachings);
+      await createEdge.createEdgeSubjectsClassrooms(db, classroom, subject);
+      await createEdge.createEdgeTeacherTeachings(db, teacher, teachings);
+      await createEdge.createEdgeGroupTeachings(db, group, teachings);
+      await createEdge.createEdgesSubjectTeachings(db, subject, teachings);
+      await createEdge.createEdgeTeachingsWishlists(db, wishlists, teachings);
+      await createEdge.createEdgeTeachingsTimetable(db, timetable, teachings);
 
-      await deleteWishlist(db, day, start, end);
+      await wishlistDB.deleteWishlist(db, day, start, end);
     } else {
-      await deleteWishlist(db, day, start, end);
+      await wishlistDB.deleteWishlist(db, day, start, end);
     }
 
     res.redirect("/wishlists");

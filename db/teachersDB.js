@@ -57,13 +57,16 @@ export async function getTeacherSubjects(db, teacherId) {
   }
 }
 
-export async function proba(db) {
+export async function getTeacherByIdandSubjectId(db, subjectId, teacherId) {
   try {
-    const query = `SELECT expand(in('TeacherTeachings')) FROM teachers`;
-    const subjects = await db.query(query);
-    return subjects;
+    const query = `SELECT FROM Teachers WHERE id = '${teacherId}' AND subjectId contains '${subjectId}'`;
+    const teachers = await db.query(query);
+    return teachers;
   } catch (error) {
-    console.error(`Error getting subjects  from the database:`, error);
+    console.error(
+      `Error getting teacher with teacherId ${teacherId} and subjectId ${subjectId} from the database:`,
+      error
+    );
     throw error;
   }
 }

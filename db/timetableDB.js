@@ -72,3 +72,35 @@ export async function getTimetableById(db, timetableId) {
     throw error;
   }
 }
+
+export async function getTimetebaleByTeacherId(
+  db,
+  teacherId,
+  subjectId,
+  groupId
+) {
+  try {
+    const query = `SELECT FROM Timetable WHERE teacherId = '${teacherId}' AND subjectId = '${subjectId}' AND groupId = '${groupId}'`;
+    const result = await db.query(query);
+    return result;
+  } catch (error) {
+    console.error("Error selecting timetable by timetable ID:", error);
+    throw error;
+  }
+}
+
+export async function getTimetableByTeacherAndTime(
+  db,
+  teacherId,
+  startTime,
+  endTime
+) {
+  try {
+    const query = `SELECT * FROM Timetable WHERE teacherId = '${teacherId}' AND start = '${startTime}' AND end = '${endTime}'`;
+    const result = await db.query(query);
+    return result;
+  } catch (error) {
+    console.error("Error selecting timetable by teacher and time:", error);
+    throw error;
+  }
+}

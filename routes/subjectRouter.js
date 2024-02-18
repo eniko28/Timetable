@@ -39,7 +39,10 @@ router.post("/addSubjects", async (req, res) => {
     );
 
     if (existingSubject !== null || existingNameAndType.length !== 0) {
-      return res.status(409).send("Subject already exists.");
+      res.status(400).render("error", {
+        message: "Subject already exists.",
+      });
+      return;
     }
 
     await subjectsDB.insertSubject(db, code, name, type);

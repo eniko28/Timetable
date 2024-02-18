@@ -1,11 +1,9 @@
 import express from "express";
 import * as wishlistDB from "../db/wishlistsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
-import {
-  createEdgeTeachersWishlists,
-  createEdgeTeachingsWishlists,
-} from "../db/createEdges.js";
+import * as createEdge from "../db/createEdges.js";
 import * as groupDB from "../db/groupsDB.js";
+import * as timetableDB from "../db/timetableDB.js";
 import setupDatabase from "../db/dbSetup.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -57,6 +55,31 @@ router.post("/addWishlists", async (req, res) => {
 
     const wishlistId = uuidv4();
 
+    const exists = await timetableDB.getTimetebaleByTeacherId(
+      db,
+      teacherCode,
+      subjectCode,
+      groupCode
+    );
+    if (exists.length !== 0) {
+      res.status(400).render("error", {
+        message: "Subject already exists in timetable for the given group.",
+      });
+      return;
+    }
+    const teacherExists = await timetableDB.getTimetableByTeacherAndTime(
+      db,
+      teacherCode,
+      start,
+      end
+    );
+    if (teacherExists.length !== 0) {
+      res.status(400).render("error", {
+        message: "Teacher already has a class scheduled at this time.",
+      });
+
+      return;
+    }
     await wishlistDB.insertWishlist(
       db,
       wishlistId,
@@ -71,7 +94,7 @@ router.post("/addWishlists", async (req, res) => {
     const teacher = await teacherDB.getTeacherById(db, teacherCode);
     const wishlists = await wishlistDB.getWishlistById(db, wishlistId);
 
-    await createEdgeTeachersWishlists(db, wishlists, teacher);
+    await createEdge.createEdgeTeachersWishlists(db, wishlists, teacher);
 
     res.redirect("/addWishlists");
   } catch (error) {

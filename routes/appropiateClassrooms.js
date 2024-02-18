@@ -1,8 +1,8 @@
 import express from "express";
 import setupDatabase from "../db/dbSetup.js";
-import { getTypesByRID } from "../db/subjectTypesDB.js";
-import { getSubjectById } from "../db/subjectsDB.js";
-import { getClassroomByType } from "../db/classroomDB.js";
+import * as classroomDB from "../db/classroomDB.js";
+import * as subjectBD from "../db/subjectsDB.js";
+import * as subjectTypesDB from "../db/subjectTypesDB.js";
 
 const router = express.Router();
 
@@ -20,10 +20,10 @@ setupDatabase()
 router.get("/getClassroomBySubject", async (req, res) => {
   try {
     var subjectId = req.query.subjectId;
-    const subject = await getSubjectById(db, subjectId);
+    const subject = await subjectBD.getSubjectById(db, subjectId);
     const subjectType = subject.type.toString();
-    const type = await getTypesByRID(db, subjectType);
-    const classrooms = await getClassroomByType(db, type.type);
+    const type = await subjectTypesDB.getTypesByRID(db, subjectType);
+    const classrooms = await classroomDB.getClassroomByType(db, type.type);
     res.json(classrooms);
   } catch (error) {
     console.error("Error getting classrooms by subject from database:", error);
