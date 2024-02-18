@@ -12,6 +12,8 @@ import {
   createEdgeTeacherTeachings,
   createEdgeGroupTeachings,
   createEdgesSubjectTeachings,
+  createEdgeTeachingsWishlists,
+  createEdgeTeachingsTimetable,
 } from "../db/createEdges.js";
 import * as teachingDB from "../db/teachingsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
@@ -21,6 +23,8 @@ import { v4 as uuidv4 } from "uuid";
 import { deleteWishlist } from "../db/wishlistsDB.js";
 import { getAllClassrooms, getClassroomByName } from "../db/classroomDB.js";
 import { insertTimetable } from "../db/timetableDB.js";
+import { getWishlistById } from "../db/wishlistsDB.js";
+import { getTimetableById } from "../db/timetableDB.js";
 
 const router = express.Router();
 let db;
@@ -50,6 +54,7 @@ router.get("/wishlists", async (req, res) => {
 router.post("/wishlists", async (req, res) => {
   try {
     const {
+      wishlistId,
       teacherId,
       subjectId,
       groupId,
@@ -131,17 +136,16 @@ router.post("/wishlists", async (req, res) => {
       const teachings = await teachingDB.getTeachingById(db, teachingId);
       const subject = await subjectDB.getSubjectById(db, subjectId);
       const classroom = await getClassroomByName(db, classroomName);
+      const wishlists = await getWishlistById(db, wishlistId);
+      const timetable = await getTimetableById(db, timetableId);
 
-      createEdgeSubjectsClassrooms(
-        db,
-        classroom,
-        subject,
-        subjectId,
-        classroomName
-      );
-      createEdgeTeacherTeachings(db, teacher, teachings);
-      createEdgeGroupTeachings(db, group, teachings);
-      createEdgesSubjectTeachings(db, subject, teachings);
+      await createEdgeSubjectsClassrooms(db, classroom, subject);
+      await createEdgeTeacherTeachings(db, teacher, teachings);
+      await createEdgeGroupTeachings(db, group, teachings);
+      await createEdgesSubjectTeachings(db, subject, teachings);
+      await createEdgeTeachingsWishlists(db, wishlists, teachings);
+      await createEdgeTeachingsTimetable(db, timetable, teachings);
+
       await deleteWishlist(db, day, start, end);
     } else {
       await deleteWishlist(db, day, start, end);

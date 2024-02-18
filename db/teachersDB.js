@@ -57,6 +57,17 @@ export async function getTeacherSubjects(db, teacherId) {
   }
 }
 
+export async function proba(db) {
+  try {
+    const query = `SELECT expand(in('TeacherTeachings')) FROM teachers`;
+    const subjects = await db.query(query);
+    return subjects;
+  } catch (error) {
+    console.error(`Error getting subjects  from the database:`, error);
+    throw error;
+  }
+}
+
 export async function getTeacherNameById(db, teacherId) {
   try {
     const query = `SELECT name FROM Teachers WHERE id = '${teacherId}'`;

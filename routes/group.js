@@ -29,7 +29,6 @@ router.get("/group", async (req, res) => {
       name,
       gradeLevel
     );
-
     for (const group of groups) {
       const teachings = await timetableDB.selectTimetableByGroupId(
         db,

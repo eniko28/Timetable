@@ -61,3 +61,14 @@ export async function selectTimetableBySubjectId(db, subjectId) {
     throw error;
   }
 }
+
+export async function getTimetableById(db, timetableId) {
+  try {
+    const query = `SELECT FROM Timetable WHERE timetableId = '${timetableId}'`;
+    const result = await db.query(query);
+    return result[0];
+  } catch (error) {
+    console.error("Error selecting timetable by timetable ID:", error);
+    throw error;
+  }
+}

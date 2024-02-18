@@ -1,7 +1,10 @@
 import express from "express";
 import * as wishlistDB from "../db/wishlistsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
-import { createEdgeTeachersWishlists } from "../db/createEdges.js";
+import {
+  createEdgeTeachersWishlists,
+  createEdgeTeachingsWishlists,
+} from "../db/createEdges.js";
 import * as groupDB from "../db/groupsDB.js";
 import setupDatabase from "../db/dbSetup.js";
 import { v4 as uuidv4 } from "uuid";
