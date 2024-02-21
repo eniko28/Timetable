@@ -35,7 +35,7 @@ document
   });
 
 function isValidTime(time) {
-  var pattern = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
+  var pattern = /^(0[8-9]|1[0-9]|20):[0-5][0-9]$/;
   return pattern.test(time);
 }
 
@@ -63,23 +63,20 @@ function isValidDay(day) {
   return daysOfWeek.includes(day);
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  var subjectCodeSelect = document.getElementById("subjectCode");
-  var groupCodeSelect = document.getElementById("groupCode");
+function updateGroups() {
+  var subjectCode = document.getElementById("subjectCode").value;
+  fetch("/getGroups?subjectCode=" + subjectCode)
+    .then((response) => response.json())
+    .then((data) => {
+      var groupDropdown = document.getElementById("groupCode");
+      groupDropdown.innerHTML = "";
+      data.forEach((group) => {
+        var option = document.createElement("option");
+        option.text = group.groupId;
+        option.value = group.groupId;
+        groupDropdown.add(option);
+      });
+    });
+}
 
-  subjectCodeSelect.addEventListener("change", function () {
-    var subjectId = this.value;
-    fetch("/getGroupsBySubject?subjectId=" + subjectId)
-      .then((response) => response.json())
-      .then((groups) => {
-        groupCodeSelect.innerHTML = "";
-        groups.forEach(function (group) {
-          var option = document.createElement("option");
-          option.value = group.id;
-          option.textContent = group.id;
-          groupCodeSelect.appendChild(option);
-        });
-      })
-      .catch((error) => console.error("Error fetching groups:", error));
-  });
-});
+document.getElementById("subjectCode").addEventListener("change", updateGroups);

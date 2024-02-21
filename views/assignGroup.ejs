@@ -12,8 +12,9 @@
         <h1>Assign groups to subjects!</h1>
         <form action="/assignGroup" method="POST" enctype="multipart/form-data">
 
-            <label for="groupCode">Teacher Id:</label>
+            <label for="groupCode">Group:</label>
             <select id="groupCode" name="groupCode">
+                <option value="">Choose...</option>
                 <% groups.forEach(function(item) { %>
                     <option value="<%= item.id %>">
                         <%= item.id %>
@@ -23,6 +24,7 @@
 
             <label for="subjectCode">Subject Id:</label>
             <select id="subjectCode" name="subjectCode">
+                <option value="">Choose...</option>
                 <% subjects.forEach(function(item) { %>
                     <option value="<%= item.id %>">
                         <%= item.id %>

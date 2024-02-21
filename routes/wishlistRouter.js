@@ -1,9 +1,10 @@
 import express from "express";
 import * as wishlistDB from "../db/wishlistsDB.js";
-import * as teacherDB from "../db/teachersDB.js";
+import * as teachersSubjects from "../db/teachersTeachingEdge.js";
 import * as createEdge from "../db/createEdges.js";
 import * as groupDB from "../db/groupsDB.js";
 import * as timetableDB from "../db/timetableDB.js";
+import * as teachingDB from "../db/teachingsDB.js";
 import setupDatabase from "../db/dbSetup.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -23,7 +24,8 @@ setupDatabase()
 router.get("/addWishlists", async (req, res) => {
   try {
     const id = req.session.userId;
-    const subjects = await teacherDB.getTeacherSubjects(db, id);
+    const subjects = await teachersSubjects.getSubjectByUserId(db, id);
+    console.log(subjects);
     const groups = await groupDB.getAllGroups(db);
     res.render("addWishlist", { id, subjects, groups });
   } catch (error) {
@@ -39,7 +41,7 @@ router.post("/addWishlists", async (req, res) => {
       return res.status(400).send("Missing required data.");
     }
 
-    const timeFormat = /^(?:0[89]|1[0-9]|20):[0-5][0-9]$/;
+    const timeFormat = /^(0[8-9]|1[0-9]|20):[0-5][0-9]$/;
     if (!start.match(timeFormat) || !end.match(timeFormat)) {
       return res
         .status(400)
@@ -91,10 +93,26 @@ router.post("/addWishlists", async (req, res) => {
       end
     );
 
-    const teacher = await teacherDB.getTeacherById(db, teacherCode);
-    const wishlists = await wishlistDB.getWishlistById(db, wishlistId);
+    const teachingId = await teachingDB.getTeachingId(
+      db,
+      teacherCode,
+      subjectCode,
+      groupCode
+    );
+    const teaching = await teachingDB.getTeachingById(db, teachingId[0].id);
+    const wishlist = await wishlistDB.getWishlistById(db, wishlistId);
 
-    await createEdge.createEdgeTeachersWishlists(db, wishlists, teacher);
+    await createEdge.createEdgeTeachingsWishlists(
+      db,
+      wishlist,
+      teaching,
+      teacherCode,
+      subjectCode,
+      groupCode,
+      start,
+      end,
+      day
+    );
 
     res.redirect("/addWishlists");
   } catch (error) {

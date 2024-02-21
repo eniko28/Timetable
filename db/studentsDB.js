@@ -38,3 +38,14 @@ export async function getGroupIdByStudentId(db, userId) {
     throw error;
   }
 }
+
+export async function getStudentById(db, userId) {
+  try {
+    const query = `SELECT FROM Students WHERE id = '${userId}'`;
+    const result = await db.query(query);
+    return result[0];
+  } catch (error) {
+    console.error("Error getting student's group from the database:", error);
+    throw error;
+  }
+}

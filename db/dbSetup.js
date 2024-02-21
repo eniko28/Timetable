@@ -20,11 +20,11 @@ async function setupDatabase() {
   try {
     const list = await server.list();
 
-    const isTimetableExists = list.some((db) => db.name === "MyTimetable");
+    const isTimetableExists = list.some((db) => db.name === "Timetable");
 
     if (!isTimetableExists) {
       const createdDb = await server.create({
-        name: "MyTimetable",
+        name: "Timetable",
         type: "graph",
         storage: "remote",
       });
@@ -33,7 +33,7 @@ async function setupDatabase() {
       return createdDb;
     } else {
       const usedDb = await server.use({
-        name: "MyTimetable",
+        name: "Timetable",
         username: "root",
         password: "root",
       });

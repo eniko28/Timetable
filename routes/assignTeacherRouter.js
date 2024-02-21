@@ -1,7 +1,13 @@
 import express from "express";
 import * as teacherDB from "../db/teachersDB.js";
 import * as subjectDB from "../db/subjectsDB.js";
+import * as teachingDB from "../db/teachingsDB.js";
+import {
+  createEdgeTeacherTeachings,
+  createEdgesSubjectTeachings,
+} from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
+import { v4 as uuidv4 } from "uuid";
 
 const router = express.Router();
 
@@ -34,19 +40,52 @@ router.post("/assignTeacher", async (req, res) => {
       return res.status(400).send("Missing required data.");
     }
 
-    const exists = await teacherDB.getTeacherByIdandSubjectId(
+    const teacherExists = await teachingDB.getTeacherBySubjectId(
       db,
+      subjectCode
+    );
+    var teachingId = uuidv4();
+    if (teacherExists.length === 0) {
+      await teachingDB.insertSubjectAndTeacher(
+        db,
+        teachingId,
+        teacherCode,
+        subjectCode
+      );
+    } else {
+      if (teacherExists[0].teacherId === teacherCode) {
+        res.status(400).render("error", {
+          message: "Teacher already assigned to selected subject.",
+        });
+        return;
+      } else {
+        await teachingDB.updateTeacher(db, teacherCode, subjectCode);
+        const id = await teachingDB.getTeachingIdByTeacherAndSubject(
+          db,
+          subjectCode,
+          teacherCode
+        );
+        teachingId = id[0].id;
+      }
+    }
+
+    const teacher = await teacherDB.getTeacherById(db, teacherCode);
+    const teaching = await teachingDB.getTeachingById(db, teachingId);
+    const subject = await subjectDB.getSubjectById(db, subjectCode);
+    await createEdgeTeacherTeachings(
+      db,
+      teacher,
+      teaching,
+      teacherCode,
+      subjectCode
+    );
+    await createEdgesSubjectTeachings(
+      db,
+      subject,
+      teaching,
       subjectCode,
       teacherCode
     );
-    if (exists.length !== 0) {
-      res.status(400).render("error", {
-        message: "Teacher already assigned to group.",
-      });
-      return;
-    }
-    await teacherDB.insertTeachersSubjectId(db, teacherCode, subjectCode);
-
     res.redirect("/assignTeacher");
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);

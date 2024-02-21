@@ -52,10 +52,9 @@ function createPropertyGroups(db, className) {
     .get(`${className}`)
     .then(function (classObj) {
       return Promise.all([
-        createPropertyIfNotExists(classObj, "id", "Integer"),
+        createPropertyIfNotExists(classObj, "id", "String"),
         createPropertyIfNotExists(classObj, "gradeLevel", "Integer"),
         createPropertyIfNotExists(classObj, "name", "String"),
-        createPropertyIfNotExists(classObj, "subjectId", "EmbeddedList"),
       ]);
     })
     .then(function (properties) {
@@ -153,7 +152,6 @@ function createPropertyTeachers(db, className) {
       return Promise.all([
         createPropertyIfNotExists(classObj, "id", "String"),
         createPropertyIfNotExists(classObj, "name", "String"),
-        createPropertyIfNotExists(classObj, "subjectId", "EmbeddedList"),
       ]);
     })
     .catch(function (error) {
@@ -226,6 +224,42 @@ function createPropertyUser(db, className) {
     })
     .catch(function (error) {
       console.error("Error creating properties for Users:", error);
+    });
+}
+
+function createPropertyTeachings(db, className) {
+  return db.class
+    .get(`${className}`)
+    .then(function (classObj) {
+      return Promise.all([
+        createPropertyIfNotExists(classObj, "id", "String"),
+        createPropertyIfNotExists(classObj, "teacherId", "String"),
+        createPropertyIfNotExists(classObj, "subjectId", "String"),
+        createPropertyIfNotExists(classObj, "groupId", "Integer"),
+      ]);
+    })
+    .catch(function (error) {
+      console.error("Error creating properties for Subjects:", error);
+    });
+}
+
+function createPropertyTimetable(db, className) {
+  return db.class
+    .get(`${className}`)
+    .then(function (classObj) {
+      return Promise.all([
+        createPropertyIfNotExists(classObj, "timetableId", "String"),
+        createPropertyIfNotExists(classObj, "teacherId", "String"),
+        createPropertyIfNotExists(classObj, "subjectId", "String"),
+        createPropertyIfNotExists(classObj, "groupId", "Integer"),
+        createPropertyIfNotExists(classObj, "day", "String"),
+        createPropertyIfNotExists(classObj, "start", "String"),
+        createPropertyIfNotExists(classObj, "end", "String"),
+        createPropertyIfNotExists(classObj, "classroomName", "String"),
+      ]);
+    })
+    .catch(function (error) {
+      console.error("Error creating properties for Subjects:", error);
     });
 }
 
@@ -303,45 +337,6 @@ function createPropertyIfNotExists(
     .catch(function (error) {
       console.error("Error getting/creating property:", error);
       throw error;
-    });
-}
-
-function createPropertyTeachings(db, className) {
-  return db.class
-    .get(`${className}`)
-    .then(function (classObj) {
-      return Promise.all([
-        createPropertyIfNotExists(classObj, "id", "String"),
-        createPropertyIfNotExists(classObj, "teacherId", "String"),
-        createPropertyIfNotExists(classObj, "subjectId", "String"),
-        createPropertyIfNotExists(classObj, "groupId", "Integer"),
-        createPropertyIfNotExists(classObj, "day", "String"),
-        createPropertyIfNotExists(classObj, "start", "String"),
-        createPropertyIfNotExists(classObj, "end", "String"),
-      ]);
-    })
-    .catch(function (error) {
-      console.error("Error creating properties for Subjects:", error);
-    });
-}
-
-function createPropertyTimetable(db, className) {
-  return db.class
-    .get(`${className}`)
-    .then(function (classObj) {
-      return Promise.all([
-        createPropertyIfNotExists(classObj, "timetableId", "String"),
-        createPropertyIfNotExists(classObj, "teacherId", "String"),
-        createPropertyIfNotExists(classObj, "subjectId", "String"),
-        createPropertyIfNotExists(classObj, "groupId", "Integer"),
-        createPropertyIfNotExists(classObj, "day", "String"),
-        createPropertyIfNotExists(classObj, "start", "String"),
-        createPropertyIfNotExists(classObj, "end", "String"),
-        createPropertyIfNotExists(classObj, "classroomName", "String"),
-      ]);
-    })
-    .catch(function (error) {
-      console.error("Error creating properties for Subjects:", error);
     });
 }
 

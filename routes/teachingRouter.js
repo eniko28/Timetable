@@ -2,9 +2,6 @@ import express from "express";
 import setupDatabase from "../db/dbSetup.js";
 import * as createEdge from "../db/createEdges.js";
 import * as teachingDB from "../db/teachingsDB.js";
-import * as teacherDB from "../db/teachersDB.js";
-import * as subjectDB from "../db/subjectsDB.js";
-import * as groupDB from "../db/groupsDB.js";
 import * as classroomDB from "../db/classroomDB.js";
 import * as wishlistDB from "../db/wishlistsDB.js";
 import * as timetableDB from "../db/timetableDB.js";
@@ -85,7 +82,7 @@ router.post("/wishlists", async (req, res) => {
           .status(400)
           .send("The group already has a class scheduled for that time.");
       }
-      const existingSubject = await teachingDB.getTeachingsByGroupAndSubjectId(
+      const existingSubject = await timetableDB.getTeachingsByGroupAndSubjectId(
         db,
         groupId,
         subjectId
@@ -97,17 +94,6 @@ router.post("/wishlists", async (req, res) => {
             "The group already has this subject scheduled in their timetable."
           );
       }
-      const teachingId = uuidv4();
-      await teachingDB.insertTeaching(
-        db,
-        teachingId,
-        teacherId,
-        subjectId,
-        groupId,
-        day,
-        start,
-        end
-      );
       const timetableId = uuidv4();
       await timetableDB.insertTimetable(
         db,
@@ -121,20 +107,41 @@ router.post("/wishlists", async (req, res) => {
         classroomName
       );
 
-      const teacher = await teacherDB.getTeacherById(db, teacherId);
-      const group = await groupDB.getGroupById(db, groupId);
-      const teachings = await teachingDB.getTeachingById(db, teachingId);
-      const subject = await subjectDB.getSubjectById(db, subjectId);
-      const classroom = await classroomDB.getClassroomByName(db, classroomName);
-      const wishlists = await wishlistDB.getWishlistById(db, wishlistId);
+      const teachingId = await teachingDB.getTeachingId(
+        db,
+        teacherId,
+        subjectId,
+        groupId
+      );
+      const teaching = await teachingDB.getTeachingById(db, teachingId[0].id);
       const timetable = await timetableDB.getTimetableById(db, timetableId);
+      const classroom = await classroomDB.getClassroomByName(db, classroomName);
 
-      await createEdge.createEdgeSubjectsClassrooms(db, classroom, subject);
-      await createEdge.createEdgeTeacherTeachings(db, teacher, teachings);
-      await createEdge.createEdgeGroupTeachings(db, group, teachings);
-      await createEdge.createEdgesSubjectTeachings(db, subject, teachings);
-      await createEdge.createEdgeTeachingsWishlists(db, wishlists, teachings);
-      await createEdge.createEdgeTeachingsTimetable(db, timetable, teachings);
+      await createEdge.createEdgeClassroomsTimetable(
+        db,
+        classroom,
+        timetable,
+        teacherId,
+        subjectId,
+        groupId,
+        start,
+        end,
+        day,
+        classroomName
+      );
+
+      await createEdge.createEdgeTeachingTimetable(
+        db,
+        teaching,
+        timetable,
+        teacherId,
+        subjectId,
+        groupId,
+        start,
+        end,
+        day,
+        classroomName
+      );
 
       await wishlistDB.deleteWishlist(db, day, start, end);
     } else {

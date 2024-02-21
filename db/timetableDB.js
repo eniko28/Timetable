@@ -104,3 +104,45 @@ export async function getTimetableByTeacherAndTime(
     throw error;
   }
 }
+
+export async function getFreeTeacher(db, teacherId, start, end, day) {
+  try {
+    const query = `SELECT FROM Timetable WHERE teacherId = '${teacherId}' AND start = '${start}' AND end = '${end}' AND day = '${day}'`;
+    const teacher = await db.query(query);
+    return teacher;
+  } catch (error) {
+    console.error(
+      `Error getting teaching with ID ${teacherId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}
+
+export async function getFreeGroup(db, groupId, start, end, day) {
+  try {
+    const query = `SELECT FROM Timetable WHERE groupId = '${groupId}' AND start = '${start}' AND end = '${end}' AND day = '${day}'`;
+    const teacher = await db.query(query);
+    return teacher;
+  } catch (error) {
+    console.error(
+      `Error getting teaching with ID ${groupId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}
+
+export async function getTeachingsByGroupAndSubjectId(db, groupId, subjectId) {
+  try {
+    const query = `SELECT FROM Timetable WHERE groupId = '${groupId}' AND subjectId = '${subjectId}' `;
+    const teacher = await db.query(query);
+    return teacher;
+  } catch (error) {
+    console.error(
+      `Error getting teaching with ID ${subjectId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}

@@ -14,6 +14,7 @@
 
             <label for="teacherCode">Teacher Id:</label>
             <select id="teacherCode" name="teacherCode">
+                <option value="">Choose...</option>
                 <% teachers.forEach(function(item) { %>
                     <option value="<%= item.id %>">
                         <%= item.id %>
@@ -23,6 +24,8 @@
 
             <label for="subjectCode">Subject Id:</label>
             <select id="subjectCode" name="subjectCode">
+                <option value="">Choose...</option>
+
                 <% subjects.forEach(function(item) { %>
                     <option value="<%= item.id %>">
                         <%= item.id %>

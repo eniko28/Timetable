@@ -4,6 +4,8 @@ import bcrypt from "bcrypt";
 import * as usersDB from "../db/usersDB.js";
 import * as teachersDB from "../db/teachersDB.js";
 import * as studentsDB from "../db/studentsDB.js";
+import * as groupDB from "../db/groupsDB.js";
+import { createEdgeStudentsGroups } from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
 
 const router = express.Router();
@@ -55,6 +57,9 @@ router.post("/register", async (req, res) => {
     if (type === "Student") {
       const groupId = req.fields.groupId;
       await studentsDB.insertStudent(db, userId, name, groupId);
+      const student = await studentsDB.getStudentById(db, userId);
+      const group = await groupDB.getGroupById(db, groupId);
+      await createEdgeStudentsGroups(db, student, group, userId, groupId);
     }
 
     res.redirect("/register");

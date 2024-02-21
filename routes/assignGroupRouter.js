@@ -1,7 +1,10 @@
 import express from "express";
 import * as subjectDB from "../db/subjectsDB.js";
 import * as groupDB from "../db/groupsDB.js";
+import * as teachingDB from "../db/teachingsDB.js";
+import { createEdgeGroupTeachings } from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
+import { v4 as uuidv4 } from "uuid";
 
 const router = express.Router();
 
@@ -34,19 +37,46 @@ router.post("/assignGroup", async (req, res) => {
       return res.status(400).send("Missing required data.");
     }
 
-    const exists = await groupDB.getGroupsByIdAndSubjectId(
-      db,
-      groupCode,
-      subjectCode
-    );
-    if (exists.length !== 0) {
-      res.status(400).render("error", {
-        message: "Group already assigned to subject.",
-      });
-      return;
+    const groupExists = await teachingDB.getGroupBySubjectId(db, subjectCode);
+    var teachingId = uuidv4();
+    if (groupExists.length === 0) {
+      await teachingDB.insertSubjectAndGroup(
+        db,
+        teachingId,
+        subjectCode,
+        groupCode
+      );
+    } else {
+      if (groupExists[0].groupId == groupCode) {
+        res.status(400).render("error", {
+          message: "Subject already assigned to selected group.",
+        });
+        return;
+      } else if (groupExists[0].groupId) {
+        const teacherId = await teachingDB.getTeacherBySubjectId(
+          db,
+          subjectCode
+        );
+        await teachingDB.insertTeaching(
+          db,
+          teachingId,
+          teacherId[0].teacherId,
+          subjectCode,
+          groupCode
+        );
+      } else {
+        await teachingDB.updateGroup(db, subjectCode, groupCode);
+        const id = await teachingDB.getTeachingIdBySubjectAndGroup(
+          db,
+          subjectCode,
+          groupCode
+        );
+        teachingId = id[0].id;
+      }
     }
-    await groupDB.insertGroupSubjectId(db, groupCode, subjectCode);
-
+    const group = await groupDB.getGroupById(db, groupCode);
+    const teaching = await teachingDB.getTeachingById(db, teachingId);
+    await createEdgeGroupTeachings(db, group, teaching, groupCode, subjectCode);
     res.redirect("/assignGroup");
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);

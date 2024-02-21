@@ -29,6 +29,7 @@ import group from "./routes/group.js";
 import teachers from "./routes/teachers.js";
 import subject from "./routes/subject.js";
 import classroom from "./routes/classrooms.js";
+import getGroups from "./routes/getGroups.js";
 
 const app = express();
 const port = 3000;
@@ -71,6 +72,7 @@ setupDatabase()
     app.use("/", teachers);
     app.use("/", subject);
     app.use("/", classroom);
+    app.use("/", getGroups);
 
     app.listen(port, () => {
       console.log(`App listening at http://localhost:${port}`);

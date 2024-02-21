@@ -1,3 +1,5 @@
+import e from "express";
+
 function createEdge(db, className) {
   return db.class
     .get(className)
@@ -25,19 +27,29 @@ function createEdges(db) {
     createEdge(db, "TeacherTeachings"),
     createEdge(db, "SubjectTeachings"),
     createEdge(db, "GroupTeachings"),
-    createEdge(db, "SubjectsClassrooms"),
-    createEdge(db, "TeachersWishlists"),
+    createEdge(db, "TeachingTimetable"),
+    createEdge(db, "StudentsGroups"),
     createEdge(db, "TeachingsWishlists"),
-    createEdge(db, "TeachingsTimetable"),
+    createEdge(db, "ClassroomsTimetable"),
   ]);
 }
 
-export async function createEdgeTeacherTeachings(db, teacher, teaching) {
+export async function createEdgeTeacherTeachings(
+  db,
+  teacher,
+  teaching,
+  teacherId,
+  subjectId
+) {
   try {
     await db
       .create("EDGE", "TeacherTeachings")
       .from(teaching["@rid"])
       .to(teacher["@rid"])
+      .set({
+        teacherId: teacherId,
+        subjectId: subjectId,
+      })
       .one();
   } catch (error) {
     console.error("Error creating TeacherTeachings edge:", error);
@@ -45,12 +57,22 @@ export async function createEdgeTeacherTeachings(db, teacher, teaching) {
   }
 }
 
-export async function createEdgeGroupTeachings(db, group, teaching) {
+export async function createEdgeGroupTeachings(
+  db,
+  group,
+  teaching,
+  groupId,
+  subjectId
+) {
   try {
     await db
       .create("EDGE", "GroupTeachings")
       .from(teaching["@rid"])
       .to(group["@rid"])
+      .set({
+        groupId: groupId,
+        subjectId: subjectId,
+      })
       .one();
   } catch (error) {
     console.error("Error creating GroupTeachings edge:", error);
@@ -58,12 +80,22 @@ export async function createEdgeGroupTeachings(db, group, teaching) {
   }
 }
 
-export async function createEdgesSubjectTeachings(db, subject, teaching) {
+export async function createEdgesSubjectTeachings(
+  db,
+  subject,
+  teaching,
+  subjectId,
+  teacherId
+) {
   try {
     await db
       .create("EDGE", "SubjectTeachings")
       .from(teaching["@rid"])
       .to(subject["@rid"])
+      .set({
+        subjectId: subjectId,
+        teacherId: teacherId,
+      })
       .one();
   } catch (error) {
     console.error("Error creating SubjectTeachings edge:", error);
@@ -71,38 +103,86 @@ export async function createEdgesSubjectTeachings(db, subject, teaching) {
   }
 }
 
-export async function createEdgeTeachersWishlists(db, wishlists, teacher) {
+export async function createEdgeTeachingTimetable(
+  db,
+  teaching,
+  timetable,
+  teacherId,
+  subjectId,
+  groupId,
+  start,
+  end,
+  day,
+  classroomName
+) {
   try {
     await db
-      .create("EDGE", "TeachersWishlists")
-      .from(wishlists["@rid"])
-      .to(teacher["@rid"])
+      .create("EDGE", "TeachingTimetable")
+      .from(teaching["@rid"])
+      .to(timetable["@rid"])
+      .set({
+        teacherId: teacherId,
+        subjectId: subjectId,
+        groupId: groupId,
+        start: start,
+        end: end,
+        day: day,
+        classroomName: classroomName,
+      })
       .one();
   } catch (error) {
-    console.error("Error creating TeachersWishlists edge:", error);
+    console.error("Error creating TeachingTimetable edge:", error);
     throw error;
   }
 }
 
-export async function createEdgeSubjectsClassrooms(db, classroom, subject) {
+export async function createEdgeStudentsGroups(
+  db,
+  student,
+  group,
+  studentId,
+  groupId
+) {
   try {
     await db
-      .create("EDGE", "SubjectsClassrooms")
-      .from(subject["@rid"])
-      .to(classroom["@rid"])
+      .create("EDGE", "StudentsGroups")
+      .from(student["@rid"])
+      .to(group["@rid"])
+      .set({
+        studentId: studentId,
+        groupId: groupId,
+      })
       .one();
   } catch (error) {
-    console.error("Error creating SubjectsClassrooms edge:", error);
+    console.error("Error creating StudentsGroups edge:", error);
     throw error;
   }
 }
 
-export async function createEdgeTeachingsWishlists(db, wishlists, teachings) {
+export async function createEdgeTeachingsWishlists(
+  db,
+  wishlist,
+  teaching,
+  teacherId,
+  subjectId,
+  groupId,
+  start,
+  end,
+  day
+) {
   try {
     await db
       .create("EDGE", "TeachingsWishlists")
-      .from(wishlists["@rid"])
-      .to(teachings["@rid"])
+      .from(wishlist["@rid"])
+      .to(teaching["@rid"])
+      .set({
+        teacherId: teacherId,
+        subjectId: subjectId,
+        groupId: groupId,
+        start: start,
+        end: end,
+        day: day,
+      })
       .one();
   } catch (error) {
     console.error("Error creating TeachingsWishlists edge:", error);
@@ -110,15 +190,35 @@ export async function createEdgeTeachingsWishlists(db, wishlists, teachings) {
   }
 }
 
-export async function createEdgeTeachingsTimetable(db, timetable, teachings) {
+export async function createEdgeClassroomsTimetable(
+  db,
+  classroom,
+  timetable,
+  teacherId,
+  subjectId,
+  groupId,
+  start,
+  end,
+  day,
+  classroomName
+) {
   try {
     await db
-      .create("EDGE", "TeachingsTimetable")
-      .from(teachings["@rid"])
-      .to(timetable["@rid"])
+      .create("EDGE", "ClassroomsTimetable")
+      .from(timetable["@rid"])
+      .to(classroom["@rid"])
+      .set({
+        teacherId: teacherId,
+        subjectId: subjectId,
+        groupId: groupId,
+        start: start,
+        end: end,
+        day: day,
+        classroomName: classroomName,
+      })
       .one();
   } catch (error) {
-    console.error("Error creating TeachingsTimetable edge:", error);
+    console.error("Error creating ClassroomsTimetable edge:", error);
     throw error;
   }
 }
