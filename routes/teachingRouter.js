@@ -143,9 +143,9 @@ router.post("/wishlists", async (req, res) => {
         classroomName
       );
 
-      await wishlistDB.deleteWishlist(db, day, start, end);
+      await wishlistDB.approvedWishlists(db, day, start, end);
     } else {
-      await wishlistDB.deleteWishlist(db, day, start, end);
+      await wishlistDB.rejectedWishlists(db, day, start, end);
     }
 
     res.redirect("/wishlists");

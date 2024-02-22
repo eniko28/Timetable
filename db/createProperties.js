@@ -153,7 +153,7 @@ function createPropertyWishlists(db, className) {
         createPropertyIfNotExists(classObj, "day", "String"),
         createPropertyIfNotExists(classObj, "start", "String"),
         createPropertyIfNotExists(classObj, "end", "String"),
-        createPropertyIfNotExists(classObj, "approved", "Boolean"),
+        createPropertyIfNotExists(classObj, "status", "String"),
       ]);
     })
     .catch(function (error) {

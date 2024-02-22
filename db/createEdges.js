@@ -1,5 +1,3 @@
-import e from "express";
-
 function createEdge(db, className) {
   return db.class
     .get(className)

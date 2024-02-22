@@ -9,7 +9,7 @@ export async function insertWishlist(
   end
 ) {
   try {
-    const query = `INSERT INTO Wishlists SET wishlistId = '${wishlistId}', teacherId = '${teacherCode}', subjectId = '${subjectCode}', groupId = '${groupCode}', day = '${day}', start = '${start}', end = '${end}'`;
+    const query = `INSERT INTO Wishlists SET wishlistId = '${wishlistId}', teacherId = '${teacherCode}', subjectId = '${subjectCode}', groupId = '${groupCode}', day = '${day}', start = '${start}', end = '${end}', status = 'waiting'`;
     await db.query(query);
   } catch (error) {
     console.error("Error inserting wishlist:", error);
@@ -19,7 +19,7 @@ export async function insertWishlist(
 
 export async function getAllWishlists(db) {
   try {
-    const query = "SELECT FROM Wishlists";
+    const query = "SELECT FROM Wishlists WHERE status = 'waiting'";
     const wishlists = await db.query(query);
     return wishlists;
   } catch (error) {
@@ -53,9 +53,19 @@ export async function getWishlistByDayandTime(db, day, start, end) {
   }
 }
 
-export async function deleteWishlist(db, day, start, end) {
+export async function approvedWishlists(db, day, start, end) {
   try {
-    const query = `DELETE VERTEX FROM Wishlists WHERE day = '${day}' AND start = '${start}' AND end = '${end}'`;
+    const query = `UPDATE Wishlists SET status = 'approved' WHERE day = '${day}' AND start = '${start}' AND end = '${end}'`;
+    await db.query(query);
+  } catch (error) {
+    console.error("Error deleting wishlist:", error);
+    throw error;
+  }
+}
+
+export async function rejectedWishlists(db, day, start, end) {
+  try {
+    const query = `UPDATE Wishlists SET status = 'rejected' WHERE day = '${day}' AND start = '${start}' AND end = '${end}'`;
     await db.query(query);
   } catch (error) {
     console.error("Error deleting wishlist:", error);
