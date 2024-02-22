@@ -2,6 +2,7 @@ import express from "express";
 import * as teacherDB from "../db/teachersDB.js";
 import * as subjectDB from "../db/subjectsDB.js";
 import * as teachingDB from "../db/teachingsDB.js";
+import * as teacherTeaching from "../db/teachersTeachingEdge.js";
 import {
   createEdgeTeacherTeachings,
   createEdgesSubjectTeachings,
@@ -40,6 +41,17 @@ router.post("/assignTeacher", async (req, res) => {
       return res.status(400).send("Missing required data.");
     }
 
+    const existingTeaching = await teacherTeaching.getTeachersSubjects(
+      db,
+      teacherCode,
+      subjectCode
+    );
+    if (existingTeaching.length !== 0) {
+      res.status(400).render("error", {
+        message: "Teacher already assigned to selected subject.",
+      });
+      return;
+    }
     const teacherExists = await teachingDB.getTeacherBySubjectId(
       db,
       subjectCode

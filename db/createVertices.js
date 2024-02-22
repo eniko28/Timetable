@@ -25,7 +25,6 @@ function createVertices(db) {
     createVertex(db, "Teachers"),
     createVertex(db, "Students"),
     createVertex(db, "Subjects"),
-    createVertex(db, "SubjectTypes"),
     createVertex(db, "Groups"),
     createVertex(db, "Teachings"),
     createVertex(db, "Classrooms"),

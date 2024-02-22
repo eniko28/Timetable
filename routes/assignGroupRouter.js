@@ -2,6 +2,7 @@ import express from "express";
 import * as subjectDB from "../db/subjectsDB.js";
 import * as groupDB from "../db/groupsDB.js";
 import * as teachingDB from "../db/teachingsDB.js";
+import * as groupTeaching from "../db/groupTeachingsEdge.js";
 import { createEdgeGroupTeachings } from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
 import { v4 as uuidv4 } from "uuid";
@@ -37,6 +38,17 @@ router.post("/assignGroup", async (req, res) => {
       return res.status(400).send("Missing required data.");
     }
 
+    const existingTeaching = await groupTeaching.getSubjectsGroups(
+      db,
+      subjectCode,
+      groupCode
+    );
+    if (existingTeaching.length !== 0) {
+      res.status(400).render("error", {
+        message: "Subject already assigned to selected group.",
+      });
+      return;
+    }
     const groupExists = await teachingDB.getGroupBySubjectId(db, subjectCode);
     var teachingId = uuidv4();
     if (groupExists.length === 0) {

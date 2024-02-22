@@ -1,23 +1,6 @@
-import {
-  getSubjectType,
-  getTypesByRID,
-  getRIDByNameAndType,
-} from "./subjectTypesDB.js";
-
 export async function insertSubject(db, code, name, type) {
   try {
-    const subjectTypeValue = await getSubjectType(db, type);
-    const linkset = [
-      {
-        "@type": "d",
-        "@class": "SubjectTypes",
-        "@rid": subjectTypeValue["@rid"],
-      },
-    ];
-
-    const query = `INSERT INTO Subjects SET id = '${code}', name = '${name}', type = ${JSON.stringify(
-      linkset
-    )}`;
+    const query = `INSERT INTO Subjects SET id = '${code}', name = '${name}', type = '${type}'`;
     await db.query(query);
   } catch (error) {
     console.error("Error inserting subject:", error);
@@ -29,12 +12,6 @@ export async function getAllSubjects(db) {
   try {
     const query = "SELECT * FROM Subjects";
     const subjects = await db.query(query);
-
-    for (let subject of subjects) {
-      const result = await getTypesByRID(db, subject.type.toString());
-      subject.type = result.type;
-    }
-
     return subjects;
   } catch (error) {
     console.error("Error getting subjects from the database:", error);
@@ -44,15 +21,8 @@ export async function getAllSubjects(db) {
 
 export async function getAllSubjectsByNameAndType(db, name, type) {
   try {
-    const typeFromDb = await getRIDByNameAndType(db, name, type);
-    const query = `SELECT * FROM Subjects WHERE name = '${name}' AND type = ${typeFromDb.toString()}`;
+    const query = `SELECT * FROM Subjects WHERE name = '${name}' AND type = '${type}'`;
     const subjects = await db.query(query);
-
-    for (let subject of subjects) {
-      const result = await getTypesByRID(db, subject.type.toString());
-      subject.type = result.type;
-    }
-
     return subjects;
   } catch (error) {
     console.error("Error getting subjects from the database:", error);

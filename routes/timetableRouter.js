@@ -4,7 +4,6 @@ import * as timetableDB from "../db/timetableDB.js";
 import * as groupDB from "../db/groupsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
 import * as subjectDB from "../db/subjectsDB.js";
-import * as subjectTypeDB from "../db/subjectTypesDB.js";
 import setupDatabase from "../db/dbSetup.js";
 
 const router = express.Router();
@@ -31,10 +30,8 @@ router.get("/timetable", async (req, res) => {
     );
     for (const teaching of teachings) {
       const subject = await subjectDB.getSubjectById(db, teaching.subjectId);
-      const rid = await subjectDB.getSubjectRidById(db, teaching.subjectId);
       teaching.subjectId = subject.name;
-      const type = await subjectTypeDB.getTypesByRID(db, rid.toString());
-      teaching.subjectType = type.type;
+      teaching.subjectType = subject.type;
       teaching.classroomName = teaching.classroomName;
     }
     for (const teaching of teachings) {

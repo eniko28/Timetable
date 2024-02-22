@@ -25,7 +25,6 @@ router.get("/addWishlists", async (req, res) => {
   try {
     const id = req.session.userId;
     const subjects = await teachersSubjects.getSubjectByUserId(db, id);
-    console.log(subjects);
     const groups = await groupDB.getAllGroups(db);
     res.render("addWishlist", { id, subjects, groups });
   } catch (error) {

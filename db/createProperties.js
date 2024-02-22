@@ -104,44 +104,11 @@ function createPropertySubjects(db, className) {
       return Promise.all([
         createPropertyIfNotExists(classObj, "id", "String"),
         createPropertyIfNotExists(classObj, "name", "String"),
-        createPropertyIfNotExists(classObj, "type", "Linkset", "SubjectTypes"),
+        createPropertyIfNotExists(classObj, "type", "String"),
       ]);
     })
     .catch(function (error) {
       console.error("Error creating properties for Subjects:", error);
-    });
-}
-
-function createPropertySubjectTypes(db, className) {
-  return db.class
-    .get(`${className}`)
-    .then(function (classObj) {
-      return Promise.all([
-        createPropertyIfNotExists(classObj, "id", "String"),
-        createPropertyIfNotExists(classObj, "type", "String"),
-      ]);
-    })
-    .then(function (properties) {
-      const subjectTypesData = [
-        { id: "course01", type: "Course" },
-        { id: "seminar01", type: "Seminar" },
-        { id: "laboratory01", type: "Laboratory" },
-      ];
-      const subjectTypesPromises = subjectTypesData.map((subjectTypes) => {
-        return createDataIfNotExistsSubjectTypes(
-          db,
-          className,
-          subjectTypes,
-          "id",
-          subjectTypes.id
-        );
-      });
-
-      return Promise.all(subjectTypesPromises);
-    })
-    .catch(function (error) {
-      console.error("Error creating properties for SubjectTypes:", error);
-      return Promise.reject(error);
     });
 }
 
@@ -166,7 +133,7 @@ function createPropertyStudents(db, className) {
       return Promise.all([
         createPropertyIfNotExists(classObj, "id", "String"),
         createPropertyIfNotExists(classObj, "name", "String"),
-        createPropertyIfNotExists(classObj, "group", "Linkset", "Groups"),
+        createPropertyIfNotExists(classObj, "group", "String"),
       ]);
     })
     .catch(function (error) {
@@ -340,40 +307,6 @@ function createPropertyIfNotExists(
     });
 }
 
-function createDataIfNotExistsSubjectTypes(
-  db,
-  className,
-  data,
-  keyName,
-  keyValue
-) {
-  return db
-    .select()
-    .from(className)
-    .where({ [keyName]: keyValue })
-    .one()
-    .then((existingData) => {
-      if (!existingData) {
-        const insertQuery = `INSERT INTO ${className} SET ${keyName}='${keyValue}', type ='${data.type}'`;
-
-        return db
-          .query(insertQuery)
-          .then(() => {})
-          .catch((error) => {
-            console.error(
-              `Error inserting data: ${JSON.stringify(data)}`,
-              error
-            );
-            return Promise.reject(error);
-          });
-      }
-    })
-    .catch((error) => {
-      console.error("Error checking existing data:", error);
-      return Promise.reject(error);
-    });
-}
-
 function createDataIfNotExistsClassrooms(
   db,
   className,
@@ -408,7 +341,6 @@ function createProperty(db) {
   return Promise.all([
     createPropertyTeachers(db, "Teachers"),
     createPropertySubjects(db, "Subjects"),
-    createPropertySubjectTypes(db, "SubjectTypes"),
     createPropertyGroups(db, "Groups"),
     createPropertyWishlists(db, "Wishlists"),
     createPropertyClassroom(db, "Classrooms"),

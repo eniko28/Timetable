@@ -2,7 +2,6 @@ import express from "express";
 import * as timetableDB from "../db/timetableDB.js";
 import * as subjectBD from "../db/subjectsDB.js";
 import * as teacherBD from "../db/teachersDB.js";
-import * as subjectTypeDB from "../db/subjectTypesDB.js";
 import setupDatabase from "../db/dbSetup.js";
 
 const router = express.Router();
@@ -37,12 +36,10 @@ router.get("/subject", async (req, res) => {
           teaching.teacherId
         );
         const subject = await subjectBD.getSubjectById(db, teaching.subjectId);
-        const rid = await subjectBD.getSubjectRidById(db, teaching.subjectId);
-        const type = await subjectTypeDB.getTypesByRID(db, rid.toString());
 
         teaching.teacherName = teacher;
         teaching.subjectId = subject.name;
-        teaching.subjectType = type.type;
+        teaching.subjectType = subject.type;
         teachings.push(teaching);
       }
     }
