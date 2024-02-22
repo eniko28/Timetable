@@ -1,5 +1,6 @@
 import express from "express";
 import * as wishlistDB from "../db/wishlistsDB.js";
+import * as subjectDB from "../db/subjectsDB.js";
 import * as teachersSubjects from "../db/teachersTeachingEdge.js";
 import * as createEdge from "../db/createEdges.js";
 import * as groupDB from "../db/groupsDB.js";
@@ -24,9 +25,14 @@ setupDatabase()
 router.get("/addWishlists", async (req, res) => {
   try {
     const id = req.session.userId;
-    const subjects = await teachersSubjects.getSubjectByUserId(db, id);
+    const subjectIds = await teachersSubjects.getSubjectByUserId(db, id);
+    for (const subjectId of subjectIds) {
+      const subjects = await subjectDB.getSubjectById(db, subjectId.subjectId);
+      subjectId.name = subjects.name;
+      subjectId.type = subjects.type;
+    }
     const groups = await groupDB.getAllGroups(db);
-    res.render("addWishlist", { id, subjects, groups });
+    res.render("addWishlist", { id, subjectIds, groups });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }

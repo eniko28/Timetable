@@ -20,13 +20,13 @@
                 </option>
             </select><br>
 
-            <label for="subjectCode">Subject Id:</label>
+            <label for="subjectCode">Subject:</label>
             <select id="subjectCode" name="subjectCode">
                 <option value="">Choose...</option>
-                <% if (subjects && subjects.length) { %>
-                    <% subjects.forEach(function(subject) { %>
+                <% if (subjectIds && subjectIds.length) { %>
+                    <% subjectIds.forEach(function(subject) { %>
                         <option value="<%= subject.subjectId %>">
-                            <%= subject.subjectId %>
+                            <%= subject.name %> - <%= subject.type %>
                         </option>
                         <% }); %>
                             <% } %>

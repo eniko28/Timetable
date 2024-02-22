@@ -2,6 +2,7 @@ import express from "express";
 import setupDatabase from "../db/dbSetup.js";
 import * as createEdge from "../db/createEdges.js";
 import * as teachingDB from "../db/teachingsDB.js";
+import * as subjectDB from "../db/subjectsDB.js";
 import * as classroomDB from "../db/classroomDB.js";
 import * as wishlistDB from "../db/wishlistsDB.js";
 import * as timetableDB from "../db/timetableDB.js";
@@ -23,6 +24,11 @@ router.get("/wishlists", async (req, res) => {
   try {
     const wishlists = await wishlistDB.getAllWishlists(db);
     const classrooms = await classroomDB.getAllClassrooms(db);
+    for (const wishlist of wishlists) {
+      const subjects = await subjectDB.getSubjectById(db, wishlist.subjectId);
+      wishlist.subjectName = subjects.name;
+      wishlist.subjectType = subjects.type;
+    }
     res.render("wishlists", {
       wishlists: wishlists,
       classrooms: classrooms,

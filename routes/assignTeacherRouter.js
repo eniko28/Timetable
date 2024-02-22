@@ -40,7 +40,6 @@ router.post("/assignTeacher", async (req, res) => {
     if (!teacherCode || !subjectCode) {
       return res.status(400).send("Missing required data.");
     }
-
     const existingTeaching = await teacherTeaching.getTeachersSubjects(
       db,
       teacherCode,

@@ -22,12 +22,12 @@
                     <% }); %>
             </select> <br>
 
-            <label for="subjectCode">Subject Id:</label>
+            <label for="subjectCode">Subject:</label>
             <select id="subjectCode" name="subjectCode">
                 <option value="">Choose...</option>
                 <% subjects.forEach(function(item) { %>
                     <option value="<%= item.id %>">
-                        <%= item.id %>
+                        <%= item.name %> - <%= item.type %>
                     </option>
                     <% }); %>
             </select> <br>

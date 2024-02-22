@@ -21,6 +21,7 @@ import onlyAssignedGroups from "./routes/onlyAssignedGroups.js";
 import appropiateClassrooms from "./routes/appropiateClassrooms.js";
 import studentRouter from "./routes/studentRouter.js";
 import timetableRouter from "./routes/timetableRouter.js";
+import timetableTeacher from "./routes/timetableTeacher.js";
 import groupTimetable from "./routes/groupTimetable.js";
 import teacherTimetable from "./routes/teacherTimetable.js";
 import subjectTimetable from "./routes/subjectTimetable.js";
@@ -68,6 +69,7 @@ setupDatabase()
     app.use("/", teacherTimetable);
     app.use("/", subjectTimetable);
     app.use("/", classroomTimetable);
+    app.use("/", timetableTeacher);
     app.use("/", group);
     app.use("/", teachers);
     app.use("/", subject);
