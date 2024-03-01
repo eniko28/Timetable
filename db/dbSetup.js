@@ -1,19 +1,6 @@
 import OrientDB from "orientjs";
 import dbConfig from "./dbConfig.js";
 
-async function createUserIfNotExists(db) {
-  try {
-    const userExists = await db.query("SELECT FROM OUser WHERE name = 'root'");
-
-    if (userExists.length === 0) {
-      await db.query("CREATE USER root IDENTIFIED BY 'root' ROLE admin");
-    }
-  } catch (error) {
-    console.error("Error creating user:", error);
-    throw error;
-  }
-}
-
 async function setupDatabase() {
   const server = OrientDB(dbConfig);
 
@@ -28,7 +15,6 @@ async function setupDatabase() {
         type: "graph",
         storage: "remote",
       });
-      await createUserIfNotExists(createdDb);
 
       return createdDb;
     } else {
@@ -37,7 +23,6 @@ async function setupDatabase() {
         username: "root",
         password: "root",
       });
-      await createUserIfNotExists(usedDb);
 
       return usedDb;
     }

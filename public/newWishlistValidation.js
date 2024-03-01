@@ -80,3 +80,14 @@ function updateGroups() {
 }
 
 document.getElementById("subjectCode").addEventListener("change", updateGroups);
+
+function showSubgroups(value) {
+  const additionalFields = document.getElementById("additionalFields");
+  const selectedSubgroupSelect = document.getElementById("selectedSubgroup");
+
+  if (value === "yes") {
+    additionalFields.style.display = "block";
+  } else {
+    additionalFields.style.display = "none";
+  }
+}

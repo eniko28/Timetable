@@ -93,10 +93,11 @@ export async function getTimetableByTeacherAndTime(
   db,
   teacherId,
   startTime,
-  endTime
+  endTime,
+  day
 ) {
   try {
-    const query = `SELECT * FROM Timetable WHERE teacherId = '${teacherId}' AND start = '${startTime}' AND end = '${endTime}'`;
+    const query = `SELECT * FROM Timetable WHERE teacherId = '${teacherId}' AND start = '${startTime}' AND end = '${endTime}' AND day = '${day}'`;
     const result = await db.query(query);
     return result;
   } catch (error) {

@@ -33,7 +33,24 @@
                     <%= item.end %>
                 </p>
                 <label for="classroomName">Assign a classrom:</label>
-                <select id="classroomName" name="classroomName">
+                <select id="classroomName" name="classroomName"> </select> <br>
+                <label for="subgroup">Assign to a subgroup:</label>
+                <select id="subgroup" name="subgroup" onchange="showSubgroups(this.value)">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select> <br>
+                <div id="additionalFields" style="display: none;">
+                    <label for="selectedSubgroup">Select Subgroup:</label>
+                    <select id="selectedSubgroup" name="selectedSubgroup">
+                        <option value="<%= item.groupId %>/1">
+                            <%= item.groupId %>/1
+                        </option>
+                        <option value="<%= item.groupId %>/2">
+                            <%= item.groupId %>/2
+                        </option>
+                    </select>
+                </div>
+
 
                 </select> <br>
                 <label for="approved">Approval status:</label>
@@ -53,6 +70,8 @@
         </form>
         <% }); %>
             <a href="/admin" class="back-button">Back</a>
+            <script src="newWishlistValidation.js" defer></script>
+
 </body>
 
 </html>

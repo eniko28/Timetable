@@ -78,7 +78,8 @@ router.post("/addWishlists", async (req, res) => {
       db,
       teacherCode,
       start,
-      end
+      end,
+      day
     );
     if (teacherExists.length !== 0) {
       res.status(400).render("error", {

@@ -50,8 +50,10 @@ router.post("/wishlists", async (req, res) => {
       end,
       approved,
       classroomName,
+      selectedSubgroup,
     } = req.fields;
     if (
+      !wishlistId ||
       !groupId ||
       !subjectId ||
       !teacherId ||
@@ -59,7 +61,8 @@ router.post("/wishlists", async (req, res) => {
       !start ||
       !end ||
       !approved ||
-      !classroomName
+      !classroomName ||
+      !selectedSubgroup
     ) {
       return res.status(400).send("Missing required data.");
     }
@@ -106,7 +109,7 @@ router.post("/wishlists", async (req, res) => {
         timetableId,
         teacherId,
         subjectId,
-        groupId,
+        selectedSubgroup,
         day,
         start,
         end,

@@ -3,18 +3,9 @@ import * as groupDB from "../db/groupsDB.js";
 export async function insertStudent(db, code, name, groupId) {
   try {
     const group = await groupDB.getGroupById(db, groupId);
-    const linkset = [
-      {
-        "@type": "d",
-        "@class": "Groups",
-        "@rid": group["@rid"],
-      },
-    ];
 
     await db.query(
-      `INSERT INTO Students SET id = '${code}', name = '${name}', group = ${JSON.stringify(
-        linkset
-      )}`
+      `INSERT INTO Students SET id = '${code}', name = '${name}', group = '${groupId}'`
     );
   } catch (error) {
     console.error("Error inserting students:", error);

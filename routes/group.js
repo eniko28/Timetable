@@ -43,9 +43,11 @@ router.get("/group", async (req, res) => {
         teaching.subjectId = subject.name;
         teaching.subjectType = subject.type;
         teaching.classroomName = teaching.classroomName;
+        teaching.groupId = teaching.groupId;
       }
       group.teachings = teachings;
     }
+    console.log(groups);
     res.render("group", { groups });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);

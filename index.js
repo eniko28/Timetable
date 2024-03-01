@@ -2,7 +2,6 @@ import express from "express";
 import setupDatabase from "./db/dbSetup.js";
 import formidable from "express-formidable";
 import subjectRouter from "./routes/subjectRouter.js";
-import groupRouter from "./routes/groupRouter.js";
 import loginRouter from "./routes/loginRouter.js";
 import registerRouter from "./routes/registerRouter.js";
 import wishlistRouter from "./routes/wishlistRouter.js";
@@ -52,7 +51,6 @@ setupDatabase()
     app.use("/", loginRouter);
     app.use("/", subjectRouter);
     app.use("/", wishlistRouter);
-    app.use("/", groupRouter);
     app.use("/", homeRouter);
     app.use("/", userRouter);
     app.use("/", assignTeacherRouter);
@@ -82,7 +80,7 @@ setupDatabase()
   })
   .catch((error) => {
     console.error(
-      "Error connecting to or creating 'MyTimetable' database:",
+      "Error connecting to or creating 'Timetable' database:",
       error
     );
   });

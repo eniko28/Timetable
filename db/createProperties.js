@@ -59,24 +59,24 @@ function createPropertyGroups(db, className) {
     })
     .then(function (properties) {
       const groupData = [
-        { id: 611, gradeLevel: 1, name: "Mathematics Computer Science" },
-        { id: 621, gradeLevel: 2, name: "Mathematics Computer Science" },
-        { id: 631, gradeLevel: 3, name: "Mathematics Computer Science" },
-        { id: 511, gradeLevel: 1, name: "Computer Science" },
-        { id: 512, gradeLevel: 1, name: "Computer Science" },
-        { id: 513, gradeLevel: 1, name: "Computer Science" },
-        { id: 514, gradeLevel: 1, name: "Computer Science" },
-        { id: 521, gradeLevel: 2, name: "Computer Science" },
-        { id: 522, gradeLevel: 2, name: "Computer Science" },
-        { id: 523, gradeLevel: 2, name: "Computer Science" },
-        { id: 524, gradeLevel: 2, name: "Computer Science" },
-        { id: 531, gradeLevel: 3, name: "Computer Science" },
-        { id: 532, gradeLevel: 3, name: "Computer Science" },
-        { id: 533, gradeLevel: 3, name: "Computer Science" },
-        { id: 534, gradeLevel: 3, name: "Computer Science" },
-        { id: 411, gradeLevel: 1, name: "Mathematics" },
-        { id: 421, gradeLevel: 2, name: "Mathematics" },
-        { id: 431, gradeLevel: 3, name: "Mathematics" },
+        { id: "611", gradeLevel: 1, name: "Mathematics Computer Science" },
+        { id: "621", gradeLevel: 2, name: "Mathematics Computer Science" },
+        { id: "631", gradeLevel: 3, name: "Mathematics Computer Science" },
+        { id: "511", gradeLevel: 1, name: "Computer Science" },
+        { id: "512", gradeLevel: 1, name: "Computer Science" },
+        { id: "513", gradeLevel: 1, name: "Computer Science" },
+        { id: "514", gradeLevel: 1, name: "Computer Science" },
+        { id: "521", gradeLevel: 2, name: "Computer Science" },
+        { id: "522", gradeLevel: 2, name: "Computer Science" },
+        { id: "523", gradeLevel: 2, name: "Computer Science" },
+        { id: "524", gradeLevel: 2, name: "Computer Science" },
+        { id: "531", gradeLevel: 3, name: "Computer Science" },
+        { id: "532", gradeLevel: 3, name: "Computer Science" },
+        { id: "533", gradeLevel: 3, name: "Computer Science" },
+        { id: "534", gradeLevel: 3, name: "Computer Science" },
+        { id: "411", gradeLevel: 1, name: "Mathematics" },
+        { id: "421", gradeLevel: 2, name: "Mathematics" },
+        { id: "431", gradeLevel: 3, name: "Mathematics" },
       ];
 
       const groupPromises = groupData.map((group) => {
@@ -149,7 +149,7 @@ function createPropertyWishlists(db, className) {
         createPropertyIfNotExists(classObj, "wishlistId", "String"),
         createPropertyIfNotExists(classObj, "teacherId", "String"),
         createPropertyIfNotExists(classObj, "subjectId", "String"),
-        createPropertyIfNotExists(classObj, "groupId", "Integer"),
+        createPropertyIfNotExists(classObj, "groupId", "String"),
         createPropertyIfNotExists(classObj, "day", "String"),
         createPropertyIfNotExists(classObj, "start", "String"),
         createPropertyIfNotExists(classObj, "end", "String"),
@@ -202,7 +202,7 @@ function createPropertyTeachings(db, className) {
         createPropertyIfNotExists(classObj, "id", "String"),
         createPropertyIfNotExists(classObj, "teacherId", "String"),
         createPropertyIfNotExists(classObj, "subjectId", "String"),
-        createPropertyIfNotExists(classObj, "groupId", "Integer"),
+        createPropertyIfNotExists(classObj, "groupId", "String"),
       ]);
     })
     .catch(function (error) {
@@ -218,7 +218,7 @@ function createPropertyTimetable(db, className) {
         createPropertyIfNotExists(classObj, "timetableId", "String"),
         createPropertyIfNotExists(classObj, "teacherId", "String"),
         createPropertyIfNotExists(classObj, "subjectId", "String"),
-        createPropertyIfNotExists(classObj, "groupId", "Integer"),
+        createPropertyIfNotExists(classObj, "groupId", "String"),
         createPropertyIfNotExists(classObj, "day", "String"),
         createPropertyIfNotExists(classObj, "start", "String"),
         createPropertyIfNotExists(classObj, "end", "String"),
@@ -262,7 +262,7 @@ function createDataIfNotExistsGroups(db, className, data, keyName, keyValue) {
     .one()
     .then((existingData) => {
       if (!existingData) {
-        const insertQuery = `INSERT INTO ${className} SET ${keyName}=${keyValue}, id='${data.id}', gradeLevel='${data.gradeLevel}', name = '${data.name}'`;
+        const insertQuery = `INSERT INTO ${className} SET ${keyName}='${keyValue}', id='${data.id}', gradeLevel=${data.gradeLevel}, name = '${data.name}'`;
 
         return db
           .query(insertQuery)
