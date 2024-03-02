@@ -71,14 +71,18 @@ router.post("/wishlists", async (req, res) => {
       const existsTeacher = await timetableDB.getFreeTeacher(
         db,
         teacherId,
-        day,
         start,
-        end
+        end,
+        day
       );
       if (existsTeacher.length !== 0) {
-        return res
-          .status(400)
-          .send("The teacher already has a class scheduled for that time.");
+        if (
+          existsTeacher[0].groupId.substring(0, 2) !== groupId.substring(0, 2)
+        ) {
+          return res
+            .status(400)
+            .send("The teacher already has a class scheduled for that time.");
+        }
       }
       const existsGroup = await timetableDB.getFreeGroup(
         db,
@@ -106,6 +110,11 @@ router.post("/wishlists", async (req, res) => {
           .send(
             "The group already has this subject scheduled in their timetable."
           );
+      }
+      if (classroomName !== existsTeacher[0].classroomName) {
+        return res
+          .status(400)
+          .send(`Classroomname must be: '${existsTeacher[0].classroomName}'`);
       }
       const timetableId = uuidv4();
       if (subgroup === "no") {
