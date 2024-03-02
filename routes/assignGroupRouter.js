@@ -1,9 +1,14 @@
 import express from "express";
 import * as subjectDB from "../db/subjectsDB.js";
 import * as groupDB from "../db/groupsDB.js";
+import * as teacherDB from "../db/teachersDB.js";
 import * as teachingDB from "../db/teachingsDB.js";
 import * as groupTeaching from "../db/groupTeachingsEdge.js";
-import { createEdgeGroupTeachings } from "../db/createEdges.js";
+import {
+  createEdgeGroupTeachings,
+  createEdgeTeacherTeachingsWithoutInfo,
+  createEdgesSubjectTeachingsWithoutInfo,
+} from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -76,6 +81,14 @@ router.post("/assignGroup", async (req, res) => {
           subjectCode,
           groupCode
         );
+        const teaching = await teachingDB.getTeachingById(db, teachingId);
+        const teacher = await teacherDB.getTeacherById(
+          db,
+          teacherId[0].teacherId
+        );
+        const subject = await subjectDB.getSubjectById(db, subjectCode);
+        await createEdgeTeacherTeachingsWithoutInfo(db, teacher, teaching);
+        await createEdgesSubjectTeachingsWithoutInfo(db, subject, teaching);
       } else {
         await teachingDB.updateGroup(db, subjectCode, groupCode);
         const id = await teachingDB.getTeachingIdBySubjectAndGroup(

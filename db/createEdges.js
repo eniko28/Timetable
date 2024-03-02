@@ -55,6 +55,23 @@ export async function createEdgeTeacherTeachings(
   }
 }
 
+export async function createEdgeTeacherTeachingsWithoutInfo(
+  db,
+  teacher,
+  teaching
+) {
+  try {
+    await db
+      .create("EDGE", "TeacherTeachings")
+      .from(teaching["@rid"])
+      .to(teacher["@rid"])
+      .one();
+  } catch (error) {
+    console.error("Error creating TeacherTeachings edge:", error);
+    throw error;
+  }
+}
+
 export async function createEdgeGroupTeachings(
   db,
   group,
@@ -94,6 +111,23 @@ export async function createEdgesSubjectTeachings(
         subjectId: subjectId,
         teacherId: teacherId,
       })
+      .one();
+  } catch (error) {
+    console.error("Error creating SubjectTeachings edge:", error);
+    throw error;
+  }
+}
+
+export async function createEdgesSubjectTeachingsWithoutInfo(
+  db,
+  subject,
+  teaching
+) {
+  try {
+    await db
+      .create("EDGE", "SubjectTeachings")
+      .from(teaching["@rid"])
+      .to(subject["@rid"])
       .one();
   } catch (error) {
     console.error("Error creating SubjectTeachings edge:", error);

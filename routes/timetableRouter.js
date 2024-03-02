@@ -22,23 +22,17 @@ setupDatabase()
 router.get("/timetable", async (req, res) => {
   try {
     const userId = req.session.userId;
-    const groupRid = await studentDB.getGroupIdByStudentId(db, userId);
-    const groupId = await groupDB.getGroupIdByRid(db, groupRid.toString());
-    const teachings = await timetableDB.selectTimetableByGroupId(
-      db,
-      groupId[0].id
-    );
+    const groupId = await studentDB.getGroupIdByStudentId(db, userId);
+    const teachings = await timetableDB.selectTimetableByGroupId(db, groupId);
     for (const teaching of teachings) {
       const subject = await subjectDB.getSubjectById(db, teaching.subjectId);
       teaching.subjectId = subject.name;
       teaching.subjectType = subject.type;
       teaching.classroomName = teaching.classroomName;
-    }
-    for (const teaching of teachings) {
       const teacher = await teacherDB.getTeacherById(db, teaching.teacherId);
       teaching.teacherId = teacher.name;
     }
-    const group = groupId[0].id;
+    const group = groupId;
     const groupName = await groupDB.getGroupsNameById(db, group);
     const groupsName = groupName[0].name;
     res.render("timetable", { teachings, groupsName, group });

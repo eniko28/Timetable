@@ -20,7 +20,7 @@ export async function insertTimetable(
 
 export async function selectTimetableByGroupId(db, groupId) {
   try {
-    const query = `SELECT * FROM Timetable WHERE groupId = '${groupId}'`;
+    const query = `SELECT * FROM Timetable WHERE groupId LIKE '${groupId}%'`;
     const result = await db.query(query);
     return result;
   } catch (error) {

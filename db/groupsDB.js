@@ -64,7 +64,7 @@ export async function getAllGroupIds(db) {
 
 export async function getGroupsByNameAndGradeLevel(db, name, gradeLevel) {
   try {
-    const query = `SELECT FROM Groups WHERE name = '${name}' AND gradeLevel = '${gradeLevel}'`;
+    const query = `SELECT id FROM Groups WHERE name = '${name}' AND gradeLevel = '${gradeLevel}'`;
     const groups = await db.query(query);
     return groups;
   } catch (error) {

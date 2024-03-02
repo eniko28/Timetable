@@ -39,6 +39,7 @@ router.get("/wishlists", async (req, res) => {
 });
 
 router.post("/wishlists", async (req, res) => {
+  let newSubgroup;
   try {
     const {
       wishlistId,
@@ -51,6 +52,7 @@ router.post("/wishlists", async (req, res) => {
       approved,
       classroomName,
       selectedSubgroup,
+      subgroup,
     } = req.fields;
     if (
       !wishlistId ||
@@ -61,8 +63,7 @@ router.post("/wishlists", async (req, res) => {
       !start ||
       !end ||
       !approved ||
-      !classroomName ||
-      !selectedSubgroup
+      !classroomName
     ) {
       return res.status(400).send("Missing required data.");
     }
@@ -91,9 +92,12 @@ router.post("/wishlists", async (req, res) => {
           .status(400)
           .send("The group already has a class scheduled for that time.");
       }
+      if (subgroup === "yes") {
+        newSubgroup = selectedSubgroup;
+      }
       const existingSubject = await timetableDB.getTeachingsByGroupAndSubjectId(
         db,
-        groupId,
+        newSubgroup,
         subjectId
       );
       if (existingSubject.length !== 0) {
@@ -104,12 +108,15 @@ router.post("/wishlists", async (req, res) => {
           );
       }
       const timetableId = uuidv4();
+      if (subgroup === "no") {
+        newSubgroup = groupId;
+      }
       await timetableDB.insertTimetable(
         db,
         timetableId,
         teacherId,
         subjectId,
-        selectedSubgroup,
+        newSubgroup,
         day,
         start,
         end,
