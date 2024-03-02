@@ -36,13 +36,13 @@
                 <select id="classroomName" name="classroomName"> </select> <br>
                 <label for="subgroup">Assign to a subgroup:</label>
                 <select id="subgroup" name="subgroup" onchange="showSubgroups(this.value)">
+                    <option value="">Choose...</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
                 </select> <br>
                 <div id="additionalFields" style="display: none;">
                     <label for="selectedSubgroup">Select Subgroup:</label>
                     <select id="selectedSubgroup" name="selectedSubgroup">
-                        <option value="">Choose...</option>
                         <option value="<%= item.groupId %>/1">
                             <%= item.groupId %>/1
                         </option>

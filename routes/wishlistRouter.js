@@ -82,11 +82,15 @@ router.post("/addWishlists", async (req, res) => {
       day
     );
     if (teacherExists.length !== 0) {
-      res.status(400).render("error", {
-        message: "Teacher already has a class scheduled at this time.",
-      });
+      if (
+        teacherExists[0].groupId.substring(0, 2) !== groupCode.substring(0, 2)
+      ) {
+        res.status(400).render("error", {
+          message: "Teacher already has a class scheduled at this time.",
+        });
 
-      return;
+        return;
+      }
     }
     await wishlistDB.insertWishlist(
       db,
