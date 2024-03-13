@@ -1,6 +1,7 @@
 import express from "express";
 import * as groupDB from "../db/groupsDB.js";
 import setupDatabase from "../db/dbSetup.js";
+import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -15,13 +16,17 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/groupTimetable", async (req, res) => {
-  try {
-    const groups = await groupDB.getAllGroups(db);
-    res.render("groupTimetable", { groups });
-  } catch (error) {
-    res.status(500).send(`Internal Server Error: ${error.message}`);
+router.get(
+  "/groupTimetable",
+  authMiddleware(["Admin", "Teacher", "Student"]),
+  async (req, res) => {
+    try {
+      const groups = await groupDB.getAllGroups(db);
+      res.render("groupTimetable", { groups });
+    } catch (error) {
+      res.status(500).send(`Internal Server Error: ${error.message}`);
+    }
   }
-});
+);
 
 export default router;

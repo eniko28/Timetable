@@ -1,8 +1,9 @@
 import express from "express";
+import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/admin", (req, res) => {
+router.get("/admin", authMiddleware(["Admin"]), (req, res) => {
   try {
     const userId = req.session.userId;
     const type = req.session.type;

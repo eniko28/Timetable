@@ -8,6 +8,7 @@ import * as timetableDB from "../db/timetableDB.js";
 import * as teachingDB from "../db/teachingsDB.js";
 import setupDatabase from "../db/dbSetup.js";
 import { v4 as uuidv4 } from "uuid";
+import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/addWishlists", async (req, res) => {
+router.get("/addWishlists", authMiddleware(["Teacher"]), async (req, res) => {
   try {
     const id = req.session.userId;
     const subjectIds = await teachersSubjects.getSubjectByUserId(db, id);
@@ -38,7 +39,7 @@ router.get("/addWishlists", async (req, res) => {
   }
 });
 
-router.post("/addWishlists", async (req, res) => {
+router.post("/addWishlists", authMiddleware(["Teacher"]), async (req, res) => {
   try {
     const { teacherCode, subjectCode, groupCode, day, start, end } = req.fields;
 

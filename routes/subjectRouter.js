@@ -1,6 +1,7 @@
 import express from "express";
 import * as subjectsDB from "../db/subjectsDB.js";
 import setupDatabase from "../db/dbSetup.js";
+import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/addSubjects", async (req, res) => {
+router.get("/addSubjects", authMiddleware(["Admin"]), async (req, res) => {
   try {
     res.render("addSubjects", {});
   } catch (error) {
@@ -23,7 +24,7 @@ router.get("/addSubjects", async (req, res) => {
   }
 });
 
-router.post("/addSubjects", async (req, res) => {
+router.post("/addSubjects", authMiddleware(["Admin"]), async (req, res) => {
   try {
     const { code, name, type } = req.fields;
 

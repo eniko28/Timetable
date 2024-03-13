@@ -11,6 +11,7 @@ import {
 } from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
 import { v4 as uuidv4 } from "uuid";
+import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -25,7 +26,7 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/assignGroup", async (req, res) => {
+router.get("/assignGroup", authMiddleware(["Admin"]), async (req, res) => {
   try {
     const groups = await groupDB.getAllGroups(db);
     const subjects = await subjectDB.getAllSubjects(db);
@@ -35,7 +36,7 @@ router.get("/assignGroup", async (req, res) => {
   }
 });
 
-router.post("/assignGroup", async (req, res) => {
+router.post("/assignGroup", authMiddleware("Admin"), async (req, res) => {
   try {
     const { groupCode, subjectCode } = req.fields;
 

@@ -7,6 +7,7 @@ import * as classroomDB from "../db/classroomDB.js";
 import * as wishlistDB from "../db/wishlistsDB.js";
 import * as timetableDB from "../db/timetableDB.js";
 import { v4 as uuidv4 } from "uuid";
+import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
 let db;
@@ -20,7 +21,7 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/wishlists", async (req, res) => {
+router.get("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
   try {
     const wishlists = await wishlistDB.getAllWishlists(db);
     const classrooms = await classroomDB.getAllClassrooms(db);
@@ -38,7 +39,7 @@ router.get("/wishlists", async (req, res) => {
   }
 });
 
-router.post("/wishlists", async (req, res) => {
+router.post("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
   let newSubgroup;
   try {
     const {
@@ -82,6 +83,14 @@ router.post("/wishlists", async (req, res) => {
           return res
             .status(400)
             .send("The teacher already has a class scheduled for that time.");
+        } else {
+          if (classroomName !== existsTeacher[0].classroomName) {
+            return res
+              .status(400)
+              .send(
+                `Classroomname must be: '${existsTeacher[0].classroomName}'`
+              );
+          }
         }
       }
       const existsGroup = await timetableDB.getFreeGroup(
@@ -110,11 +119,6 @@ router.post("/wishlists", async (req, res) => {
           .send(
             "The group already has this subject scheduled in their timetable."
           );
-      }
-      if (classroomName !== existsTeacher[0].classroomName) {
-        return res
-          .status(400)
-          .send(`Classroomname must be: '${existsTeacher[0].classroomName}'`);
       }
       const timetableId = uuidv4();
       if (subgroup === "no") {

@@ -3,6 +3,7 @@ import * as timetableDB from "../db/timetableDB.js";
 import * as groupDB from "../db/groupsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
 import * as subjectBD from "../db/subjectsDB.js";
+import { authMiddleware } from "../middleware/auth.js";
 
 import setupDatabase from "../db/dbSetup.js";
 
@@ -19,48 +20,55 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/group", async (req, res) => {
-  try {
-    const { name, gradeLevel } = req.query;
-    let groups = await groupDB.getGroupsByNameAndGradeLevel(
-      db,
-      name,
-      gradeLevel
-    );
-
-    for (const group of groups) {
-      const teachings = await timetableDB.selectTimetableByGroupId(
+router.get(
+  "/group",
+  authMiddleware(["Admin", "Student", "Teacher"]),
+  async (req, res) => {
+    try {
+      const { name, gradeLevel } = req.query;
+      let groups = await groupDB.getGroupsByNameAndGradeLevel(
         db,
-        group.id
+        name,
+        gradeLevel
       );
 
-      group.teachings = [];
-
-      for (const teaching of teachings) {
-        const teacher = await teacherDB.getTeacherNameById(
+      for (const group of groups) {
+        const teachings = await timetableDB.selectTimetableByGroupId(
           db,
-          teaching.teacherId
+          group.id
         );
-        const subject = await subjectBD.getSubjectById(db, teaching.subjectId);
 
-        const newTeaching = {
-          teacherName: teacher,
-          subjectId: subject.name,
-          subjectType: subject.type,
-          classroomName: teaching.classroomName,
-          day: teaching.day,
-          start: teaching.start,
-          end: teaching.end,
-          groupId: teaching.groupId,
-        };
+        group.teachings = [];
 
-        group.teachings.push(newTeaching);
+        for (const teaching of teachings) {
+          const teacher = await teacherDB.getTeacherNameById(
+            db,
+            teaching.teacherId
+          );
+          const subject = await subjectBD.getSubjectById(
+            db,
+            teaching.subjectId
+          );
+
+          const newTeaching = {
+            teacherName: teacher,
+            subjectId: subject.name,
+            subjectType: subject.type,
+            classroomName: teaching.classroomName,
+            day: teaching.day,
+            start: teaching.start,
+            end: teaching.end,
+            groupId: teaching.groupId,
+          };
+
+          group.teachings.push(newTeaching);
+        }
       }
+      res.render("group", { groups });
+    } catch (error) {
+      res.status(500).send(`Internal Server Error: ${error.message}`);
     }
-    res.render("group", { groups });
-  } catch (error) {
-    res.status(500).send(`Internal Server Error: ${error.message}`);
   }
-});
+);
 
 export default router;

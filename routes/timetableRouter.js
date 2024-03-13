@@ -5,6 +5,7 @@ import * as groupDB from "../db/groupsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
 import * as subjectDB from "../db/subjectsDB.js";
 import setupDatabase from "../db/dbSetup.js";
+import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/timetable", async (req, res) => {
+router.get("/timetable", authMiddleware(["Student"]), async (req, res) => {
   try {
     const userId = req.session.userId;
     const groupId = await studentDB.getGroupIdByStudentId(db, userId);

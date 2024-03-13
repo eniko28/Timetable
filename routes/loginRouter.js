@@ -81,12 +81,13 @@ router.post("/login", async (req, res) => {
       const match = await bcrypt.compare(password, passwordFromDatabase);
 
       if (match) {
-        req.session.userId = userId;
-        req.session.type = type;
-
         const token = jwt.sign({ userId, type }, secret, {
           expiresIn: "356d",
         });
+        req.session.userId = userId;
+        req.session.type = type;
+        req.session.token = token;
+
         if (type === "Admin") {
           res.redirect("/admin");
         } else {

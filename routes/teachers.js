@@ -1,8 +1,8 @@
 import express from "express";
 import * as timetableDB from "../db/timetableDB.js";
 import * as subjectBD from "../db/subjectsDB.js";
-
 import setupDatabase from "../db/dbSetup.js";
+import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -17,22 +17,26 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/teachers", async (req, res) => {
-  try {
-    const { name, id } = req.query;
+router.get(
+  "/teachers",
+  authMiddleware(["Teacher", "Admin", "Student"]),
+  async (req, res) => {
+    try {
+      const { name, id } = req.query;
 
-    const teachings = await timetableDB.selectTimetableByTeacherId(db, id);
+      const teachings = await timetableDB.selectTimetableByTeacherId(db, id);
 
-    for (const teaching of teachings) {
-      const subject = await subjectBD.getSubjectById(db, teaching.subjectId);
+      for (const teaching of teachings) {
+        const subject = await subjectBD.getSubjectById(db, teaching.subjectId);
 
-      teaching.subjectId = subject.name;
-      teaching.subjectType = subject.type;
+        teaching.subjectId = subject.name;
+        teaching.subjectType = subject.type;
+      }
+      res.render("teachers", { teachings, name });
+    } catch (error) {
+      res.status(500).send(`Internal Server Error: ${error.message}`);
     }
-    res.render("teachers", { teachings, name });
-  } catch (error) {
-    res.status(500).send(`Internal Server Error: ${error.message}`);
   }
-});
+);
 
 export default router;

@@ -9,6 +9,7 @@ import {
 } from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
 import { v4 as uuidv4 } from "uuid";
+import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/assignTeacher", async (req, res) => {
+router.get("/assignTeacher", authMiddleware(["Admin"]), async (req, res) => {
   try {
     const teachers = await teacherDB.getAllTeachers(db);
     const subjects = await subjectDB.getAllSubjects(db);
@@ -33,7 +34,7 @@ router.get("/assignTeacher", async (req, res) => {
   }
 });
 
-router.post("/assignTeacher", async (req, res) => {
+router.post("/assignTeacher", authMiddleware(["Admin"]), async (req, res) => {
   try {
     const { teacherCode, subjectCode } = req.fields;
 
