@@ -224,6 +224,7 @@ a.back-button:hover {
 table {
     border-collapse: collapse;
     width: 100%;
+    max-width: 800px; 
 }
 
 th,
@@ -231,13 +232,20 @@ td {
     border: 1px solid black;
     padding: 8px;
     text-align: left;
+    max-width: 200px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
 }
 
 .timetable {
-    width: 80%; 
-    margin: 0 auto; 
+    width: 80%;
+    margin: 0 auto;
     border: 2px solid black;
-    border-collapse: collapse;}
+    border-collapse: collapse;
+    max-width: 800px;
+}
+
 
 .timetable th,
 .timetable td {

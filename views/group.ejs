@@ -25,7 +25,9 @@
                 </tr>
             </thead>
             <tbody>
-                <% group.teachings.forEach(function(teaching) { %>
+                <% const days=['Monday', 'Tuesday' , 'Wednesday' , 'Thursday' , 'Friday' ]; days.forEach(function(day) {
+                    const dayTeachings=group.teachings.filter(teaching=> teaching.day === day);
+                    dayTeachings.forEach(function(teaching) { %>
                     <tr>
                         <td>
                             <%= teaching.day %>
@@ -49,12 +51,10 @@
                             <%= teaching.teacherName %>
                         </td>
                     </tr>
-                    <% }); %>
+                    <% }); }); %>
             </tbody>
         </table>
         <% }); %>
-
-
             <a href="javascript:history.go(-1)" class="back-button">Back</a>
 </body>
 
