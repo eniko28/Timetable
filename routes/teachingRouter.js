@@ -2,6 +2,7 @@ import express from "express";
 import setupDatabase from "../db/dbSetup.js";
 import * as createEdge from "../db/createEdges.js";
 import * as teachingDB from "../db/teachingsDB.js";
+import * as teacherDB from "../db/teachersDB.js";
 import * as subjectDB from "../db/subjectsDB.js";
 import * as classroomDB from "../db/classroomDB.js";
 import * as wishlistDB from "../db/wishlistsDB.js";
@@ -25,6 +26,7 @@ router.get("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
   try {
     const wishlists = await wishlistDB.getAllWishlists(db);
     const classrooms = await classroomDB.getAllClassrooms(db);
+    const teachers = await teacherDB.getAllTeachers(db);
     for (const wishlist of wishlists) {
       const subjects = await subjectDB.getSubjectById(db, wishlist.subjectId);
       wishlist.subjectName = subjects.name;
@@ -33,6 +35,7 @@ router.get("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
     res.render("wishlists", {
       wishlists: wishlists,
       classrooms: classrooms,
+      teachers: teachers,
     });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
@@ -41,7 +44,9 @@ router.get("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
 
 router.post("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
   let newSubgroup;
+  let transaction;
   try {
+    transaction = await db.begin();
     const {
       wishlistId,
       teacherId,
@@ -177,8 +182,12 @@ router.post("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
       await wishlistDB.rejectedWishlists(db, day, start, end);
     }
 
+    await transaction.commit();
     res.redirect("/wishlists");
   } catch (error) {
+    if (transaction) {
+      await transaction.rollback();
+    }
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
