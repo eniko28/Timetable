@@ -8,14 +8,21 @@
 </head>
 
 <body>
-    <h1>
-        About me:
-    </h1>
+    <h1>About me:</h1>
     <h4 id="username">Username: <%= userId %>
     </h4>
     <h4 id="usertype">User type: <%= type %>
     </h4>
-    <a href="/<%= type %>" class="back-button">Back</a>
+
+    <% if (type==='Teacher' || type==='Student' ) { %>
+        <p>Upload your profile picture:</p>
+        <form action="/home" method="post" enctype="multipart/form-data">
+            <input type="file" name="avatar" accept="image/*">
+            <input type="submit" value="Upload">
+        </form>
+        <% } %>
+
+            <a href="/<%= type %>" class="back-button">Back</a>
 </body>
 
 </html>
