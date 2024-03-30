@@ -31,6 +31,7 @@ function createVertices(db) {
     createVertex(db, "Users"),
     createVertex(db, "Wishlists"),
     createVertex(db, "Timetable"),
+    createVertex(db, "Personal"),
   ]);
 }
 

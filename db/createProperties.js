@@ -134,6 +134,24 @@ function createPropertyStudents(db, className) {
         createPropertyIfNotExists(classObj, "id", "String"),
         createPropertyIfNotExists(classObj, "name", "String"),
         createPropertyIfNotExists(classObj, "group", "String"),
+        createPropertyIfNotExists(classObj, "personal", "Linkset", "Personal"),
+      ]);
+    })
+    .catch(function (error) {
+      console.error("Error creating properties for Students:", error);
+    });
+}
+
+function createPropertyPersonal(db, className) {
+  return db.class
+    .get(`${className}`)
+    .then(function (classObj) {
+      return Promise.all([
+        createPropertyIfNotExists(classObj, "id", "String"),
+        createPropertyIfNotExists(classObj, "profilePicture", "String"),
+        createPropertyIfNotExists(classObj, "email", "String"),
+        createPropertyIfNotExists(classObj, "address", "String"),
+        createPropertyIfNotExists(classObj, "phone", "String"),
       ]);
     })
     .catch(function (error) {
@@ -348,6 +366,7 @@ function createProperty(db) {
     createPropertyTeachings(db, "Teachings"),
     createPropertyStudents(db, "Students"),
     createPropertyTimetable(db, "Timetable"),
+    createPropertyPersonal(db, "Personal"),
   ]);
 }
 

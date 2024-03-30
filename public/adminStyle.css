@@ -17,14 +17,9 @@ h4 {
     text-align: center;
 }
 
-#username {
+#username, #usertype, #address, #phone, #email {
     font-weight: bold;
     color: #A0763F;
-}
-
-#usertype {
-    font-style: italic;
-    color: #A0763F; 
 }
 
 form {

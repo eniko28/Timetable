@@ -1,4 +1,5 @@
 import * as groupDB from "../db/groupsDB.js";
+import { getUserData } from "./personalDB.js";
 
 export async function insertStudent(db, code, name, groupId) {
   try {
@@ -9,6 +10,30 @@ export async function insertStudent(db, code, name, groupId) {
     );
   } catch (error) {
     console.error("Error inserting students:", error);
+    throw error;
+  }
+}
+
+export async function updateStudent(db, userId) {
+  try {
+    const personal = await getUserData(db, userId);
+
+    const linkset = [
+      {
+        "@type": "d",
+        "@class": "Personal",
+        "@rid": personal["@rid"],
+      },
+    ];
+
+    await db.query(
+      `UPDATE Students SET personal = ${JSON.stringify(
+        linkset
+      )} WHERE id = :userId`,
+      { params: { userId } }
+    );
+  } catch (error) {
+    console.error("Error updating student:", error);
     throw error;
   }
 }

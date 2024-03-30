@@ -11,27 +11,94 @@
     <h1>About me:</h1>
     <div class="img-container">
         <div class="text-container">
-            <h4 id="username">Username: <%= userId %>
-            </h4>
-            <h4 id="usertype">User type: <%= type %>
-            </h4>
+            <div>
+                <h4 id="username">Username: <%= userId %>
+                </h4>
+                <h4 id="usertype">User type: <%= type %>
+                </h4>
+                <% if (type==='Teacher' || type==='Student' ) { %>
+                    <% if (!userData) { %>
+                        <button onclick="showImageUploader()">Add more information</button>
+                        <% } else { %>
+                            <button onclick="showEditForm()">Edit information</button>
+                            <% } %>
+                                <% } %>
+            </div>
         </div>
         <% if (imageName) { %>
             <div class="image-container">
                 <img src="<%= imageName %>" alt="Profile Picture">
             </div>
             <% } %>
+                <% if (userData) { %>
+                    <div class="text-container">
+                        <div>
+                            <h4 id="email">Email: <%= userData.email %>
+                            </h4>
+                            <h4 id="address">Address: <%= userData.address %>
+                            </h4>
+                            <h4 id="phone">Phone: <%= userData.phone %>
+                            </h4>
+                        </div>
+                    </div>
+                    <% } %>
     </div>
 
-    <% if (type==='Teacher' || type==='Student' ) { %>
-        <p>Upload your profile picture:</p>
-        <form action="/home" method="post" enctype="multipart/form-data" style="max-width: 300px; margin: 0 auto;">
-            <input type="file" name="avatar" accept="image/*">
-            <input type="submit" value="Upload">
-        </form>
-        <% } %>
+    <div id="imageUploaderForm" style="display: none;">
+        <br>
+        <div>
+            <form action="/home" method="post" enctype="multipart/form-data" style="max-width: 300px; margin: 0 auto;">
+                <label for="profilePicture">Profile picture:</label>
+                <input type="file" name="avatar" accept="image/*">
+                <br><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <br>
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address">
+                <br>
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone">
+                <br> <br>
+                <input type="submit" value="Save">
+            </form>
+        </div>
+    </div>
 
-            <a href="/<%= type %>" class="back-button">Back</a>
+    <div id="editForm" style="display: none;">
+        <br>
+        <div>
+            <form action="/home" method="post" enctype="multipart/form-data" style="max-width: 300px; margin: 0 auto;">
+                <label for="profilePicture">Profile picture:</label>
+                <input type="file" name="avatar" accept="image/*">
+                <br><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="<%= userData ? userData.email : '' %>" required>
+                <br>
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" value="<%= userData ? userData.address : '' %>">
+                <br>
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone" value="<%= userData ? userData.phone : '' %>">
+                <br> <br>
+                <input type="submit" value="Save">
+            </form>
+        </div>
+    </div>
+
+    <a href="/<%= type %>" class="back-button">Back</a>
+
+    <script>
+        function showImageUploader() {
+            var uploaderForm = document.getElementById("imageUploaderForm");
+            uploaderForm.style.display = "block";
+        }
+
+        function showEditForm() {
+            var editForm = document.getElementById("editForm");
+            editForm.style.display = "block";
+        }
+    </script>
 </body>
 
 </html>
