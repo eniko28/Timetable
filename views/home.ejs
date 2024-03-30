@@ -9,14 +9,23 @@
 
 <body>
     <h1>About me:</h1>
-    <h4 id="username">Username: <%= userId %>
-    </h4>
-    <h4 id="usertype">User type: <%= type %>
-    </h4>
+    <div class="img-container">
+        <div class="text-container">
+            <h4 id="username">Username: <%= userId %>
+            </h4>
+            <h4 id="usertype">User type: <%= type %>
+            </h4>
+        </div>
+        <% if (imageName) { %>
+            <div class="image-container">
+                <img src="<%= imageName %>" alt="Profile Picture">
+            </div>
+            <% } %>
+    </div>
 
     <% if (type==='Teacher' || type==='Student' ) { %>
         <p>Upload your profile picture:</p>
-        <form action="/home" method="post" enctype="multipart/form-data">
+        <form action="/home" method="post" enctype="multipart/form-data" style="max-width: 300px; margin: 0 auto;">
             <input type="file" name="avatar" accept="image/*">
             <input type="submit" value="Upload">
         </form>

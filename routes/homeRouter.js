@@ -1,7 +1,7 @@
 import express from "express";
 import eformidable from "express-formidable";
-import { existsSync, mkdirSync, copyFileSync } from "fs";
-import { join } from "path";
+import { existsSync, mkdirSync, copyFileSync, unlinkSync } from "fs";
+import { join, basename } from "path";
 import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -25,7 +25,15 @@ router.get(
     try {
       const userId = req.session.userId;
       const type = req.session.type;
-      res.render("home", { userId, type });
+      let imageName = null;
+      const profilePicturePath = join(
+        uploadDir,
+        `${userId}-profile-picture.jpg`
+      );
+      if (existsSync(profilePicturePath)) {
+        imageName = basename(profilePicturePath);
+      }
+      res.render("home", { userId, type, imageName });
     } catch (error) {
       res.status(500).send(`Internal Server Error: ${error.message}`);
     }
@@ -37,9 +45,13 @@ router.post(
   authMiddleware(["Teacher", "Student"]),
   async (req, res) => {
     try {
+      const userId = req.session.userId;
       const imagePath = req.files.avatar.path;
-      const imageName = req.files.avatar.name;
+      const imageName = `${userId}-profile-picture.jpg`;
       const destinationPath = join(uploadDir, imageName);
+      if (existsSync(destinationPath)) {
+        unlinkSync(destinationPath);
+      }
       copyFileSync(imagePath, destinationPath);
       res.redirect("home");
     } catch (error) {
