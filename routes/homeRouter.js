@@ -28,17 +28,6 @@ const uploadDir = join(process.cwd(), "uploadDir");
 if (!existsSync(uploadDir)) {
   mkdirSync(uploadDir);
 }
-const tmpUploadDir = join(process.cwd(), "tmpUploadDir"); // Átmeneti mappa
-if (!existsSync(tmpUploadDir)) {
-  mkdirSync(tmpUploadDir);
-}
-router.use(
-  eformidable({
-    uploadDir: tmpUploadDir,
-    keepExtensions: true,
-    multiples: true,
-  })
-);
 
 router.use(express.static(uploadDir));
 

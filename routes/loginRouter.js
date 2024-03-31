@@ -24,15 +24,6 @@ setupDatabase()
     process.exit(1);
   });
 
-setupDatabase()
-  .then((database) => {
-    db = database;
-  })
-  .catch((error) => {
-    console.error("Error setting up database:", error);
-    process.exit(1);
-  });
-
 router.use(
   session({
     secret: secret,

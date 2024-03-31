@@ -5,14 +5,29 @@
     <meta charset="UTF-8" />
     <title>Teacher Page</title>
     <link rel="stylesheet" href="adminStyle.css">
+    <style>
+        .home-button {
+            background-image: url('<%= imagePath %>');
+            background-size: cover;
+            background-position: center;
+            border: none;
+            padding: 23px 40px !important;
+            cursor: pointer;
+            width: auto !important;
+            height: auto !important;
+        }
+    </style>
 </head>
 
 <body>
     <div class="navbar">
-        <button onclick="window.location.href='/home'">Home</button>
-        <button onclick="window.location.href='/timetableTeacher'">Timetable</button>
-        <button onclick="window.location.href='/addWishlists'">Create wishlist</button>
-        <button onclick="window.location.href='/logout'" class="logout-button">Log out</button>
+        <% if (imagePath!=null) { %>
+            <button onclick="window.location.href='/home'" class="home-button"></button>
+            <% } else { %>
+                <button onclick="window.location.href='/home'">Home</button>
+                <% } %> <button onclick="window.location.href='/timetableTeacher'">Timetable</button>
+                    <button onclick="window.location.href='/addWishlists'">Create wishlist</button>
+                    <button onclick="window.location.href='/logout'" class="logout-button">Log out</button>
     </div>
     <h1>
         <div class="links-container">
