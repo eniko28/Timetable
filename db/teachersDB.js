@@ -1,9 +1,35 @@
+import { getUserData } from "./personalDB.js";
+
 export async function insertTeacherNameAndId(db, teacherCode, name) {
   try {
     const query = `INSERT INTO Teachers SET id = '${teacherCode}', name = '${name}'`;
     await db.query(query);
   } catch (error) {
     console.error("Error inserting teacher:", error);
+    throw error;
+  }
+}
+
+export async function updateTeachers(db, userId) {
+  try {
+    const personal = await getUserData(db, userId);
+
+    const linkset = [
+      {
+        "@type": "d",
+        "@class": "Personal",
+        "@rid": personal["@rid"],
+      },
+    ];
+
+    await db.query(
+      `UPDATE Teachers SET personal = ${JSON.stringify(
+        linkset
+      )} WHERE id = :userId`,
+      { params: { userId } }
+    );
+  } catch (error) {
+    console.error("Error updating teachers:", error);
     throw error;
   }
 }

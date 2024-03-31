@@ -1,11 +1,11 @@
 import express from "express";
-import eformidable from "express-formidable";
 import setupDatabase from "../db/dbSetup.js";
 import { existsSync, mkdirSync, copyFileSync, unlinkSync } from "fs";
 import { join, basename } from "path";
 import { authMiddleware } from "../middleware/auth.js";
 import * as personalDB from "../db/personalDB.js";
 import { updateStudent } from "../db/studentsDB.js";
+import { updateTeachers } from "../db/teachersDB.js";
 
 let db;
 
@@ -62,6 +62,7 @@ router.post(
   async (req, res) => {
     try {
       const userId = req.session.userId;
+      const type = req.session.type;
       const email = req.fields.email;
       const address = req.fields.address;
       const phone = req.fields.phone;
@@ -92,6 +93,13 @@ router.post(
         unlinkSync(destinationPath);
       }
       copyFileSync(imagePath, destinationPath);
+      if (type === "Student") {
+        await updateStudent(db, userId);
+      } else {
+        if (type === "Teacher") {
+          await updateTeachers(db, userId);
+        }
+      }
       res.redirect("home");
     } catch (error) {
       res.status(500).send(`Internal Server Error: ${error.message}`);
