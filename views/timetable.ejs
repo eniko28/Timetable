@@ -4,65 +4,89 @@
 <head>
     <meta charset="UTF-8" />
     <title>Timetable</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="studentStyle.css">
 </head>
 
 <body>
-    <div class="filter">
-        <label for="dayFilter">Filter by day:</label>
-        <select id="dayFilter">
-            <option value="All">All</option>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-        </select>
-    </div>
-    <table class="timetable">
-        <h1>
-            <%= groupsName %>, <%= group %> group
-        </h1>
-        <tr>
-            <th>Day</th>
-            <th>Hours</th>
-            <th>Classroom</th>
-            <th>Group</th>
-            <th>Type</th>
-            <th>Subject</th>
-            <th>Teacher</th>
-            <% teachings.sort((a, b)=> {
-                const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-                return days.indexOf(a.day) - days.indexOf(b.day);
-                }).forEach(function(item) { %>
-        <tr class="timetable-row <%= item.day %>">
-            <td>
-                <%= item.day %>
-            </td>
-            <td>
-                <%= item.start %> - <%= item.end %>
-            </td>
-            <td>
-                <%= item.classroomName %>
-            </td>
-            <td>
-                <%= item.groupId %>
-            </td>
-            <td>
-                <%= item.subjectType %>
-            </td>
-            <td>
-                <%= item.subjectId %>
-            </td>
-            <td>
-                <%= item.teacherId %>
-            </td>
-        </tr>
-        <% }); %>
-            </tr>
-    </table>
-    <a href="/student" class="back-button">Back</a>
 
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 filter">
+                <label for="dayFilter">Filter by day:</label>
+                <select id="dayFilter" class="form-control">
+                    <option value="All">All</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center">
+                    <%= groupsName %>, <%= group %> group
+                </h1>
+                <table class="table table-bordered timetable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Day</th>
+                            <th>Hours</th>
+                            <th>Classroom</th>
+                            <th>Group</th>
+                            <th>Type</th>
+                            <th>Subject</th>
+                            <th>Teacher</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% teachings.sort((a, b)=> {
+                            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                            return days.indexOf(a.day) - days.indexOf(b.day);
+                            }).forEach(function(item) { %>
+                            <tr class="timetable-row <%= item.day %>">
+                                <td>
+                                    <%= item.day %>
+                                </td>
+                                <td>
+                                    <%= item.start %> - <%= item.end %>
+                                </td>
+                                <td>
+                                    <%= item.classroomName %>
+                                </td>
+                                <td>
+                                    <%= item.groupId %>
+                                </td>
+                                <td>
+                                    <%= item.subjectType %>
+                                </td>
+                                <td>
+                                    <%= item.subjectId %>
+                                </td>
+                                <td>
+                                    <%= item.teacherId %>
+                                </td>
+                            </tr>
+                            <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 text-left back-button-container">
+        <a href="/student" class="back-button">Back</a>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         document.getElementById('dayFilter').addEventListener('change', function () {
             const selectedDay = this.value;
