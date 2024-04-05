@@ -18,6 +18,17 @@ export async function insertTimetable(
   }
 }
 
+export async function selectTimetable(db) {
+  try {
+    const query = `SELECT FROM Timetable`;
+    const result = await db.query(query);
+    return result;
+  } catch (error) {
+    console.error("Error selecting timetable by group ID:", error);
+    throw error;
+  }
+}
+
 export async function selectTimetableByGroupId(db, groupId) {
   try {
     const query = `SELECT * FROM Timetable WHERE groupId LIKE '${groupId}%'`;

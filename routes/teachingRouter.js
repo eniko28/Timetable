@@ -27,6 +27,8 @@ router.get("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
     const wishlists = await wishlistDB.getAllWishlists(db);
     const classrooms = await classroomDB.getAllClassrooms(db);
     const teachers = await teacherDB.getAllTeachers(db);
+    const timetable = await timetableDB.selectTimetable(db);
+
     for (const wishlist of wishlists) {
       const subjects = await subjectDB.getSubjectById(db, wishlist.subjectId);
       wishlist.subjectName = subjects.name;
@@ -36,6 +38,7 @@ router.get("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
       wishlists: wishlists,
       classrooms: classrooms,
       teachers: teachers,
+      timetable: timetable,
     });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);

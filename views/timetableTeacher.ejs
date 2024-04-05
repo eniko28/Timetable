@@ -8,6 +8,17 @@
 </head>
 
 <body>
+    <div class="filter">
+        <label for="dayFilter">Filter by day:</label>
+        <select id="dayFilter">
+            <option value="All">All</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+        </select>
+    </div>
     <table class="timetable">
         <h1>
             <%= teacherName %>'s timetable
@@ -23,7 +34,7 @@
                 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
                 return days.indexOf(a.day) - days.indexOf(b.day);
                 }).forEach(function(item) { %>
-        <tr>
+        <tr class="timetable-row <%= item.day %>">
             <td>
                 <%= item.day %>
             </td>
@@ -48,6 +59,19 @@
 
     </table>
     <a href="/teacher" class="back-button">Back</a>
+    <script>
+        document.getElementById('dayFilter').addEventListener('change', function () {
+            const selectedDay = this.value;
+            const rows = document.querySelectorAll('.timetable-row');
+            rows.forEach(function (row) {
+                if (selectedDay === 'All' || row.classList.contains(selectedDay)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

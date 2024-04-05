@@ -6,70 +6,94 @@
     <title>Wishlists</title>
     <link rel="stylesheet" href="adminStyle.css">
     <script src="classtypes.js" defer></script>
+    <script>
+        function showTeacherInfo(selectedTeacherId) {
+            var allTeacherDivs = document.querySelectorAll('.teacher-info');
+            for (var i = 0; i < allTeacherDivs.length; i++) {
+                allTeacherDivs[i].style.display = 'none';
+            }
+            var selectedTeacherDiv = document.querySelectorAll('.teacher-info[data-teacher-id="' + selectedTeacherId + '"]');
+            for (var j = 0; j < selectedTeacherDiv.length; j++) {
+                selectedTeacherDiv[j].style.display = 'block';
+            }
+        }
+    </script>
 </head>
 
 <body>
 
     <h1>Wishlists: </h1>
+    <select id="teacherList" onchange="showTeacherInfo(this.value)">
+        <option value="">Choose a teacher...</option>
+        <% var teacherNames=new Set(); wishlists.forEach(function(item) { teacherNames.add(item.teacherId); });
+            teacherNames.forEach(function(teacherId) { %>
+            <option value="<%= teacherId %>">
+                <%= teacherId %>
+            </option>
+            <% }); %>
+    </select>
+
     <% wishlists.forEach(function(item) { %>
-        <form action="/wishlists" method="post" enctype="multipart/form-data">
-            <div>
-                <p>Teacher Id:
-                    <%= item.teacherId %>
-                </p>
-                <p>Subject:
-                    <%= item.subjectName %> - <%= item.subjectType %>
-                </p>
-                <p>Group:
-                    <%= item.groupId %>
-                </p>
-                <p>Day:
-                    <%= item.day %>
-                </p>
-                <p>Start:
-                    <%= item.start %>
-                </p>
-                <p>End:
-                    <%= item.end %>
-                </p>
-                <label for="classroomName">Assign a classrom:</label>
-                <select id="classroomName" name="classroomName"> </select> <br>
-                <label for="subgroup">Assign to a subgroup:</label>
-                <select id="subgroup" name="subgroup" onchange="showSubgroups(this.value)">
-                    <option value="">Choose...</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                </select> <br>
-                <div id="additionalFields" style="display: none;">
-                    <label for="selectedSubgroup">Select Subgroup:</label>
-                    <select id="selectedSubgroup" name="selectedSubgroup">
-                        <option value="<%= item.groupId %>/1">
-                            <%= item.groupId %>/1
-                        </option>
-                        <option value="<%= item.groupId %>/2">
-                            <%= item.groupId %>/2
-                        </option>
+        <div class="teacher-info" data-teacher-id="<%= item.teacherId %>" style="display: none;">
+            <form action="/wishlists" method="post" enctype="multipart/form-data">
+                <div>
+                    <p>Teacher Id:
+                        <%= item.teacherId %>
+                    </p>
+                    <p>Subject:
+                        <%= item.subjectName %> - <%= item.subjectType %>
+                    </p>
+                    <p>Group:
+                        <%= item.groupId %>
+                    </p>
+                    <p>Day:
+                        <%= item.day %>
+                    </p>
+                    <p>Start:
+                        <%= item.start %>
+                    </p>
+                    <p>End:
+                        <%= item.end %>
+                    </p>
+                    <label for="classroomName">Assign a classrom:</label>
+                    <select id="classroomName" name="classroomName"> </select> <br>
+                    <label for="subgroup">Assign to a subgroup:</label>
+                    <select id="subgroup" name="subgroup" onchange="showSubgroups(this.value)">
+                        <option value="">Choose...</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select> <br>
+                    <div id="additionalFields" style="display: none;">
+                        <label for="selectedSubgroup">Select Subgroup:</label>
+                        <select id="selectedSubgroup" name="selectedSubgroup">
+                            <option value="<%= item.groupId %>/1">
+                                <%= item.groupId %>/1
+                            </option>
+                            <option value="<%= item.groupId %>/2">
+                                <%= item.groupId %>/2
+                            </option>
+                        </select>
+                    </div>
+
+                    </select> <br>
+                    <label for="approved">Approval status:</label>
+                    <select id="approved" name="approved">
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
                     </select>
+                    <input type="hidden" name="wishlistId" value="<%= item.wishlistId %>">
+                    <input type="hidden" name="day" value="<%= item.day %>">
+                    <input type="hidden" name="start" value="<%= item.start %>">
+                    <input type="hidden" name="end" value="<%= item.end %>">
+                    <input type="hidden" name="teacherId" value="<%= item.teacherId %>" id="<%= item.teacherId %>">
+                    <input type="hidden" name="subjectId" value="<%= item.subjectId %>" id="<%= item.subjectId %>">
+                    <input type="hidden" name="groupId" value="<%= item.groupId %>">
+                    <button type="submit" class="submit-button">Send</button>
                 </div>
-
-
-                </select> <br>
-                <label for="approved">Approval status:</label>
-                <select id="approved" name="approved">
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
-                </select>
-                <input type="hidden" name="wishlistId" value="<%= item.wishlistId %>">
-                <input type="hidden" name="day" value="<%= item.day %>">
-                <input type="hidden" name="start" value="<%= item.start %>">
-                <input type="hidden" name="end" value="<%= item.end %>">
-                <input type="hidden" name="teacherId" value="<%= item.teacherId %>" id="<%= item.teacherId %>">
-                <input type="hidden" name="subjectId" value="<%= item.subjectId %>" id="<%= item.subjectId %>">
-                <input type="hidden" name="groupId" value="<%= item.groupId %>">
-                <button type="submit" class="submit-button">Send</button>
-            </div>
-        </form>
+            </form>
+        </div>
         <% }); %>
+
             <a href="/admin" class="back-button">Back</a>
             <script src="newWishlistValidation.js" defer></script>
 
