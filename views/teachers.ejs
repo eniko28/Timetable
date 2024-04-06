@@ -4,52 +4,55 @@
 <head>
     <meta charset="UTF-8" />
     <title>Teacher's timetable</title>
-    <link rel="stylesheet" type="text/css" href="adminStyle.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="timetable.css">
 </head>
 
 <body>
-    <table class="timetable">
+    <div class="container">
         <h1>
             <%= name %>
         </h1>
-        <thead>
-            <tr>
-                <th>Day</th>
-                <th>Hours</th>
-                <th>Classroom</th>
-                <th>Group</th>
-                <th>Type</th>
-                <th>Subject</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% const days=['Monday', 'Tuesday' , 'Wednesday' , 'Thursday' , 'Friday' ]; days.forEach(function(day) {
-                const dayTeachings=teachings.filter(teaching=> teaching.day === day);
-                dayTeachings.forEach(function(teaching) { %>
+        <table class="table timetable">
+            <thead>
                 <tr>
-                    <td>
-                        <%= teaching.day %>
-                    </td>
-                    <td>
-                        <%= teaching.start %> - <%= teaching.end %>
-                    </td>
-                    <td>
-                        <%= teaching.classroomName %>
-                    </td>
-                    <td>
-                        <%= teaching.groupId %>
-                    </td>
-                    <td>
-                        <%= teaching.subjectType %>
-                    </td>
-                    <td>
-                        <%= teaching.subjectId %>
-                    </td>
+                    <th>Day</th>
+                    <th>Hours</th>
+                    <th>Classroom</th>
+                    <th>Group</th>
+                    <th>Type</th>
+                    <th>Subject</th>
                 </tr>
-                <% }); }); %>
-        </tbody>
-    </table>
-    <a href="javascript:history.go(-1)" class="back-button">Back</a>
+            </thead>
+            <tbody>
+                <% const days=['Monday', 'Tuesday' , 'Wednesday' , 'Thursday' , 'Friday' ]; days.forEach(function(day) {
+                    const dayTeachings=teachings.filter(teaching=> teaching.day === day);
+                    dayTeachings.forEach(function(teaching) { %>
+                    <tr>
+                        <td>
+                            <%= teaching.day %>
+                        </td>
+                        <td>
+                            <%= teaching.start %> - <%= teaching.end %>
+                        </td>
+                        <td>
+                            <%= teaching.classroomName %>
+                        </td>
+                        <td>
+                            <%= teaching.groupId %>
+                        </td>
+                        <td>
+                            <%= teaching.subjectType %>
+                        </td>
+                        <td>
+                            <%= teaching.subjectId %>
+                        </td>
+                    </tr>
+                    <% }); }); %>
+            </tbody>
+        </table>
+    </div>
+    <a href="javascript:history.go(-1)" class="btn btn-secondary back-button">Back</a>
 </body>
 
 </html>

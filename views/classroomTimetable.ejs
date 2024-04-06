@@ -4,31 +4,33 @@
 <head>
     <meta charset="UTF-8" />
     <title>Classroom's Timetable</title>
-    <link rel="stylesheet" type="text/css" href="adminStyle.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="timetable.css">
 </head>
 
 <body>
-
-    <h1>Classroom's timetable: </h1>
-    <table class="timetable">
-        <thead>
-            <tr>
-                <th>Subject</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% classrooms.forEach(function(classroom) { %>
-                <tr>
-                    <td><button class="timetableButton"
-                            onclick="window.location.href='/classrooms?name=<%= classroom.name %>'">
-                            <%= classroom.name %>
-                        </button>
-                    </td>
-                </tr>
+    <div class="container">
+        <h1>Classroom's timetable:</h1>
+        <div class="row">
+            <% classrooms.forEach(function(classroom, index) { %>
+                <div class="col-md-4">
+                    <button class="table timetable"
+                        onclick="window.location.href='/classrooms?name=<%= classroom.name %>'">
+                        <%= classroom.name %>
+                    </button>
+                </div>
+                <% if ((index + 1) % 3===0) { %>
+        </div>
+        <div class="row">
+            <% } %>
                 <% }); %>
-        </tbody>
-    </table>
-    <a href="javascript:history.go(-1)" class="back-button">Back</a>
+        </div>
+    </div>
+    <a href="javascript:history.go(-1)" class="btn btn-secondary back-button">Back</a>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

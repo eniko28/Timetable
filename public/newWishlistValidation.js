@@ -91,3 +91,16 @@ function showSubgroups(value) {
     additionalFields.style.display = "none";
   }
 }
+
+function showTeacherInfo(selectedTeacherId) {
+  var allTeacherDivs = document.querySelectorAll(".teacher-info");
+  for (var i = 0; i < allTeacherDivs.length; i++) {
+    allTeacherDivs[i].style.display = "none";
+  }
+  var selectedTeacherDiv = document.querySelectorAll(
+    '.teacher-info[data-teacher-id="' + selectedTeacherId + '"]'
+  );
+  for (var j = 0; j < selectedTeacherDiv.length; j++) {
+    selectedTeacherDiv[j].style.display = "block";
+  }
+}

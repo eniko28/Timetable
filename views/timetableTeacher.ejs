@@ -78,23 +78,10 @@
         <a href="/teacher" class="back-button">Back</a>
     </div>
 
-
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        document.getElementById('dayFilter').addEventListener('change', function () {
-            const selectedDay = this.value;
-            const rows = document.querySelectorAll('.timetable-row');
-            rows.forEach(function (row) {
-                if (selectedDay === 'All' || row.classList.contains(selectedDay)) {
-                    row.style.display = 'table-row';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    </script>
+    <script src="timetable.js"></script>
 </body>
 
 </html>

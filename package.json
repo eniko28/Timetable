@@ -1,5 +1,13 @@
 {
   "type": "module",
+  "devDependencies": {
+    "eslint": "^8.37.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-prettier": "8.8.0",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-prettier": "4.2.1",
+    "prettier": "2.8.7"
+  },
   "dependencies": {
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
@@ -15,6 +23,8 @@
     "uuid": "^9.0.1"
   },
   "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write .",
     "start": "nodemon index.js"
   }
 }

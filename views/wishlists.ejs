@@ -5,19 +5,6 @@
     <meta charset="UTF-8" />
     <title>Wishlists</title>
     <link rel="stylesheet" href="adminStyle.css">
-    <script src="classtypes.js" defer></script>
-    <script>
-        function showTeacherInfo(selectedTeacherId) {
-            var allTeacherDivs = document.querySelectorAll('.teacher-info');
-            for (var i = 0; i < allTeacherDivs.length; i++) {
-                allTeacherDivs[i].style.display = 'none';
-            }
-            var selectedTeacherDiv = document.querySelectorAll('.teacher-info[data-teacher-id="' + selectedTeacherId + '"]');
-            for (var j = 0; j < selectedTeacherDiv.length; j++) {
-                selectedTeacherDiv[j].style.display = 'block';
-            }
-        }
-    </script>
 </head>
 
 <body>
@@ -55,7 +42,7 @@
                     <p>End:
                         <%= item.end %>
                     </p>
-                    <label for="classroomName">Assign a classrom:</label>
+                    <label for="classroomName">Assign a classroom:</label>
                     <select id="classroomName" name="classroomName"> </select> <br>
                     <label for="subgroup">Assign to a subgroup:</label>
                     <select id="subgroup" name="subgroup" onchange="showSubgroups(this.value)">
@@ -75,7 +62,6 @@
                         </select>
                     </div>
 
-                    </select> <br>
                     <label for="approved">Approval status:</label>
                     <select id="approved" name="approved">
                         <option value="approved">Approved</option>
