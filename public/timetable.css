@@ -1,0 +1,61 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #EEDCC4;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #72542D;
+    margin-bottom: 20px;
+}
+
+a.back-button {
+    position: fixed; 
+    top: 20px; 
+    left: 20px; 
+    background-color: #72542D; 
+    color: white; 
+    padding: 10px 20px; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    transition: background-color 0.3s ease; 
+}
+
+a.back-button:hover {
+    background-color: #A0763F; 
+}
+
+.table td button {
+    color: #fff;
+    background-color: #72542D;
+    border-color: #72542D;
+    display: block;
+    margin: 0 auto;
+}
+
+.table td button:hover {
+    background-color: #A0763F;
+    border-color: #A0763F;
+}
+
+.table th,
+.table td {
+    border: 1px solid #72542D;
+    width: 25%;
+    text-align: center;
+}
+.table thead tr:first-child th {
+    border-bottom: 2px solid #72542D;
+}
+
+.timetable {
+    border: 2px solid #72542D;
+    background-color: #f8f9fa; 
+}
+
+.timetable th,
+        .timetable td {
+            width: 14.28%; 
+        }
