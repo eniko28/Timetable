@@ -5,84 +5,402 @@
     <meta charset="UTF-8" />
     <title>Wishlists</title>
     <link rel="stylesheet" href="adminStyle.css">
+    <style>
+        #timetable {
+            border-collapse: collapse;
+            width: 70%;
+            margin: 20px auto;
+        }
+
+        #timetable th,
+        #timetable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #timetable th {
+            background-color: #f2f2f2;
+        }
+
+        .start-time {
+            background-color: red;
+        }
+
+        .group-time {
+            background-color: purple;
+        }
+
+        #groups-container {
+            float: left;
+            margin-right: 20px;
+            width: 30%;
+        }
+
+        #groups-list {
+            padding: 0;
+        }
+
+        #groups-list li {
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        #details-container {
+            float: left;
+            width: 30%;
+            margin-top: 20px;
+        }
+
+        #teacherInput,
+        #subjectInput {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        #groups-container {
+            float: left;
+            margin-right: 20px;
+            width: auto;
+        }
+
+        #groups-list {
+            padding: 0;
+            list-style: none;
+        }
+
+        #groups-list li {
+            cursor: pointer;
+            margin-bottom: 5px;
+            background-color: white;
+            padding: 5px;
+        }
+
+        #details-container {
+            text-align: center;
+        }
+
+        #teacherInput,
+        #subjectInput {
+            width: 200px;
+        }
+
+        #inputs-container {
+            clear: both;
+            margin-top: 20px;
+            display: none;
+        }
+
+        #inputs-container input {
+            width: 200px;
+            margin-right: 10px;
+        }
+
+        #form-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        #form-container select,
+        #form-container button {
+            margin: 5px;
+        }
+    </style>
 </head>
 
 <body>
+    <div id="groups-container">
+        <ul id="groups-list">
+            <% groups.forEach(group=> { %>
+                <li data-groupid="<%= group.id %>">
+                    <%= group.id %>
+                </li>
+                <% }); %>
+        </ul>
+    </div>
 
-    <h1>Wishlists: </h1>
-    <select id="teacherList" onchange="showTeacherInfo(this.value)">
-        <option value="">Choose a teacher...</option>
-        <% var teacherNames=new Set(); wishlists.forEach(function(item) { teacherNames.add(item.teacherId); });
-            teacherNames.forEach(function(teacherId) { %>
-            <option value="<%= teacherId %>">
-                <%= teacherId %>
-            </option>
-            <% }); %>
-    </select>
+    <div id="details-container">
+        <select id="teacherInput" placeholder="Teachers">
+            <option disabled selected>Select a teacher...</option>
+        </select>
+        <select id="subjectInput" placeholder="Subjects">
+            <option disabled selected>Select a subject...</option>
+        </select>
+    </div>
 
-    <% wishlists.forEach(function(item) { %>
-        <div class="teacher-info" data-teacher-id="<%= item.teacherId %>" style="display: none;">
-            <form action="/wishlists" method="post" enctype="multipart/form-data">
-                <div>
-                    <p>Teacher Id:
-                        <%= item.teacherId %>
-                    </p>
-                    <p>Subject:
-                        <%= item.subjectName %> - <%= item.subjectType %>
-                    </p>
-                    <p>Group:
-                        <%= item.groupId %>
-                    </p>
-                    <p>Day:
-                        <%= item.day %>
-                    </p>
-                    <p>Start:
-                        <%= item.start %>
-                    </p>
-                    <p>End:
-                        <%= item.end %>
-                    </p>
-                    <label for="classroomName">Assign a classroom:</label>
-                    <select id="classroomName" name="classroomName"> </select> <br>
-                    <label for="subgroup">Assign to a subgroup:</label>
-                    <select id="subgroup" name="subgroup" onchange="showSubgroups(this.value)">
-                        <option value="">Choose...</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                    </select> <br>
-                    <div id="additionalFields" style="display: none;">
-                        <label for="selectedSubgroup">Select Subgroup:</label>
-                        <select id="selectedSubgroup" name="selectedSubgroup">
-                            <option value="<%= item.groupId %>/1">
-                                <%= item.groupId %>/1
-                            </option>
-                            <option value="<%= item.groupId %>/2">
-                                <%= item.groupId %>/2
-                            </option>
-                        </select>
-                    </div>
+    <table id="timetable">
+        <tr>
+            <th></th>
+            <th id="monday-header">Monday</th>
+            <th id="tuesday-header">Tuesday</th>
+            <th id="wednesday-header">Wednesday</th>
+            <th id="thursday-header">Thursday</th>
+            <th id="friday-header">Friday</th>
+        </tr>
+        <% for (let hour=8; hour <=18; hour+=2) { %>
+            <tr>
+                <td>
+                    <% const formattedStartHour=(hour < 10) ? '0' + hour : hour; %>
+                        <%= formattedStartHour %>:00 - <%= (hour+2) %>:00
+                </td>
+                <% for (let day=1; day <=5; day++) { %>
+                    <% const formattedHour=(hour < 10) ? '0' + hour : hour; %>
+                        <% const cellId='day' + day + '-hour' + formattedHour + ':00' ; %>
+                            <td id="<%= cellId %>"></td>
+                            <% } %>
+            </tr>
+            <% } %>
+    </table>
 
-                    <label for="approved">Approval status:</label>
-                    <select id="approved" name="approved">
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
-                    </select>
-                    <input type="hidden" name="wishlistId" value="<%= item.wishlistId %>">
-                    <input type="hidden" name="day" value="<%= item.day %>">
-                    <input type="hidden" name="start" value="<%= item.start %>">
-                    <input type="hidden" name="end" value="<%= item.end %>">
-                    <input type="hidden" name="teacherId" value="<%= item.teacherId %>" id="<%= item.teacherId %>">
-                    <input type="hidden" name="subjectId" value="<%= item.subjectId %>" id="<%= item.subjectId %>">
-                    <input type="hidden" name="groupId" value="<%= item.groupId %>">
-                    <button type="submit" class="submit-button">Send</button>
-                </div>
-            </form>
-        </div>
-        <% }); %>
+    <div id="form-container">
+        <form id="classroomForm">
+            <select id="classroomSelect" name="classroom">
+                <option disabled selected>Select a classroom...</option>
+                <% classrooms.forEach(classroom=> { %>
+                    <option value="<%= classroom.name %>">
+                        <%= classroom.name %>
+                    </option>
+                    <% }); %>
+            </select>
+            <button type="submit" class="submit-button">Send</button>
+        </form>
+    </div>
 
-            <a href="/admin" class="back-button">Back</a>
-            <script src="newWishlistValidation.js" defer></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var selectedGroupId;
+            var listItems = document.querySelectorAll("#groups-list li");
+            var teacherInput = document.getElementById("teacherInput");
+            var subjectInput = document.getElementById("subjectInput");
+            var timetableCells = document.querySelectorAll("#timetable td");
+            var inputContainer = document.getElementById("inputs-container");
+            var formContainer = document.getElementById("form-container");
 
+            // Az időbeosztás frissítése
+            function updateTimetable(timetable) {
+                timetableCells.forEach(function (cell) {
+                    cell.classList.remove('group-time');
+                });
+
+                timetable.forEach(function (slot) {
+                    var day = slot.day;
+                    var start = slot.start;
+                    var end = slot.end;
+
+                    switch (day) {
+                        case 'Monday':
+                            day = 'day1';
+                            break;
+                        case 'Tuesday':
+                            day = 'day2';
+                            break;
+                        case 'Wednesday':
+                            day = 'day3';
+                            break;
+                        case 'Thursday':
+                            day = 'day4';
+                            break;
+                        case 'Friday':
+                            day = 'day5';
+                            break;
+                        default:
+                            break;
+                    }
+
+                    var startCell = document.getElementById(day + '-hour' + start);
+                    var endCell = document.getElementById(day + '-hour' + end);
+
+                    if (startCell) {
+                        startCell.classList.add('group-time');
+                    }
+                });
+            }
+
+            listItems.forEach(function (item) {
+                item.addEventListener("click", function () {
+                    var groupId = item.getAttribute("data-groupid");
+                    selectedGroupId = item.getAttribute("data-groupid");
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", "/group/" + groupId + "/details", true);
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            var response = JSON.parse(xhr.responseText);
+
+                            if (response.teachers.length > 0) {
+                                teacherInput.innerHTML = '<option disabled selected>Select a teacher...</option>';
+
+                                response.teachers.forEach(function (teacher) {
+                                    var option = document.createElement("option");
+                                    option.text = teacher.teacherId;
+                                    teacherInput.add(option);
+                                });
+
+                                teacherInput.addEventListener("change", function () {
+                                    timetableCells.forEach(function (cell) {
+                                        cell.classList.remove('start-time');
+                                    });
+
+                                    var selectedTeacher = teacherInput.value;
+                                    var filteredSubjects = response.subjects.filter(function (subject) {
+                                        return subject.teacherId === selectedTeacher;
+                                    });
+
+                                    subjectInput.innerHTML = '<option disabled selected>Select a subject...</option>';
+
+                                    filteredSubjects.forEach(function (subject) {
+                                        var option = document.createElement("option");
+                                        option.text = subject.subjectId;
+                                        subjectInput.add(option);
+                                    });
+
+                                    var teacherId = teacherInput.value;
+                                    var teacherWishlists = response.wishlists.filter(function (wishlist) {
+                                        return wishlist.teacherId === teacherId;
+                                    });
+
+                                    teacherWishlists.forEach(function (wishlist) {
+                                        var day = wishlist.day;
+                                        var start = wishlist.start;
+                                        var end = wishlist.end;
+
+                                        switch (day) {
+                                            case 'Monday':
+                                                day = 'day1';
+                                                break;
+                                            case 'Tuesday':
+                                                day = 'day2';
+                                                break;
+                                            case 'Wednesday':
+                                                day = 'day3';
+                                                break;
+                                            case 'Thursday':
+                                                day = 'day4';
+                                                break;
+                                            case 'Friday':
+                                                day = 'day5';
+                                                break;
+                                            default:
+                                                break;
+                                        }
+
+                                        var startCell = document.getElementById(day + '-hour' + start);
+                                        var endCell = document.getElementById(day + '-hour' + end);
+
+                                        if (startCell) {
+                                            startCell.classList.add('start-time');
+                                        }
+                                    });
+
+                                    updateTimetable(response.timetable);
+                                });
+                            } else {
+                                teacherInput.innerHTML = '<option disabled selected>No teachers in this group</option>';
+                            }
+                        }
+                    };
+                    xhr.send();
+                });
+            });
+
+            const dayMappings = {
+                'day1': 'Monday',
+                'day2': 'Tuesday',
+                'day3': 'Wednesday',
+                'day4': 'Thursday',
+                'day5': 'Friday'
+            };
+            timetableCells.forEach(function (cell) {
+                cell.addEventListener("click", function () {
+                    formContainer.style.display = "block";
+                    var cellId = cell.id.split('-');
+                    var selectedDay = dayMappings[cellId[0]];
+                    var startTime = cellId[1].replace('hour', '').padStart(4, '0').replace(/(..)(..)/, "$1$2");
+                    var endTime = (parseInt(startTime.split(':')[0]) + 2).toString().padStart(2, '0') + ':00';
+
+                    var form = document.getElementById("classroomForm");
+                    form.addEventListener("submit", function (event) {
+                        event.preventDefault();
+
+                        var selectedClassroom = document.getElementById("classroomSelect").value;
+                        var selectedTeacher = document.getElementById("teacherInput").value;
+                        var selectedSubject = document.getElementById("subjectInput").value;
+
+                        switch (selectedDay) {
+                            case 'day1':
+                                selectedDay = 'Monday';
+                                break;
+                            case 'day2':
+                                selectedDay = 'Tuesday';
+                                break;
+                            case 'day3':
+                                selectedDay = 'Wednesday';
+                                break;
+                            case 'day4':
+                                selectedDay = 'Thursday';
+                                break;
+                            case 'day5':
+                                selectedDay = 'Friday';
+                                break;
+                            default:
+                                break;
+                        }
+
+                        const data = {
+                            groupId: selectedGroupId,
+                            teacherId: selectedTeacher,
+                            subjectId: selectedSubject,
+                            day: selectedDay,
+                            start: startTime,
+                            end: endTime,
+                            classroomName: selectedClassroom
+                        };
+
+                        sendWishlist(data);
+                    });
+                });
+            });
+
+            function sendWishlist(data) {
+                fetch("/wishlists", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log("Wishlist data sent successfully!");
+                        } else {
+                            if (response.headers.get("content-type").includes("text/html")) {
+                                response.text().then(errorMessage => {
+                                    const parser = new DOMParser();
+                                    const doc = parser.parseFromString(errorMessage, 'text/html');
+                                    const message = doc.body.textContent.trim();
+
+                                    alert(message);
+                                });
+                            } else {
+                                response.json().then(errorData => {
+                                    alert(errorData.message);
+                                });
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error sending wishlist data:", error);
+                    });
+            }
+        });
+    </script>
 </body>
 
 </html>

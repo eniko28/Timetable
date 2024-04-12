@@ -2,14 +2,12 @@ export async function insertWishlist(
   db,
   wishlistId,
   teacherCode,
-  groupCode,
-  subjectCode,
   day,
   start,
   end
 ) {
   try {
-    const query = `INSERT INTO Wishlists SET wishlistId = '${wishlistId}', teacherId = '${teacherCode}', subjectId = '${subjectCode}', groupId = '${groupCode}', day = '${day}', start = '${start}', end = '${end}', status = 'waiting'`;
+    const query = `INSERT INTO Wishlists SET wishlistId = '${wishlistId}', teacherId = '${teacherCode}', day = '${day}', start = '${start}', end = '${end}', status = 'waiting'`;
     await db.query(query);
   } catch (error) {
     console.error("Error inserting wishlist:", error);

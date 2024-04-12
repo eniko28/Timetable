@@ -20,24 +20,6 @@
                 </option>
             </select><br>
 
-            <label for="subjectCode">Subject:</label>
-            <select id="subjectCode" name="subjectCode">
-                <option value="">Choose...</option>
-                <% if (subjectIds && subjectIds.length) { %>
-                    <% subjectIds.forEach(function(subject) { %>
-                        <option value="<%= subject.subjectId %>">
-                            <%= subject.name %> - <%= subject.type %>
-                        </option>
-                        <% }); %>
-                            <% } %>
-            </select><br>
-            <span class="error-message" id="startError"></span><br>
-
-            <label for="groupCode">Group Id:</label>
-            <select id="groupCode" name="groupCode"></select><br>
-            <span class="error-message" id="startError"></span><br>
-
-
             <label for="day">Day:</label>
             <select name="day">
                 <option value="">Choose...</option>

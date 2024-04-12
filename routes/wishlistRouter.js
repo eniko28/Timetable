@@ -5,7 +5,7 @@ import * as teachersSubjects from "../db/teachersTeachingEdge.js";
 import * as createEdge from "../db/createEdges.js";
 import * as groupDB from "../db/groupsDB.js";
 import * as timetableDB from "../db/timetableDB.js";
-import * as teachingDB from "../db/teachingsDB.js";
+import * as teacherDB from "../db/teachersDB.js";
 import setupDatabase from "../db/dbSetup.js";
 import { v4 as uuidv4 } from "uuid";
 import { authMiddleware } from "../middleware/auth.js";
@@ -41,9 +41,9 @@ router.get("/addWishlists", authMiddleware(["Teacher"]), async (req, res) => {
 
 router.post("/addWishlists", authMiddleware(["Teacher"]), async (req, res) => {
   try {
-    const { teacherCode, subjectCode, groupCode, day, start, end } = req.fields;
+    const { teacherCode, day, start, end } = req.fields;
 
-    if (!teacherCode || !groupCode || !subjectCode || !day || !start || !end) {
+    if (!teacherCode || !day || !start || !end) {
       return res.status(400).send("Missing required data.");
     }
 
@@ -63,18 +63,6 @@ router.post("/addWishlists", authMiddleware(["Teacher"]), async (req, res) => {
 
     const wishlistId = uuidv4();
 
-    const exists = await timetableDB.getTimetebaleByTeacherId(
-      db,
-      teacherCode,
-      subjectCode,
-      groupCode
-    );
-    if (exists.length !== 0) {
-      res.status(400).render("error", {
-        message: "Subject already exists in timetable for the given group.",
-      });
-      return;
-    }
     const teacherExists = await timetableDB.getTimetableByTeacherAndTime(
       db,
       teacherCode,
@@ -97,32 +85,21 @@ router.post("/addWishlists", authMiddleware(["Teacher"]), async (req, res) => {
       db,
       wishlistId,
       teacherCode,
-      groupCode,
-      subjectCode,
       day,
       start,
       end
     );
 
-    const teachingId = await teachingDB.getTeachingId(
-      db,
-      teacherCode,
-      subjectCode,
-      groupCode
-    );
-    const teaching = await teachingDB.getTeachingById(db, teachingId[0].id);
+    const teacher = await teacherDB.getTeacherById(db, teacherCode);
     const wishlist = await wishlistDB.getWishlistById(db, wishlistId);
 
-    await createEdge.createEdgeTeachingsWishlists(
+    await createEdge.createEdgeTeachersWishlists(
       db,
       wishlist,
-      teaching,
-      teacherCode,
-      subjectCode,
-      groupCode,
+      teacher,
+      day,
       start,
-      end,
-      day
+      end
     );
 
     res.redirect("/addWishlists");

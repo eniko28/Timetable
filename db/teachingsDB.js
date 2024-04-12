@@ -169,3 +169,45 @@ export async function getTeachingId(db, teacherId, subjectId, groupId) {
     throw error;
   }
 }
+
+export async function getTeachersByGroupId(db, groupId) {
+  try {
+    const query = `SELECT teacherId FROM Teachings WHERE groupId = '${groupId}'`;
+    const teaching = await db.query(query);
+    return teaching;
+  } catch (error) {
+    console.error(
+      `Error getting teaching with ID ${groupId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}
+
+export async function getSubjectByGroupId(db, groupId) {
+  try {
+    const query = `SELECT subjectId FROM Teachings WHERE groupId = '${groupId}'`;
+    const teaching = await db.query(query);
+    return teaching;
+  } catch (error) {
+    console.error(
+      `Error getting teaching with ID ${groupId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}
+
+export async function getSubjectsByTeacherId(db, teacherId) {
+  try {
+    const query = `SELECT * FROM Teachings WHERE teacherId = '${teacherId}'`;
+    const teaching = await db.query(query);
+    return teaching;
+  } catch (error) {
+    console.error(
+      `Error getting teaching with ID ${groupId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}
