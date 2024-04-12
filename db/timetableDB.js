@@ -158,3 +158,17 @@ export async function getTeachingsByGroupAndSubjectId(db, groupId, subjectId) {
     throw error;
   }
 }
+
+export async function getFreeClassroom(db, classroomName, start, end, day) {
+  try {
+    const query = `SELECT FROM Timetable WHERE classroomName = '${classroomName}' AND day = '${day}' AND start = '${start}' AND end = '${end}'`;
+    const classroom = await db.query(query);
+    return classroom;
+  } catch (error) {
+    console.error(
+      `Error getting classroom with name: ${classroomName} from the database:`,
+      error
+    );
+    throw error;
+  }
+}

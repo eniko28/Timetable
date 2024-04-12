@@ -137,7 +137,7 @@
 
     <table id="timetable">
         <tr>
-            <th></th>
+            <th>Hours</th>
             <th id="monday-header">Monday</th>
             <th id="tuesday-header">Tuesday</th>
             <th id="wednesday-header">Wednesday</th>
@@ -183,7 +183,6 @@
             var inputContainer = document.getElementById("inputs-container");
             var formContainer = document.getElementById("form-container");
 
-            // Az időbeosztás frissítése
             function updateTimetable(timetable) {
                 timetableCells.forEach(function (cell) {
                     cell.classList.remove('group-time');

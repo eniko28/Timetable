@@ -77,13 +77,6 @@ router.post("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
           message: "The teacher already has a class scheduled for that time.",
         });
         return;
-      } else {
-        if (classroomName !== existsTeacher[0].classroomName) {
-          res.status(400).render("error", {
-            message: `Classroomname must be: '${existsTeacher[0].classroomName}'`,
-          });
-          return;
-        }
       }
     }
 
@@ -110,6 +103,20 @@ router.post("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
       res.status(400).render("error", {
         message:
           "The group already has this subject scheduled in their timetable.",
+      });
+      return;
+    }
+
+    const isFreeClassroom = await timetableDB.getFreeClassroom(
+      db,
+      classroomName,
+      start,
+      end,
+      day
+    );
+    if (isFreeClassroom.length !== 0) {
+      res.status(400).render("error", {
+        message: "The classroom is booked at this time.",
       });
       return;
     }
