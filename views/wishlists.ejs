@@ -14,10 +14,11 @@
 
         #timetable th,
         #timetable td {
-            border: 1px solid #ddd;
+            border: 1px solid black;
             padding: 8px;
             text-align: center;
             cursor: pointer;
+            width: 14%;
         }
 
         #timetable th {
@@ -36,6 +37,7 @@
             float: left;
             margin-right: 20px;
             width: 30%;
+            margin-bottom: 20px;
         }
 
         #groups-list {
@@ -69,6 +71,7 @@
             float: left;
             margin-right: 20px;
             width: auto;
+            margin-top: 50px;
         }
 
         #groups-list {
@@ -78,9 +81,9 @@
 
         #groups-list li {
             cursor: pointer;
-            margin-bottom: 5px;
             background-color: white;
-            padding: 5px;
+            margin-bottom: 5px;
+            padding: 5px
         }
 
         #details-container {
@@ -111,6 +114,16 @@
         #form-container select,
         #form-container button {
             margin: 5px;
+        }
+
+        .selected-group {
+            color: #8B4513;
+        }
+
+        .back-button {
+            clear: both;
+            display: block;
+            margin-left: -22px;
         }
     </style>
 </head>
@@ -172,6 +185,17 @@
             <button type="submit" class="submit-button">Send</button>
         </form>
     </div>
+    <div style="display: flex; align-items: center;">
+        <div style="width: 10px; height: 10px; background-color: red; margin-right: 5px;"></div>
+        <div>Teachers' wishlists</div>
+    </div>
+
+    <div style="display: flex; align-items: center;">
+        <div style="width: 10px; height: 10px; background-color: purple; margin-right: 5px;"></div>
+        <div>Group's timetable</div>
+    </div>
+
+    <a href="/admin" class="back-button">Back</a>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -182,6 +206,15 @@
             var timetableCells = document.querySelectorAll("#timetable td");
             var inputContainer = document.getElementById("inputs-container");
             var formContainer = document.getElementById("form-container");
+
+            listItems.forEach(function (item) {
+                item.addEventListener("click", function () {
+                    listItems.forEach(function (item) {
+                        item.classList.remove("selected-group");
+                    });
+                    item.classList.add("selected-group");
+                });
+            });
 
             function updateTimetable(timetable) {
                 timetableCells.forEach(function (cell) {
@@ -303,7 +336,10 @@
                             } else {
                                 teacherInput.innerHTML = '<option disabled selected>No teachers in this group</option>';
                             }
+                            updateSubjects(response.subjects);
                         }
+                        updateTimetable(response.timetable);
+
                     };
                     xhr.send();
                 });
@@ -366,6 +402,17 @@
                     });
                 });
             });
+
+            function updateSubjects(subjects) {
+                subjectInput.innerHTML = '<option disabled selected>Select a subject...</option>';
+
+                subjects.forEach(function (subject) {
+                    var option = document.createElement("option");
+                    option.text = subject.subjectId;
+                    subjectInput.add(option);
+                });
+            }
+
 
             function sendWishlist(data) {
                 fetch("/wishlists", {
