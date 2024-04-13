@@ -4,7 +4,6 @@ import {
   getTeachersByGroupId,
   getSubjectsByTeacherId,
 } from "../db/teachingsDB.js";
-import * as teacherDB from "../db/teachersDB.js";
 import * as groupDB from "../db/groupsDB.js";
 import * as classroomDB from "../db/classroomDB.js";
 import * as wishlistDB from "../db/wishlistsDB.js";
