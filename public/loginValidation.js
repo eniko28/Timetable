@@ -19,7 +19,12 @@ document.getElementById("login").addEventListener("submit", function (event) {
     userIdError.textContent = "User ID must be at least 1 character long";
     event.preventDefault();
   }
-  if (type !== "Admin" && type !== "Teacher" && type !== "Student") {
+  if (
+    type !== "Admin" &&
+    type !== "Teacher" &&
+    type !== "Student" &&
+    type !== "Scheduler"
+  ) {
     userTypeError.textContent = "Please select a valid user type";
     event.preventDefault();
   }

@@ -22,7 +22,7 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
+router.get("/wishlists", authMiddleware(["Scheduler"]), async (req, res) => {
   try {
     const wishlists = await wishlistDB.getAllWishlists(db);
     const classrooms = await classroomDB.getAllClassrooms(db);
@@ -42,7 +42,7 @@ router.get("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
   }
 });
 
-router.post("/wishlists", authMiddleware(["Admin"]), async (req, res) => {
+router.post("/wishlists", authMiddleware(["Scheduler"]), async (req, res) => {
   try {
     const { teacherId, subjectId, groupId, day, start, end, classroomName } =
       req.fields;

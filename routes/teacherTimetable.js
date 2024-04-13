@@ -18,7 +18,7 @@ setupDatabase()
 
 router.get(
   "/teacherTimetable",
-  authMiddleware(["Admin", "Teacher", "Student"]),
+  authMiddleware(["Admin", "Teacher", "Student", "Scheduler"]),
   async (req, res) => {
     try {
       const teachers = await teacherDB.getAllTeachers(db);

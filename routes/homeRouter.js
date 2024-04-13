@@ -33,7 +33,7 @@ router.use(express.static(uploadDir));
 
 router.get(
   "/home",
-  authMiddleware(["Admin", "Student", "Teacher"]),
+  authMiddleware(["Admin", "Student", "Teacher", "Scheduler"]),
   async (req, res) => {
     try {
       const userId = req.session.userId;

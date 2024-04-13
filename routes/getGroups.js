@@ -17,7 +17,7 @@ setupDatabase()
 
 router.get(
   "/getGroups",
-  authMiddleware(["Admin", "Student", "Teacher"]),
+  authMiddleware(["Admin", "Student", "Teacher", "Scheduler"]),
   async (req, res) => {
     try {
       const { subjectCode } = req.query;

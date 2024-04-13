@@ -18,7 +18,7 @@ setupDatabase()
 
 router.use(
   "/users",
-  authMiddleware(["Admin", "Student", "Teacher"]),
+  authMiddleware(["Scheduler", "Student", "Teacher", "Admin"]),
   async (req, res) => {
     try {
       const users = await usersDb.getAllUsers(db);

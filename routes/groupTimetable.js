@@ -18,7 +18,7 @@ setupDatabase()
 
 router.get(
   "/groupTimetable",
-  authMiddleware(["Admin", "Teacher", "Student"]),
+  authMiddleware(["Admin", "Teacher", "Student", "Scheduler"]),
   async (req, res) => {
     try {
       const groups = await groupDB.getAllGroups(db);

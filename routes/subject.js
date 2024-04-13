@@ -20,7 +20,7 @@ setupDatabase()
 
 router.get(
   "/subject",
-  authMiddleware(["Admin", "Student", "Teacher"]),
+  authMiddleware(["Admin", "Student", "Teacher", "Scheduler"]),
   async (req, res) => {
     try {
       const { name } = req.query;

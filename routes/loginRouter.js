@@ -87,6 +87,10 @@ router.post("/login", async (req, res) => {
           } else {
             if (type === "Student") {
               res.redirect("/student");
+            } else {
+              if (type === "Scheduler") {
+                res.redirect("/scheduler");
+              }
             }
           }
         }
