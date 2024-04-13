@@ -122,18 +122,6 @@ router.post("/wishlists", authMiddleware(["Scheduler"]), async (req, res) => {
     }
     const timetableId = uuidv4();
 
-    await timetableDB.insertTimetable(
-      db,
-      timetableId,
-      teacherId,
-      subjectId,
-      groupId,
-      day,
-      start,
-      end,
-      classroomName
-    );
-
     const teachingId = await teachingDB.getTeachingId(
       db,
       teacherId,
@@ -141,33 +129,19 @@ router.post("/wishlists", authMiddleware(["Scheduler"]), async (req, res) => {
       groupId
     );
     const teaching = await teachingDB.getTeachingById(db, teachingId[0].id);
-    const timetable = await timetableDB.getTimetableById(db, timetableId);
     const classroom = await classroomDB.getClassroomByName(db, classroomName);
 
-    await createEdge.createEdgeClassroomsTimetable(
-      db,
-      classroom,
-      timetable,
+    await timetableDB.insertWithTransaction(
+      timetableId,
       teacherId,
       subjectId,
       groupId,
+      day,
       start,
       end,
-      day,
-      classroomName
-    );
-
-    await createEdge.createEdgeTeachingTimetable(
-      db,
+      classroomName,
       teaching,
-      timetable,
-      teacherId,
-      subjectId,
-      groupId,
-      start,
-      end,
-      day,
-      classroomName
+      classroom
     );
 
     res.redirect("/wishlists");

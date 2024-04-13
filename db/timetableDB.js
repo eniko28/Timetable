@@ -1,3 +1,15 @@
+import setupDatabase from "../db/dbSetup.js";
+
+let db;
+setupDatabase()
+  .then((database) => {
+    db = database;
+  })
+  .catch((error) => {
+    console.error("Error setting up database:", error);
+    process.exit(1);
+  });
+
 export async function insertTimetable(
   db,
   timetableId,
@@ -31,7 +43,7 @@ export async function selectTimetable(db) {
 
 export async function selectTimetableByGroupId(db, groupId) {
   try {
-    const query = `SELECT * FROM Timetable WHERE groupId LIKE '${groupId}%'`;
+    const query = `SELECT FROM Timetable WHERE groupId LIKE '${groupId}%'`;
     const result = await db.query(query);
     return result;
   } catch (error) {
@@ -42,7 +54,7 @@ export async function selectTimetableByGroupId(db, groupId) {
 
 export async function selectTimetableByClassroom(db, classroomName) {
   try {
-    const query = `SELECT * FROM Timetable WHERE classroomName = '${classroomName}'`;
+    const query = `SELECT FROM Timetable WHERE classroomName = '${classroomName}'`;
     const result = await db.query(query);
     return result;
   } catch (error) {
@@ -53,7 +65,7 @@ export async function selectTimetableByClassroom(db, classroomName) {
 
 export async function selectTimetableByTeacherId(db, teacherId) {
   try {
-    const query = `SELECT * FROM Timetable WHERE teacherId = '${teacherId}'`;
+    const query = `SELECT FROM Timetable WHERE teacherId = '${teacherId}'`;
     const result = await db.query(query);
     return result;
   } catch (error) {
@@ -64,7 +76,7 @@ export async function selectTimetableByTeacherId(db, teacherId) {
 
 export async function selectTimetableBySubjectId(db, subjectId) {
   try {
-    const query = `SELECT * FROM Timetable WHERE subjectId = '${subjectId}'`;
+    const query = `SELECT FROM Timetable WHERE subjectId = '${subjectId}'`;
     const result = await db.query(query);
     return result;
   } catch (error) {
@@ -108,7 +120,7 @@ export async function getTimetableByTeacherAndTime(
   day
 ) {
   try {
-    const query = `SELECT * FROM Timetable WHERE teacherId = '${teacherId}' AND start = '${startTime}' AND end = '${endTime}' AND day = '${day}'`;
+    const query = `SELECT FROM Timetable WHERE teacherId = '${teacherId}' AND start = '${startTime}' AND end = '${endTime}' AND day = '${day}'`;
     const result = await db.query(query);
     return result;
   } catch (error) {
@@ -171,4 +183,68 @@ export async function getFreeClassroom(db, classroomName, start, end, day) {
     );
     throw error;
   }
+}
+
+export async function insertWithTransaction(
+  timetableId,
+  teacherCode,
+  subjectCode,
+  groupCode,
+  day,
+  start,
+  end,
+  classroomName,
+  teaching,
+  classroom
+) {
+  var trx = await db
+    .let("newTimetable", function (nt) {
+      nt.insert()
+        .into("Timetable")
+        .set({
+          timetableId: timetableId,
+          teacherId: teacherCode,
+          subjectId: subjectCode,
+          groupId: groupCode,
+          day: day,
+          start: start,
+          end: end,
+          classroomName: classroomName,
+        })
+        .return("@rid");
+    })
+    .let("classroomTimetableEdge", function (cte) {
+      cte
+        .create("EDGE", "ClassroomsTimetable")
+        .from("$newTimetable")
+        .to(classroom["@rid"])
+        .set({
+          teacherId: teacherCode,
+          subjectId: subjectCode,
+          groupId: groupCode,
+          start: start,
+          end: end,
+          day: day,
+          classroomName: classroomName,
+        });
+    })
+    .let("teachingTimetableEdge", function (tte) {
+      tte
+        .create("edge", "TeachingTimetable")
+        .from(teaching["@rid"])
+        .to("$newTimetable")
+        .set({
+          teacherId: teacherCode,
+          subjectId: subjectCode,
+          groupId: groupCode,
+          start: start,
+          end: end,
+          day: day,
+          classroomName: classroomName,
+        });
+    })
+    .commit()
+    .return("$newTimetable")
+    .all()
+    .then(function (results) {});
 }

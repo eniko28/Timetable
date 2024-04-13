@@ -46,7 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       var startCell = document.getElementById(day + "-hour" + start);
-      var endCell = document.getElementById(day + "-hour" + end);
 
       if (startCell) {
         startCell.classList.add("group-time");
@@ -259,7 +258,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => {
         if (response.ok) {
-          console.log("Wishlist data sent successfully!");
+          location.reload();
         } else {
           if (response.headers.get("content-type").includes("text/html")) {
             response.text().then((errorMessage) => {
