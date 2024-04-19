@@ -137,23 +137,6 @@ select.filter {
     margin-bottom: 20px;
 }
 
-.navbar {
-    background-color: #D2B48C;
-    overflow: hidden;
-}
-
-
-.navbar button {
-    float: left;
-    display: block;
-    color: #D2B48C;
-    text-align: center;
-    padding: 14px 20px;
-    text-decoration: none;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-}
 
 a.back-button {
     position: fixed; 
@@ -171,23 +154,6 @@ a.back-button:hover {
     background-color: #A0763F; 
 }
 
-.navbar button.logout-button {
-    float: right; 
-    background-color: #A0763F; 
-    color: white; 
-    border: none; 
-    padding: 14px 20px; 
-    font-size: 16px;
-    cursor: pointer; 
-    border-radius: 5px;
-    margin-left: 10px; 
-    transition: background-color 0.3s ease; 
-}
-
-.navbar button.logout-button:hover {
-    background-color: #72542D; 
-}
-
 .error-message {
     color: red;
     font-size: 12px;
@@ -197,6 +163,7 @@ a.back-button:hover {
     width: 30%; 
     margin: 0 auto; 
     text-align: center; 
+    margin-top: 10px;
 }
 
 .links-container a {

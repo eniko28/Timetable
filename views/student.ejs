@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Student Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="adminStyle.css">
     <style>
         .home-button {
@@ -20,23 +21,38 @@
 </head>
 
 <body>
-    <div class="navbar">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <% if (imagePath!=null) { %>
-            <button onclick="window.location.href='/home'" class="home-button"></button>
+            <button onclick="window.location.href='/home'" class="navbar-brand home-button"></button>
             <% } else { %>
-                <button onclick="window.location.href='/home'">Home</button>
+                <a class="navbar-brand" href="/home">Home</a>
                 <% } %>
-                    <button onclick="window.location.href='/timetable'">My Timetable</button>
-                    <button onclick="window.location.href='/logout'" class="logout-button">Log out</button>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/timetable">My Timetable</a>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link logout-button" href="/logout">Log out</a>
+                            </li>
+                        </ul>
+                    </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="text-center links-container">
+            <a href="/groupTimetable" class="btn btn-secondary">Group's timetable</a>
+            <a href="/teacherTimetable" class="btn btn-secondary">Teacher's timetable</a>
+            <a href="/subjectTimetable" class="btn btn-secondary">Subject's timetable</a>
+            <a href="/classroomTimetable" class="btn btn-secondary">Classroom's timetable</a>
+        </h1>
     </div>
-    <h1>
-        <div class="links-container">
-            <a href="/groupTimetable">Group's timetable</a>
-            <a href="/teacherTimetable">Teacher's timetable</a>
-            <a href="/subjectTimetable">Subject's timetable</a>
-            <a href="/classroomTimetable">Classroom's timetable</a>
-        </div>
-    </h1>
 </body>
 
 </html>

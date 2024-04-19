@@ -61,7 +61,6 @@ router.post("/register", async (req, res) => {
       const group = await groupDB.getGroupById(db, groupId);
       await createEdgeStudentsGroups(db, student, group, userId, groupId);
     }
-
     res.redirect("/register");
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);

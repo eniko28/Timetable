@@ -10,26 +10,6 @@ setupDatabase()
     process.exit(1);
   });
 
-export async function insertTimetable(
-  db,
-  timetableId,
-  teacherCode,
-  subjectCode,
-  groupCode,
-  day,
-  start,
-  end,
-  classroomName
-) {
-  try {
-    const query = `INSERT INTO Timetable SET timetableId = '${timetableId}', teacherId = '${teacherCode}', subjectId = '${subjectCode}', groupId = '${groupCode}', day = '${day}', start = '${start}', end = '${end}', classroomName = '${classroomName}'`;
-    await db.query(query);
-  } catch (error) {
-    console.error("Error inserting teaching:", error);
-    throw error;
-  }
-}
-
 export async function selectTimetable(db) {
   try {
     const query = `SELECT FROM Timetable`;
@@ -185,7 +165,7 @@ export async function getFreeClassroom(db, classroomName, start, end, day) {
   }
 }
 
-export async function insertWithTransaction(
+export async function insertTimetable(
   timetableId,
   teacherCode,
   subjectCode,
@@ -197,7 +177,7 @@ export async function insertWithTransaction(
   teaching,
   classroom
 ) {
-  var trx = await db
+  await db
     .let("newTimetable", function (nt) {
       nt.insert()
         .into("Timetable")

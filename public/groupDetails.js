@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
     timetable.forEach(function (slot) {
       var day = slot.day;
       var start = slot.start;
-      var end = slot.end;
 
       switch (day) {
         case "Monday":
@@ -66,13 +65,23 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function updateSubjectInput(subjects) {
+  function updateSubjectInput(subjects, timetableSubjects, selectedGroupId) {
     subjectInput.innerHTML =
       "<option disabled selected>Select a subject...</option>";
+
+    const filteredSubjectsByGroup = subjects.filter(
+      (subject) => subject.groupId === selectedGroupId
+    );
+
     const uniqueSubjects = [
-      ...new Set(subjects.map((subject) => subject.subjectId)),
+      ...new Set(filteredSubjectsByGroup.map((subject) => subject.subjectId)),
     ];
-    uniqueSubjects.forEach(function (subject) {
+
+    const availableSubjects = uniqueSubjects.filter(
+      (subject) => !timetableSubjects.includes(subject)
+    );
+
+    availableSubjects.forEach(function (subject) {
       var option = document.createElement("option");
       option.text = subject;
       subjectInput.add(option);
@@ -115,8 +124,15 @@ document.addEventListener("DOMContentLoaded", function () {
               ) {
                 return subject.teacherId === selectedTeacher;
               });
+              var timetableSubjects = response.timetable.map(
+                (slot) => slot.subjectId
+              );
 
-              updateSubjectInput(filteredSubjects);
+              updateSubjectInput(
+                filteredSubjects,
+                timetableSubjects,
+                selectedGroupId
+              );
 
               var teacherId = teacherInput.value;
               var teacherWishlists = response.wishlists.filter(function (
@@ -151,7 +167,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 var startCell = document.getElementById(day + "-hour" + start);
-                var endCell = document.getElementById(day + "-hour" + end);
 
                 if (startCell) {
                   startCell.classList.add("start-time");
@@ -234,19 +249,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   });
-
-  function updateSubjects(subjects) {
-    subjectInput.innerHTML =
-      "<option disabled selected>Select a subject...</option>";
-    const uniqueSubjects = [
-      ...new Set(subjects.map((subject) => subject.subjectId)),
-    ];
-    uniqueSubjects.forEach(function (subject) {
-      var option = document.createElement("option");
-      option.text = subject;
-      subjectInput.add(option);
-    });
-  }
 
   function sendWishlist(data) {
     fetch("/wishlists", {

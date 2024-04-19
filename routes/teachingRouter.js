@@ -131,7 +131,7 @@ router.post("/wishlists", authMiddleware(["Scheduler"]), async (req, res) => {
     const teaching = await teachingDB.getTeachingById(db, teachingId[0].id);
     const classroom = await classroomDB.getClassroomByName(db, classroomName);
 
-    await timetableDB.insertWithTransaction(
+    await timetableDB.insertTimetable(
       timetableId,
       teacherId,
       subjectId,

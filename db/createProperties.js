@@ -208,23 +208,6 @@ function createPropertyUser(db, className) {
         "admin01"
       );
     })
-    .then(function (property) {
-      const userData = {
-        userId: "scheduler01",
-        name: "Scheduler",
-        password:
-          "$2b$10$PWTYAlbeqyHwbbMxgrGsB.kgk.IeukIce0dcAMkRjfY861u8iHLRS",
-        type: "Scheduler",
-      };
-
-      return createDataIfNotExists(
-        db,
-        className,
-        userData,
-        "userId",
-        "scheduler01"
-      );
-    })
     .catch(function (error) {
       console.error("Error creating properties for Users:", error);
     });
