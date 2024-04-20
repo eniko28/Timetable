@@ -228,3 +228,14 @@ export async function insertTimetable(
     .all()
     .then(function (results) {});
 }
+
+export async function getTimetableByDayAndTime(db, day, start) {
+  try {
+    const query = `SELECT FROM Timetable WHERE day = '${day}' AND start = '${start}'`;
+    const result = await db.query(query);
+    return result;
+  } catch (error) {
+    console.error("Error selecting timetable by teacher and time:", error);
+    throw error;
+  }
+}

@@ -151,4 +151,28 @@ router.post("/wishlists", authMiddleware(["Scheduler"]), async (req, res) => {
   }
 });
 
+router.get(
+  "/free-classrooms",
+  authMiddleware(["Scheduler"]),
+  async (req, res) => {
+    try {
+      const { day, start } = req.query;
+      const timetable = await timetableDB.getTimetableByDayAndTime(
+        db,
+        day,
+        start
+      );
+      const occupiedClassrooms = timetable.map((slot) => slot.classroomName);
+      const allClassrooms = await classroomDB.getAllClassrooms(db);
+      const freeClassrooms = allClassrooms.filter(
+        (classroom) => !occupiedClassrooms.includes(classroom.name)
+      );
+      res.json(freeClassrooms);
+    } catch (error) {
+      console.error("Error fetching free classrooms:", error);
+      res.status(500).send("Internal Server Error: " + error.message);
+    }
+  }
+);
+
 export default router;

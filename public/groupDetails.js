@@ -206,6 +206,22 @@ document.addEventListener("DOMContentLoaded", function () {
         (parseInt(startTime.split(":")[0]) + 2).toString().padStart(2, "0") +
         ":00";
 
+      fetch(`/free-classrooms?day=${selectedDay}&start=${startTime}`)
+        .then((response) => response.json())
+        .then((freeClassrooms) => {
+          const classroomSelect = document.getElementById("classroomSelect");
+          classroomSelect.innerHTML =
+            "<option disabled selected>Select a classroom...</option>";
+          freeClassrooms.forEach((classroom) => {
+            var option = document.createElement("option");
+            option.text = classroom.name;
+            classroomSelect.add(option);
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching free classrooms:", error);
+        });
+
       var form = document.getElementById("classroomForm");
       form.addEventListener("submit", function (event) {
         event.preventDefault();
