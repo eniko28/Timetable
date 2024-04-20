@@ -21,10 +21,10 @@
 
     <div id="details-container">
         <select id="teacherInput" placeholder="Teachers">
-            <option disabled selected>Select a teacher...</option>
+            <option disabled selected required>Select a teacher...</option>
         </select>
         <select id="subjectInput" placeholder="Subjects">
-            <option disabled selected>Select a subject...</option>
+            <option disabled selected required>Select a subject...</option>
         </select>
     </div>
 
@@ -57,7 +57,7 @@
             <select id="classroomSelect" name="classroom">
                 <option disabled selected>Select a classroom...</option>
                 <% classrooms.forEach(classroom=> { %>
-                    <option value="<%= classroom.name %>">
+                    <option value="<%= classroom.name %>" required>
                         <%= classroom.name %>
                     </option>
                     <% }); %>

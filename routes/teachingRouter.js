@@ -1,6 +1,5 @@
 import express from "express";
 import setupDatabase from "../db/dbSetup.js";
-import * as createEdge from "../db/createEdges.js";
 import * as teachingDB from "../db/teachingsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
 import * as groupDB from "../db/groupsDB.js";
@@ -60,7 +59,6 @@ router.post("/wishlists", authMiddleware(["Scheduler"]), async (req, res) => {
       });
       return;
     }
-
     const existsTeacher = await timetableDB.getFreeTeacher(
       db,
       teacherId,

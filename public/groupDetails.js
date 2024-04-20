@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
   var selectedGroupId;
+  var submitClicked = false;
+  var lastClickedCellData = null;
+
   var listItems = document.querySelectorAll("#groups-list li");
   var teacherInput = document.getElementById("teacherInput");
   var subjectInput = document.getElementById("subjectInput");
@@ -144,7 +147,6 @@ document.addEventListener("DOMContentLoaded", function () {
               teacherWishlists.forEach(function (wishlist) {
                 var day = wishlist.day;
                 var start = wishlist.start;
-                var end = wishlist.end;
 
                 switch (day) {
                   case "Monday":
@@ -193,6 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
     day4: "Thursday",
     day5: "Friday",
   };
+
   timetableCells.forEach(function (cell) {
     cell.addEventListener("click", function () {
       formContainer.style.display = "block";
@@ -205,7 +208,11 @@ document.addEventListener("DOMContentLoaded", function () {
       var endTime =
         (parseInt(startTime.split(":")[0]) + 2).toString().padStart(2, "0") +
         ":00";
-
+      lastClickedCellData = {
+        selectedDay: selectedDay,
+        startTime: startTime,
+        endTime: endTime,
+      };
       fetch(`/free-classrooms?day=${selectedDay}&start=${startTime}`)
         .then((response) => response.json())
         .then((freeClassrooms) => {
@@ -224,44 +231,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
       var form = document.getElementById("classroomForm");
       form.addEventListener("submit", function (event) {
-        event.preventDefault();
+        if (!submitClicked) {
+          submitClicked = true;
+          event.preventDefault();
 
-        var selectedClassroom =
-          document.getElementById("classroomSelect").value;
-        var selectedTeacher = document.getElementById("teacherInput").value;
-        var selectedSubject = document.getElementById("subjectInput").value;
+          var selectedClassroom =
+            document.getElementById("classroomSelect").value;
+          var selectedTeacher = document.getElementById("teacherInput").value;
+          var selectedSubject = document.getElementById("subjectInput").value;
 
-        switch (selectedDay) {
-          case "day1":
-            selectedDay = "Monday";
-            break;
-          case "day2":
-            selectedDay = "Tuesday";
-            break;
-          case "day3":
-            selectedDay = "Wednesday";
-            break;
-          case "day4":
-            selectedDay = "Thursday";
-            break;
-          case "day5":
-            selectedDay = "Friday";
-            break;
-          default:
-            break;
+          const data = {
+            groupId: selectedGroupId,
+            teacherId: selectedTeacher,
+            subjectId: selectedSubject,
+            day: lastClickedCellData.selectedDay,
+            start: lastClickedCellData.startTime,
+            end: lastClickedCellData.endTime,
+            classroomName: selectedClassroom,
+          };
+          sendWishlist(data);
         }
-
-        const data = {
-          groupId: selectedGroupId,
-          teacherId: selectedTeacher,
-          subjectId: selectedSubject,
-          day: selectedDay,
-          start: startTime,
-          end: endTime,
-          classroomName: selectedClassroom,
-        };
-
-        sendWishlist(data);
       });
     });
   });
