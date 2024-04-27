@@ -1,6 +1,14 @@
 export async function insertSubject(db, code, name, type) {
   try {
-    const query = `INSERT INTO Subjects SET id = '${code}', name = '${name}', type = '${type}'`;
+    var hours = 0;
+    if (type === "Course") {
+      hours = 1;
+    } else {
+      if (type === "Seminar" || type === "Laboratory") {
+        hours = 4;
+      }
+    }
+    const query = `INSERT INTO Subjects SET id = '${code}', name = '${name}', type = '${type}', hours = '${hours}'`;
     await db.query(query);
   } catch (error) {
     console.error("Error inserting subject:", error);

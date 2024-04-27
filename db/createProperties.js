@@ -105,6 +105,7 @@ function createPropertySubjects(db, className) {
         createPropertyIfNotExists(classObj, "id", "String"),
         createPropertyIfNotExists(classObj, "name", "String"),
         createPropertyIfNotExists(classObj, "type", "String"),
+        createPropertyIfNotExists(classObj, "hours", "Integer"),
       ]);
     })
     .catch(function (error) {
@@ -167,12 +168,9 @@ function createPropertyWishlists(db, className) {
       return Promise.all([
         createPropertyIfNotExists(classObj, "wishlistId", "String"),
         createPropertyIfNotExists(classObj, "teacherId", "String"),
-        createPropertyIfNotExists(classObj, "subjectId", "String"),
-        createPropertyIfNotExists(classObj, "groupId", "String"),
         createPropertyIfNotExists(classObj, "day", "String"),
         createPropertyIfNotExists(classObj, "start", "String"),
         createPropertyIfNotExists(classObj, "end", "String"),
-        createPropertyIfNotExists(classObj, "status", "String"),
       ]);
     })
     .catch(function (error) {

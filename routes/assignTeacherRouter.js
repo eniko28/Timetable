@@ -1,11 +1,13 @@
 import express from "express";
 import * as teacherDB from "../db/teachersDB.js";
 import * as subjectDB from "../db/subjectsDB.js";
+import * as groupDB from "../db/groupsDB.js";
 import * as teachingDB from "../db/teachingsDB.js";
 import * as teacherTeaching from "../db/teachersTeachingEdge.js";
 import {
   createEdgeTeacherTeachings,
   createEdgesSubjectTeachings,
+  createEdgeGroupTeachings,
 } from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
 import { v4 as uuidv4 } from "uuid";
@@ -52,10 +54,7 @@ router.post("/assignTeacher", authMiddleware(["Admin"]), async (req, res) => {
       });
       return;
     }
-    const teacherExists = await teachingDB.getTeacherBySubjectId(
-      db,
-      subjectCode
-    );
+    const teacherExists = await teachingDB.getAllBySubjectId(db, subjectCode);
     var teachingId = uuidv4();
     if (teacherExists.length === 0) {
       await teachingDB.insertSubjectAndTeacher(
@@ -65,11 +64,29 @@ router.post("/assignTeacher", authMiddleware(["Admin"]), async (req, res) => {
         subjectCode
       );
     } else {
-      if (teacherExists[0].teacherId === teacherCode) {
-        res.status(400).render("error", {
-          message: "Teacher already assigned to selected subject.",
-        });
-        return;
+      if (
+        teacherExists[0].teacherId !== teacherCode &&
+        teacherExists[0].teacherId
+      ) {
+        await teachingDB.insertSubjectAndTeacher(
+          db,
+          teachingId,
+          teacherCode,
+          subjectCode
+        );
+        if (teacherExists[0].groupId) {
+          const groupCode = teacherExists[0].groupId;
+          const group = await groupDB.getGroupById(db, groupCode);
+          const teaching = await teachingDB.getTeachingById(db, teachingId);
+          await createEdgeGroupTeachings(
+            db,
+            group,
+            teaching,
+            groupCode,
+            subjectCode
+          );
+          await teachingDB.updateGroup(db, subjectCode, groupCode);
+        }
       } else {
         await teachingDB.updateTeacher(db, teacherCode, subjectCode);
         const id = await teachingDB.getTeachingIdByTeacherAndSubject(
@@ -80,7 +97,6 @@ router.post("/assignTeacher", authMiddleware(["Admin"]), async (req, res) => {
         teachingId = id[0].id;
       }
     }
-
     const teacher = await teacherDB.getTeacherById(db, teacherCode);
     const teaching = await teachingDB.getTeachingById(db, teachingId);
     const subject = await subjectDB.getSubjectById(db, subjectCode);

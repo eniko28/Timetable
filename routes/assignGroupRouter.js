@@ -100,9 +100,23 @@ router.post("/assignGroup", authMiddleware("Admin"), async (req, res) => {
         teachingId = id[0].id;
       }
     }
-    const group = await groupDB.getGroupById(db, groupCode);
     const teaching = await teachingDB.getTeachingById(db, teachingId);
-    await createEdgeGroupTeachings(db, group, teaching, groupCode, subjectCode);
+    const all = await teachingDB.getTeachingsByGroupAndSubjectId(
+      db,
+      groupCode,
+      subjectCode
+    );
+    for (const teachingRecord of all) {
+      const teaching = await teachingDB.getTeachingById(db, teachingRecord.id);
+      const group = await groupDB.getGroupById(db, groupCode);
+      await createEdgeGroupTeachings(
+        db,
+        group,
+        teaching,
+        groupCode,
+        subjectCode
+      );
+    }
     res.redirect("/assignGroup");
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);

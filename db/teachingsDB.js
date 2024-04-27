@@ -111,6 +111,17 @@ export async function getTeacherBySubjectId(db, subjectId) {
   }
 }
 
+export async function getAllBySubjectId(db, subjectId) {
+  try {
+    const query = `SELECT FROM Teachings WHERE subjectId = '${subjectId}'`;
+    const wishlist = await db.query(query);
+    return wishlist;
+  } catch (error) {
+    console.error("Error getting teachings from the database:", error);
+    throw error;
+  }
+}
+
 export async function getGroupBySubjectId(db, subjectId) {
   try {
     const query = `SELECT groupId FROM Teachings WHERE subjectId = '${subjectId}'`;

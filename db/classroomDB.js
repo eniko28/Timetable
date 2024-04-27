@@ -1,6 +1,6 @@
 export async function getAllClassrooms(db) {
   try {
-    const query = "SELECT * FROM Classrooms";
+    const query = "SELECT FROM Classrooms";
     const classrooms = await db.query(query);
     return classrooms;
   } catch (error) {

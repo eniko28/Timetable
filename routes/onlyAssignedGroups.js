@@ -1,5 +1,4 @@
 import express from "express";
-import multer from "multer";
 import setupDatabase from "../db/dbSetup.js";
 import * as groupDB from "../db/groupsDB.js";
 import { authMiddleware } from "../middleware/auth.js";
