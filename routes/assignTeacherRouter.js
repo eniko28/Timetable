@@ -76,15 +76,15 @@ router.post("/assignTeacher", authMiddleware(["Admin"]), async (req, res) => {
         );
         if (teacherExists[0].groupId) {
           const groupCode = teacherExists[0].groupId;
-          const group = await groupDB.getGroupById(db, groupCode);
-          const teaching = await teachingDB.getTeachingById(db, teachingId);
-          await createEdgeGroupTeachings(
+          // const group = await groupDB.getGroupById(db, groupCode);
+          // const teaching = await teachingDB.getTeachingById(db, teachingId);
+          /*await createEdgeGroupTeachings(
             db,
             group,
             teaching,
             groupCode,
             subjectCode
-          );
+          );*/
           await teachingDB.updateGroup(db, subjectCode, groupCode);
         }
       } else {
@@ -97,23 +97,30 @@ router.post("/assignTeacher", authMiddleware(["Admin"]), async (req, res) => {
         teachingId = id[0].id;
       }
     }
-    const teacher = await teacherDB.getTeacherById(db, teacherCode);
-    const teaching = await teachingDB.getTeachingById(db, teachingId);
-    const subject = await subjectDB.getSubjectById(db, subjectCode);
-    await createEdgeTeacherTeachings(
+    const all = await teachingDB.getTeachingsByTeacherAndSubject(
       db,
-      teacher,
-      teaching,
       teacherCode,
       subjectCode
     );
-    await createEdgesSubjectTeachings(
-      db,
-      subject,
-      teaching,
-      subjectCode,
-      teacherCode
-    );
+    for (const teachingRecord of all) {
+      const teacher = await teacherDB.getTeacherById(db, teacherCode);
+      const teaching = await teachingDB.getTeachingById(db, teachingRecord.id);
+      const subject = await subjectDB.getSubjectById(db, subjectCode);
+      await createEdgeTeacherTeachings(
+        db,
+        teacher,
+        teaching,
+        teacherCode,
+        subjectCode
+      );
+      await createEdgesSubjectTeachings(
+        db,
+        subject,
+        teaching,
+        subjectCode,
+        teacherCode
+      );
+    }
     res.redirect("/assignTeacher");
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);

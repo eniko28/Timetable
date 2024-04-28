@@ -89,6 +89,21 @@ export async function getTeachingsByGroupAndSubjectId(db, groupId, subjectId) {
   }
 }
 
+export async function getTeachingsByTeacherAndSubject(
+  db,
+  teacherId,
+  subjectId
+) {
+  try {
+    const query = `SELECT FROM Teachings WHERE teacherId = '${teacherId}' AND subjectId = '${subjectId}' `;
+    const wishlist = await db.query(query);
+    return wishlist;
+  } catch (error) {
+    console.error("Error getting teachings from the database:", error);
+    throw error;
+  }
+}
+
 export async function getTeachingByGroupId(db, groupId) {
   try {
     const query = `SELECT FROM Teachings WHERE groupId = '${groupId}'`;

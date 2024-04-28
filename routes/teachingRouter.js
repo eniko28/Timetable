@@ -1,6 +1,7 @@
 import express from "express";
 import setupDatabase from "../db/dbSetup.js";
 import * as teachingDB from "../db/teachingsDB.js";
+import * as subjectDB from "../db/subjectsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
 import * as groupDB from "../db/groupsDB.js";
 import * as classroomDB from "../db/classroomDB.js";
@@ -50,7 +51,7 @@ router.post("/wishlists", authMiddleware(["Scheduler"]), async (req, res) => {
       !subjectId ||
       !teacherId ||
       !day ||
-      !start ||
+      +!start ||
       !end ||
       !classroomName
     ) {
@@ -154,14 +155,18 @@ router.get(
   authMiddleware(["Scheduler"]),
   async (req, res) => {
     try {
-      const { day, start } = req.query;
+      const { day, start, subject } = req.query;
       const timetable = await timetableDB.getTimetableByDayAndTime(
         db,
         day,
         start
       );
+      const subjectType = await subjectDB.getSubjectTypeById(db, subject);
       const occupiedClassrooms = timetable.map((slot) => slot.classroomName);
-      const allClassrooms = await classroomDB.getAllClassrooms(db);
+      const allClassrooms = await classroomDB.getClassroomByType(
+        db,
+        subjectType.type
+      );
       const freeClassrooms = allClassrooms.filter(
         (classroom) => !occupiedClassrooms.includes(classroom.name)
       );

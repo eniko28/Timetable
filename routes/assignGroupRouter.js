@@ -6,8 +6,8 @@ import * as teachingDB from "../db/teachingsDB.js";
 import * as groupTeaching from "../db/groupTeachingsEdge.js";
 import {
   createEdgeGroupTeachings,
-  createEdgeTeacherTeachingsWithoutInfo,
-  createEdgesSubjectTeachingsWithoutInfo,
+  createEdgeTeacherTeachings,
+  createEdgesSubjectTeachings,
 } from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
 import { v4 as uuidv4 } from "uuid";
@@ -75,21 +75,48 @@ router.post("/assignGroup", authMiddleware("Admin"), async (req, res) => {
           db,
           subjectCode
         );
-        await teachingDB.insertTeaching(
-          db,
-          teachingId,
-          teacherId[0].teacherId,
-          subjectCode,
-          groupCode
-        );
+        if (teacherId[0].teacherId === undefined) {
+          await teachingDB.insertSubjectAndGroup(
+            db,
+            teachingId,
+            subjectCode,
+            groupCode
+          );
+        } else {
+          await teachingDB.insertTeaching(
+            db,
+            teachingId,
+            teacherId[0].teacherId,
+            subjectCode,
+            groupCode
+          );
+          const teacher = await teacherDB.getTeacherById(
+            db,
+            teacherId[0].teacherId
+          );
+          const teaching = await teachingDB.getTeachingById(db, teachingId);
+          const subject = await subjectDB.getSubjectById(db, subjectCode);
+          await createEdgeTeacherTeachings(
+            db,
+            teacher,
+            teaching,
+            teacherId[0].teacherId,
+            subjectCode
+          );
+          await createEdgesSubjectTeachings(
+            db,
+            subject,
+            teaching,
+            subjectCode,
+            teacherId[0].teacherId
+          );
+        }
         const teaching = await teachingDB.getTeachingById(db, teachingId);
         const teacher = await teacherDB.getTeacherById(
           db,
           teacherId[0].teacherId
         );
         const subject = await subjectDB.getSubjectById(db, subjectCode);
-        await createEdgeTeacherTeachingsWithoutInfo(db, teacher, teaching);
-        await createEdgesSubjectTeachingsWithoutInfo(db, subject, teaching);
       } else {
         await teachingDB.updateGroup(db, subjectCode, groupCode);
         const id = await teachingDB.getTeachingIdBySubjectAndGroup(
@@ -100,7 +127,6 @@ router.post("/assignGroup", authMiddleware("Admin"), async (req, res) => {
         teachingId = id[0].id;
       }
     }
-    const teaching = await teachingDB.getTeachingById(db, teachingId);
     const all = await teachingDB.getTeachingsByGroupAndSubjectId(
       db,
       groupCode,
@@ -118,6 +144,36 @@ router.post("/assignGroup", authMiddleware("Admin"), async (req, res) => {
       );
     }
     res.redirect("/assignGroup");
+  } catch (error) {
+    res.status(500).send(`Internal Server Error: ${error.message}`);
+  }
+});
+
+router.get("/getGroupSubjects", async (req, res) => {
+  try {
+    const groupId = req.query.groupId;
+
+    if (!groupId) {
+      return res.status(400).send("Missing groupId parameter.");
+    }
+
+    const groupSubjects = await groupTeaching.getSubjectsByGroup(db, groupId);
+    const allSubjects = await subjectDB.getAllSubjects(db);
+
+    var unassignedSubjects = [];
+    for (var i = 0; i < allSubjects.length; i++) {
+      var isAssigned = false;
+      for (var j = 0; j < groupSubjects.length; j++) {
+        if (groupSubjects[j].subjectId === allSubjects[i].id) {
+          isAssigned = true;
+          break;
+        }
+      }
+      if (!isAssigned) {
+        unassignedSubjects.push(allSubjects[i]);
+      }
+    }
+    res.json(unassignedSubjects);
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }

@@ -213,7 +213,9 @@ document.addEventListener("DOMContentLoaded", function () {
         startTime: startTime,
         endTime: endTime,
       };
-      fetch(`/free-classrooms?day=${selectedDay}&start=${startTime}`)
+      fetch(
+        `/free-classrooms?day=${selectedDay}&start=${startTime}&subject=${subjectInput.value}`
+      )
         .then((response) => response.json())
         .then((freeClassrooms) => {
           const classroomSelect = document.getElementById("classroomSelect");

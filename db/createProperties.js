@@ -105,7 +105,6 @@ function createPropertySubjects(db, className) {
         createPropertyIfNotExists(classObj, "id", "String"),
         createPropertyIfNotExists(classObj, "name", "String"),
         createPropertyIfNotExists(classObj, "type", "String"),
-        createPropertyIfNotExists(classObj, "hours", "Integer"),
       ]);
     })
     .catch(function (error) {

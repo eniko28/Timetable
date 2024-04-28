@@ -76,3 +76,17 @@ export async function getSubjectsByName(db, subjectName) {
     throw error;
   }
 }
+
+export async function getSubjectTypeById(db, subjectId) {
+  try {
+    const query = `SELECT type FROM Subjects WHERE id = '${subjectId}'`;
+    const subject = await db.query(query);
+    return subject.length > 0 ? subject[0] : null;
+  } catch (error) {
+    console.error(
+      `Error getting subject with ID ${subjectId} from the database:`,
+      error
+    );
+    throw error;
+  }
+}
