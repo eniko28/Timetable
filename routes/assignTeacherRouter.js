@@ -76,15 +76,15 @@ router.post("/assignTeacher", authMiddleware(["Admin"]), async (req, res) => {
         );
         if (teacherExists[0].groupId) {
           const groupCode = teacherExists[0].groupId;
-          // const group = await groupDB.getGroupById(db, groupCode);
-          // const teaching = await teachingDB.getTeachingById(db, teachingId);
-          /*await createEdgeGroupTeachings(
+          const group = await groupDB.getGroupById(db, groupCode);
+          const teaching = await teachingDB.getTeachingById(db, teachingId);
+          await createEdgeGroupTeachings(
             db,
             group,
             teaching,
             groupCode,
             subjectCode
-          );*/
+          );
           await teachingDB.updateGroup(db, subjectCode, groupCode);
         }
       } else {

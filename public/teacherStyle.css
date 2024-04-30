@@ -1,30 +1,30 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #EEDCC4;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #eedcc4;
 }
 
-h1, h2 {
-    text-align: center;
-    color: #72542D;
-    margin-bottom: 20px;
-
+h1,
+h2 {
+  text-align: center;
+  color: #72542d;
+  margin-bottom: 20px;
 }
 
 form {
-    width: 50%;
-    margin: 0 auto;
-    background-color: #F4E5D3;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  width: 50%;
+  margin: 0 auto;
+  background-color: #f4e5d3;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 label {
-    display: block;
-    margin-bottom: 10px;
-    color: #72542D;
+  display: block;
+  margin-bottom: 10px;
+  color: #72542d;
 }
 
 input[type="text"],
@@ -32,65 +32,64 @@ input[type="password"],
 input[type="userId"],
 input[id="type"],
 select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    color: #72542D
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: #72542d;
 }
 
 .submit-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #D2B48C;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  width: 100%;
+  padding: 10px;
+  background-color: #d2b48c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .submit-button:hover {
-    background-color: #72542D;
+  background-color: #72542d;
 }
 
-
 a.back-button {
-    position: fixed; 
-    top: 20px; 
-    left: 20px; 
-    background-color: #72542D; 
-    color: white; 
-    padding: 10px 20px; 
-    text-decoration: none; 
-    border-radius: 5px; 
-    transition: background-color 0.3s ease; 
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #72542d;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
 a.back-button:hover {
-    background-color: #A0763F; 
+  background-color: #a0763f;
 }
 
 .navbar button.logout-button {
-    float: right; 
-    background-color: #A0763F; 
-    color: white; 
-    border: none; 
-    padding: 14px 20px; 
-    font-size: 16px;
-    cursor: pointer; 
-    border-radius: 5px;
-    margin-left: 10px; 
-    transition: background-color 0.3s ease; 
+  float: right;
+  background-color: #a0763f;
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .navbar button.logout-button:hover {
-    background-color: #72542D; 
+  background-color: #72542d;
 }
 
 .error-message {
-    color: red;
-    font-size: 12px;
+  color: red;
+  font-size: 12px;
 }
