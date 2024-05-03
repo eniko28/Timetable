@@ -1,34 +1,8 @@
 import express from "express";
-import setupDatabase from "../db/dbSetup.js";
-import * as groupDB from "../db/groupsDB.js";
-import { authMiddleware } from "../middleware/auth.js";
+import groupRouter from "../controller/onlyAssignedGroupsController.js";
 
-const router = express.Router();
+const app = express();
 
-let db;
+app.use("/group", groupRouter);
 
-setupDatabase()
-  .then((database) => {
-    db = database;
-  })
-  .catch((error) => {
-    console.error("Error setting up database:", error);
-    process.exit(1);
-  });
-
-router.get(
-  "/getGroupsBySubject",
-  authMiddleware(["Admin", "Student", "Teacher", "Scheduler"]),
-  async (req, res) => {
-    try {
-      const { subjectId } = req.query;
-      const result = await groupDB.getGroupsBySubjectId(db, subjectId);
-      res.send(result);
-    } catch (error) {
-      console.error("Error getting groups by subject from database:", error);
-      res.status(500).send("Internal Server Error");
-    }
-  }
-);
-
-export default router;
+export default app;
