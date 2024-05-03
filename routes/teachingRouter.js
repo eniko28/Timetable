@@ -1,4 +1,5 @@
 import express from "express";
+import { v4 as uuidv4 } from "uuid";
 import setupDatabase from "../db/dbSetup.js";
 import * as teachingDB from "../db/teachingsDB.js";
 import * as subjectDB from "../db/subjectsDB.js";
@@ -7,7 +8,6 @@ import * as groupDB from "../db/groupsDB.js";
 import * as classroomDB from "../db/classroomDB.js";
 import * as wishlistDB from "../db/wishlistsDB.js";
 import * as timetableDB from "../db/timetableDB.js";
-import { v4 as uuidv4 } from "uuid";
 import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -31,11 +31,11 @@ router.get("/wishlists", authMiddleware(["Scheduler"]), async (req, res) => {
     const groups = await groupDB.getAllGroups(db);
 
     res.render("wishlists", {
-      wishlists: wishlists,
-      classrooms: classrooms,
-      teachers: teachers,
-      timetable: timetable,
-      groups: groups,
+      wishlists,
+      classrooms,
+      teachers,
+      timetable,
+      groups,
     });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
@@ -131,6 +131,7 @@ router.post("/wishlists", authMiddleware(["Scheduler"]), async (req, res) => {
     const classroom = await classroomDB.getClassroomByName(db, classroomName);
 
     await timetableDB.insertTimetable(
+      db,
       timetableId,
       teacherId,
       subjectId,
@@ -146,7 +147,7 @@ router.post("/wishlists", authMiddleware(["Scheduler"]), async (req, res) => {
     res.redirect("/wishlists");
   } catch (error) {
     console.error("Error processing wishlist data:", error);
-    res.status(500).send("Internal Server Error: " + error.message);
+    res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
 
@@ -173,7 +174,7 @@ router.get(
       res.json(freeClassrooms);
     } catch (error) {
       console.error("Error fetching free classrooms:", error);
-      res.status(500).send("Internal Server Error: " + error.message);
+      res.status(500).send(`Internal Server Error: ${error.message}`);
     }
   }
 );

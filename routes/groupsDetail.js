@@ -23,7 +23,7 @@ setupDatabase()
   });
 
 router.get("/group/:groupId/details", async (req, res) => {
-  const groupId = req.params.groupId;
+  const { groupId } = req.params;
   const wishlists = await wishlistDB.getAllWishlists(db);
   const classrooms = await classroomDB.getAllClassrooms(db);
   const groups = await groupDB.getAllGroups(db);
@@ -37,12 +37,12 @@ router.get("/group/:groupId/details", async (req, res) => {
   const subjectsResults = await Promise.all(subjectsPromises);
   const subjects = subjectsResults.flatMap((result) => result);
   res.json({
-    teachers: teachers,
-    subjects: subjects,
-    wishlists: wishlists,
-    classrooms: classrooms,
-    timetable: timetable,
-    groups: groups,
+    teachers,
+    subjects,
+    wishlists,
+    classrooms,
+    timetable,
+    groups,
   });
 });
 

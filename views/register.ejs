@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>User</title>
-    <link rel="stylesheet" href="adminStyle.css">
+    <link rel="stylesheet" href="style/adminStyle.css">
 </head>
 
 <body>
@@ -23,7 +23,7 @@
         <span class="error-message" id="userIdError"></span><br><br>
 
         <label for="type">User Type:</label>
-        <select id="type" name="type" onchange="showAdditionalFields()">
+        <select id="type" name="type">
             <option value="">Choose...</option>
             <option value="Student">Student</option>
             <option value="Teacher">Teacher</option>
@@ -61,7 +61,7 @@
     </form>
     <a href="/admin" class="back-button">Back</a>
 
-    <script src="registerValidation.js" defer></script>
+    <script src="/validation/registerValidation.js" defer></script>
 </body>
 
 </html>

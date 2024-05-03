@@ -23,20 +23,25 @@ router.get(
   authMiddleware(["Teacher"]),
   async (req, res) => {
     try {
-      const userId = req.session.userId;
+      const { userId } = req.session;
       const teacher = await teacherDB.getTeacherById(db, userId);
       const teacherName = teacher.name;
       const teachings = await timetableDB.selectTimetableByTeacherId(
         db,
         userId
       );
-      for (const teaching of teachings) {
-        const subject = await subjectDB.getSubjectById(db, teaching.subjectId);
-        teaching.subjectId = subject.name;
-        teaching.subjectType = subject.type;
-        teaching.classroomName = teaching.classroomName;
-        teaching.groupId = teaching.groupId;
-      }
+
+      await Promise.all(
+        teachings.map(async (teaching) => {
+          const subject = await subjectDB.getSubjectById(
+            db,
+            teaching.subjectId
+          );
+          teaching.subjectId = subject.name;
+          teaching.subjectType = subject.type;
+        })
+      );
+
       res.render("timetableTeacher", { teachings, teacherName });
     } catch (error) {
       res.status(500).send(`Internal Server Error: ${error.message}`);

@@ -1,6 +1,6 @@
 import express from "express";
-import setupDatabase from "./db/dbSetup.js";
 import formidable from "express-formidable";
+import setupDatabase from "./db/dbSetup.js";
 import subjectRouter from "./routes/subjectRouter.js";
 import loginRouter from "./routes/loginRouter.js";
 import registerRouter from "./routes/registerRouter.js";
@@ -41,13 +41,11 @@ app.use(express.static("public"));
 app.use(formidable());
 
 setupDatabase()
-  .then((db) => {
-    return createVertices(db).then(function () {
-      return createEdges(db).then(function () {
-        return createProperties(db);
-      });
-    });
-  })
+  .then((db) =>
+    createVertices(db).then(() =>
+      createEdges(db).then(() => createProperties(db))
+    )
+  )
   .then(() => {
     app.use("/", registerRouter);
     app.use("/", loginRouter);

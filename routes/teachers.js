@@ -26,12 +26,17 @@ router.get(
 
       const teachings = await timetableDB.selectTimetableByTeacherId(db, id);
 
-      for (const teaching of teachings) {
-        const subject = await subjectBD.getSubjectById(db, teaching.subjectId);
+      await Promise.all(
+        teachings.map(async (teaching) => {
+          const subject = await subjectBD.getSubjectById(
+            db,
+            teaching.subjectId
+          );
+          teaching.subjectId = subject.name;
+          teaching.subjectType = subject.type;
+        })
+      );
 
-        teaching.subjectId = subject.name;
-        teaching.subjectType = subject.type;
-      }
       res.render("teachers", { teachings, name });
     } catch (error) {
       res.status(500).send(`Internal Server Error: ${error.message}`);

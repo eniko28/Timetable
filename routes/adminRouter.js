@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.get("/admin", authMiddleware(["Admin"]), (req, res) => {
   try {
-    const userId = req.session.userId;
-    const type = req.session.type;
+    const { userId } = req.session;
+    const { type } = req.session;
     res.render("admin.ejs", { userId, type });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);

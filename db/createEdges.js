@@ -1,23 +1,19 @@
 function createEdge(db, className) {
   return db.class
     .get(className)
-    .then(function (existingClass) {
-      return existingClass;
-    })
-    .catch(function () {
-      return db.class
+    .then((existingClass) => existingClass)
+    .catch(() =>
+      db.class
         .create(className, "E")
-        .then(function (createdClass) {
-          return createdClass;
-        })
-        .catch(function (creationError) {
+        .then((createdClass) => createdClass)
+        .catch((creationError) => {
           console.error(
             `Error creating Class(E) '${className}':`,
             creationError
           );
           throw creationError;
-        });
-    });
+        })
+    );
 }
 
 function createEdges(db) {
@@ -45,8 +41,8 @@ export async function createEdgeTeacherTeachings(
       .from(teaching["@rid"])
       .to(teacher["@rid"])
       .set({
-        teacherId: teacherId,
-        subjectId: subjectId,
+        teacherId,
+        subjectId,
       })
       .one();
   } catch (error) {
@@ -85,8 +81,8 @@ export async function createEdgeGroupTeachings(
       .from(teaching["@rid"])
       .to(group["@rid"])
       .set({
-        groupId: groupId,
-        subjectId: subjectId,
+        groupId,
+        subjectId,
       })
       .one();
   } catch (error) {
@@ -108,8 +104,8 @@ export async function createEdgesSubjectTeachings(
       .from(teaching["@rid"])
       .to(subject["@rid"])
       .set({
-        subjectId: subjectId,
-        teacherId: teacherId,
+        subjectId,
+        teacherId,
       })
       .one();
   } catch (error) {
@@ -153,13 +149,13 @@ export async function createEdgeTeachingTimetable(
       .from(teaching["@rid"])
       .to(timetable["@rid"])
       .set({
-        teacherId: teacherId,
-        subjectId: subjectId,
-        groupId: groupId,
-        start: start,
-        end: end,
-        day: day,
-        classroomName: classroomName,
+        teacherId,
+        subjectId,
+        groupId,
+        start,
+        end,
+        day,
+        classroomName,
       })
       .one();
   } catch (error) {
@@ -181,8 +177,8 @@ export async function createEdgeStudentsGroups(
       .from(student["@rid"])
       .to(group["@rid"])
       .set({
-        studentId: studentId,
-        groupId: groupId,
+        studentId,
+        groupId,
       })
       .one();
   } catch (error) {
@@ -205,9 +201,9 @@ export async function createEdgeTeachersWishlists(
       .from(wishlist["@rid"])
       .to(teacher["@rid"])
       .set({
-        day: day,
-        start: start,
-        end: end,
+        day,
+        start,
+        end,
       })
       .one();
   } catch (error) {
@@ -234,13 +230,13 @@ export async function createEdgeClassroomsTimetable(
       .from(timetable["@rid"])
       .to(classroom["@rid"])
       .set({
-        teacherId: teacherId,
-        subjectId: subjectId,
-        groupId: groupId,
-        start: start,
-        end: end,
-        day: day,
-        classroomName: classroomName,
+        teacherId,
+        subjectId,
+        groupId,
+        start,
+        end,
+        day,
+        classroomName,
       })
       .one();
   } catch (error) {

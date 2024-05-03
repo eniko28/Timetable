@@ -1,7 +1,7 @@
 import express from "express";
-import setupDatabase from "../db/dbSetup.js";
 import { existsSync, mkdirSync, copyFileSync, unlinkSync } from "fs";
 import { join, basename } from "path";
+import setupDatabase from "../db/dbSetup.js";
 import { authMiddleware } from "../middleware/auth.js";
 import * as personalDB from "../db/personalDB.js";
 import { updateStudent } from "../db/studentsDB.js";
@@ -36,8 +36,8 @@ router.get(
   authMiddleware(["Admin", "Student", "Teacher", "Scheduler"]),
   async (req, res) => {
     try {
-      const userId = req.session.userId;
-      const type = req.session.type;
+      const { userId } = req.session;
+      const { type } = req.session;
       const userData = await personalDB.getUserData(db, userId);
 
       let imageName = null;
@@ -61,11 +61,11 @@ router.post(
   authMiddleware(["Teacher", "Student"]),
   async (req, res) => {
     try {
-      const userId = req.session.userId;
-      const type = req.session.type;
-      const email = req.fields.email;
-      const address = req.fields.address;
-      const phone = req.fields.phone;
+      const { userId } = req.session;
+      const { type } = req.session;
+      const { email } = req.fields;
+      const { address } = req.fields;
+      const { phone } = req.fields;
       const imagePath = req.files.avatar.path;
       const imageName = `${userId}-profile-picture.jpg`;
       const destinationPath = join(uploadDir, imageName);
@@ -95,10 +95,8 @@ router.post(
       copyFileSync(imagePath, destinationPath);
       if (type === "Student") {
         await updateStudent(db, userId);
-      } else {
-        if (type === "Teacher") {
-          await updateTeachers(db, userId);
-        }
+      } else if (type === "Teacher") {
+        await updateTeachers(db, userId);
       }
       res.redirect("home");
     } catch (error) {

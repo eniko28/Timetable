@@ -1,10 +1,7 @@
-import * as groupDB from "../db/groupsDB.js";
 import { getUserData } from "./personalDB.js";
 
 export async function insertStudent(db, code, name, groupId) {
   try {
-    const group = await groupDB.getGroupById(db, groupId);
-
     await db.query(
       `INSERT INTO Students SET id = '${code}', name = '${name}', group = '${groupId}'`
     );
@@ -46,9 +43,8 @@ export async function getGroupIdByStudentId(db, userId) {
 
     if (result.length > 0) {
       return result[0].group;
-    } else {
-      return null;
     }
+    return null;
   } catch (error) {
     console.error("Error getting student's group from the database:", error);
     throw error;

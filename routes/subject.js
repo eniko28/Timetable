@@ -27,29 +27,32 @@ router.get(
 
       const subjectIds = await subjectBD.getSubjectsByName(db, name);
 
-      const teachings = [];
-      for (const subjectId of subjectIds) {
+      const subjectTeachingsPromises = subjectIds.map(async (subjectId) => {
         const subjectTeachings = await timetableDB.selectTimetableBySubjectId(
           db,
           subjectId.id
         );
 
-        for (const teaching of subjectTeachings) {
-          const teacher = await teacherBD.getTeacherNameById(
-            db,
-            teaching.teacherId
-          );
-          const subject = await subjectBD.getSubjectById(
-            db,
-            teaching.subjectId
-          );
+        return Promise.all(
+          subjectTeachings.map(async (teaching) => {
+            const teacher = await teacherBD.getTeacherNameById(
+              db,
+              teaching.teacherId
+            );
+            const subject = await subjectBD.getSubjectById(
+              db,
+              teaching.subjectId
+            );
 
-          teaching.teacherName = teacher;
-          teaching.subjectId = subject.name;
-          teaching.subjectType = subject.type;
-          teachings.push(teaching);
-        }
-      }
+            teaching.teacherName = teacher;
+            teaching.subjectId = subject.name;
+            teaching.subjectType = subject.type;
+            return teaching;
+          })
+        );
+      });
+
+      const teachings = (await Promise.all(subjectTeachingsPromises)).flat();
 
       res.render("subject", { teachings, name });
     } catch (error) {

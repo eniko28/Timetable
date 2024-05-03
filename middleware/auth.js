@@ -11,7 +11,7 @@ const secret = process.env.SECRET;
 
 export function authMiddleware(requiredRoles) {
   return (req, res, next) => {
-    const token = req.session.token;
+    const { token } = req.session;
     if (!token) {
       res.status(401).json({ error: "Authentication error: Missing token" });
       return;

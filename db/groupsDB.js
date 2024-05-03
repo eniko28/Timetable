@@ -53,11 +53,11 @@ export async function getGroupsNameById(db, groupId) {
 
 export async function getAllGroupIds(db) {
   try {
-    const query = `SELECT id FROM Groups `;
+    const query = "SELECT id FROM Groups ";
     const groups = await db.query(query);
     return groups;
   } catch (error) {
-    console.error(`Error getting groupNames from the database:`, error);
+    console.error("Error getting groupNames from the database:", error);
     throw error;
   }
 }

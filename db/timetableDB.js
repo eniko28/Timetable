@@ -1,18 +1,6 @@
-import setupDatabase from "../db/dbSetup.js";
-
-let db;
-setupDatabase()
-  .then((database) => {
-    db = database;
-  })
-  .catch((error) => {
-    console.error("Error setting up database:", error);
-    process.exit(1);
-  });
-
 export async function selectTimetable(db) {
   try {
-    const query = `SELECT FROM Timetable`;
+    const query = "SELECT FROM Timetable";
     const result = await db.query(query);
     return result;
   } catch (error) {
@@ -177,6 +165,7 @@ export async function getTimetableByDayAndTime(db, day, start) {
 }
 
 export async function insertTimetable(
+  db,
   timetableId,
   teacherCode,
   subjectCode,
@@ -189,22 +178,22 @@ export async function insertTimetable(
   classroom
 ) {
   await db
-    .let("newTimetable", function (nt) {
+    .let("newTimetable", (nt) => {
       nt.insert()
         .into("Timetable")
         .set({
-          timetableId: timetableId,
+          timetableId,
           teacherId: teacherCode,
           subjectId: subjectCode,
           groupId: groupCode,
-          day: day,
-          start: start,
-          end: end,
-          classroomName: classroomName,
+          day,
+          start,
+          end,
+          classroomName,
         })
         .return("@rid");
     })
-    .let("classroomTimetableEdge", function (cte) {
+    .let("classroomTimetableEdge", (cte) => {
       cte
         .create("EDGE", "ClassroomsTimetable")
         .from("$newTimetable")
@@ -213,13 +202,13 @@ export async function insertTimetable(
           teacherId: teacherCode,
           subjectId: subjectCode,
           groupId: groupCode,
-          start: start,
-          end: end,
-          day: day,
-          classroomName: classroomName,
+          start,
+          end,
+          day,
+          classroomName,
         });
     })
-    .let("teachingTimetableEdge", function (tte) {
+    .let("teachingTimetableEdge", (tte) => {
       tte
         .create("edge", "TeachingTimetable")
         .from(teaching["@rid"])
@@ -228,14 +217,14 @@ export async function insertTimetable(
           teacherId: teacherCode,
           subjectId: subjectCode,
           groupId: groupCode,
-          start: start,
-          end: end,
-          day: day,
-          classroomName: classroomName,
+          start,
+          end,
+          day,
+          classroomName,
         });
     })
     .commit()
     .return("$newTimetable")
     .all()
-    .then(function (results) {});
+    .then(() => {});
 }

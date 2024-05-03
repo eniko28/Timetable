@@ -1,23 +1,19 @@
 function createVertex(db, className) {
   return db.class
     .get(className)
-    .then(function (existingClass) {
-      return existingClass;
-    })
-    .catch(function () {
-      return db.class
+    .then((existingClass) => existingClass)
+    .catch(() =>
+      db.class
         .create(className, "V")
-        .then(function (createdClass) {
-          return createdClass;
-        })
-        .catch(function (creationError) {
+        .then((createdClass) => createdClass)
+        .catch((creationError) => {
           console.error(
             `Error creating Class(V) '${className}':`,
             creationError
           );
           throw creationError;
-        });
-    });
+        })
+    );
 }
 
 function createVertices(db) {

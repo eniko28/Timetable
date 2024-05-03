@@ -76,7 +76,7 @@ export async function getPassword(db, userId) {
 
 export async function getTeachers(db) {
   try {
-    const query = `SELECT FROM Users WHERE type = 'Teacher'`;
+    const query = "SELECT FROM Users WHERE type = 'Teacher'";
     const teachers = await db.query(query);
     return teachers;
   } catch (error) {

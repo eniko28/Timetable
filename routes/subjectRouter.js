@@ -16,7 +16,7 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/addSubjects", authMiddleware(["Admin"]), async (req, res) => {
+router.get("/addSubjects", authMiddleware(["Admin"]), (req, res) => {
   try {
     res.render("addSubjects", {});
   } catch (error) {
@@ -40,27 +40,26 @@ router.post("/addSubjects", authMiddleware(["Admin"]), async (req, res) => {
     );
 
     if (existingSubject !== null || existingNameAndType.length !== 0) {
-      res.status(400).render("error", {
+      return res.status(400).render("error", {
         message: "Subject already exists.",
       });
-      return;
     }
 
     await subjectsDB.insertSubject(db, code, name, type);
-    res.redirect("/addSubjects");
+    return res.redirect("/addSubjects");
   } catch (error) {
-    res.status(500).send(`Internal Server Error: ${error.message}`);
+    return res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
 
 router.use("/subjects", async (req, res) => {
   try {
     const subjects = await subjectsDB.getAllSubjects(db);
-    res.render("subjects", {
-      subjects: subjects,
+    return res.render("subjects", {
+      subjects,
     });
   } catch (error) {
-    res.status(500).send(`Internal Server Error: ${error.message}`);
+    return res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
 

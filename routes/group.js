@@ -26,44 +26,45 @@ router.get(
   async (req, res) => {
     try {
       const { name, gradeLevel } = req.query;
-      let groups = await groupDB.getGroupsByNameAndGradeLevel(
+      const groups = await groupDB.getGroupsByNameAndGradeLevel(
         db,
         name,
         gradeLevel
       );
 
-      for (const group of groups) {
-        const teachings = await timetableDB.selectTimetableByGroupId(
-          db,
-          group.id
-        );
-
-        group.teachings = [];
-
-        for (const teaching of teachings) {
-          const teacher = await teacherDB.getTeacherNameById(
+      await Promise.all(
+        groups.map(async (group) => {
+          const teachings = await timetableDB.selectTimetableByGroupId(
             db,
-            teaching.teacherId
-          );
-          const subject = await subjectBD.getSubjectById(
-            db,
-            teaching.subjectId
+            group.id
           );
 
-          const newTeaching = {
-            teacherName: teacher,
-            subjectId: subject.name,
-            subjectType: subject.type,
-            classroomName: teaching.classroomName,
-            day: teaching.day,
-            start: teaching.start,
-            end: teaching.end,
-            groupId: teaching.groupId,
-          };
+          group.teachings = await Promise.all(
+            teachings.map(async (teaching) => {
+              const teacher = await teacherDB.getTeacherNameById(
+                db,
+                teaching.teacherId
+              );
+              const subject = await subjectBD.getSubjectById(
+                db,
+                teaching.subjectId
+              );
 
-          group.teachings.push(newTeaching);
-        }
-      }
+              return {
+                teacherName: teacher,
+                subjectId: subject.name,
+                subjectType: subject.type,
+                classroomName: teaching.classroomName,
+                day: teaching.day,
+                start: teaching.start,
+                end: teaching.end,
+                groupId: teaching.groupId,
+              };
+            })
+          );
+        })
+      );
+
       res.render("group", { groups });
     } catch (error) {
       res.status(500).send(`Internal Server Error: ${error.message}`);

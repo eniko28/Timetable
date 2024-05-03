@@ -24,7 +24,7 @@ setupDatabase()
     process.exit(1);
   });
 
-router.get("/register", async (req, res) => {
+router.get("/register", (req, res) => {
   try {
     res.render("register", {});
   } catch (error) {
@@ -43,10 +43,9 @@ router.post("/register", async (req, res) => {
     const user = await usersDB.getUsernameById(db, userId);
 
     if (user !== null) {
-      res.status(400).render("error", {
+      return res.status(400).render("error", {
         message: "The provided userId is already taken!",
       });
-      return;
     }
 
     const hashWithSalt = await bcrypt.hash(password, 10);
@@ -55,26 +54,26 @@ router.post("/register", async (req, res) => {
       await teachersDB.insertTeacherNameAndId(db, userId, name);
     }
     if (type === "Student") {
-      const groupId = req.fields.groupId;
+      const { groupId } = req.fields;
       await studentsDB.insertStudent(db, userId, name, groupId);
       const student = await studentsDB.getStudentById(db, userId);
       const group = await groupDB.getGroupById(db, groupId);
       await createEdgeStudentsGroups(db, student, group, userId, groupId);
     }
-    res.redirect("/register");
+    return res.redirect("/register");
   } catch (error) {
-    res.status(500).send(`Internal Server Error: ${error.message}`);
+    return res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
 
 router.use("/register", async (req, res) => {
   try {
     const users = await usersDB.getAllUsers(db);
-    res.render("registerDB", {
-      users: users,
+    return res.render("registerDB", {
+      users,
     });
   } catch (error) {
-    res.status(500).send(`Internal Server Error: ${error.message}`);
+    return res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
 

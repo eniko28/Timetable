@@ -22,9 +22,9 @@ router.get(
   authMiddleware(["Admin", "Teacher", "Student"]),
   async (req, res) => {
     try {
-      var subjectId = req.query.subjectId;
+      const { subjectId } = req.query;
       const subject = await subjectBD.getSubjectById(db, subjectId);
-      const type = subject.type;
+      const { type } = subject;
       const classrooms = await classroomDB.getClassroomByType(db, type);
       res.json(classrooms);
     } catch (error) {

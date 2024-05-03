@@ -1,4 +1,5 @@
 import express from "express";
+import { v4 as uuidv4 } from "uuid";
 import * as teacherDB from "../db/teachersDB.js";
 import * as subjectDB from "../db/subjectsDB.js";
 import * as groupDB from "../db/groupsDB.js";
@@ -10,7 +11,6 @@ import {
   createEdgeGroupTeachings,
 } from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
-import { v4 as uuidv4 } from "uuid";
 import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -49,13 +49,12 @@ router.post("/assignTeacher", authMiddleware(["Admin"]), async (req, res) => {
       subjectCode
     );
     if (existingTeaching.length !== 0) {
-      res.status(400).render("error", {
+      return res.status(400).render("error", {
         message: "Teacher already assigned to selected subject.",
       });
-      return;
     }
     const teacherExists = await teachingDB.getAllBySubjectId(db, subjectCode);
-    var teachingId = uuidv4();
+    let teachingId = uuidv4();
     if (teacherExists.length === 0) {
       await teachingDB.insertSubjectAndTeacher(
         db,
@@ -63,67 +62,72 @@ router.post("/assignTeacher", authMiddleware(["Admin"]), async (req, res) => {
         teacherCode,
         subjectCode
       );
-    } else {
-      if (
-        teacherExists[0].teacherId !== teacherCode &&
-        teacherExists[0].teacherId
-      ) {
-        await teachingDB.insertSubjectAndTeacher(
+    } else if (
+      teacherExists[0].teacherId !== teacherCode &&
+      teacherExists[0].teacherId
+    ) {
+      await teachingDB.insertSubjectAndTeacher(
+        db,
+        teachingId,
+        teacherCode,
+        subjectCode
+      );
+      if (teacherExists[0].groupId) {
+        const groupCode = teacherExists[0].groupId;
+        const group = await groupDB.getGroupById(db, groupCode);
+        const teaching = await teachingDB.getTeachingById(db, teachingId);
+        await createEdgeGroupTeachings(
           db,
-          teachingId,
-          teacherCode,
+          group,
+          teaching,
+          groupCode,
           subjectCode
         );
-        if (teacherExists[0].groupId) {
-          const groupCode = teacherExists[0].groupId;
-          const group = await groupDB.getGroupById(db, groupCode);
-          const teaching = await teachingDB.getTeachingById(db, teachingId);
-          await createEdgeGroupTeachings(
-            db,
-            group,
-            teaching,
-            groupCode,
-            subjectCode
-          );
-          await teachingDB.updateGroup(db, subjectCode, groupCode);
-        }
-      } else {
-        await teachingDB.updateTeacher(db, teacherCode, subjectCode);
-        const id = await teachingDB.getTeachingIdByTeacherAndSubject(
-          db,
-          subjectCode,
-          teacherCode
-        );
-        teachingId = id[0].id;
+        await teachingDB.updateGroup(db, subjectCode, groupCode);
       }
+    } else {
+      await teachingDB.updateTeacher(db, teacherCode, subjectCode);
+      const id = await teachingDB.getTeachingIdByTeacherAndSubject(
+        db,
+        subjectCode,
+        teacherCode
+      );
+      teachingId = id[0].id;
     }
     const all = await teachingDB.getTeachingsByTeacherAndSubject(
       db,
       teacherCode,
       subjectCode
     );
-    for (const teachingRecord of all) {
+
+    const promises = all.map(async (teachingRecord) => {
       const teacher = await teacherDB.getTeacherById(db, teacherCode);
       const teaching = await teachingDB.getTeachingById(db, teachingRecord.id);
       const subject = await subjectDB.getSubjectById(db, subjectCode);
-      await createEdgeTeacherTeachings(
-        db,
-        teacher,
-        teaching,
-        teacherCode,
-        subjectCode
-      );
-      await createEdgesSubjectTeachings(
-        db,
-        subject,
-        teaching,
-        subjectCode,
-        teacherCode
-      );
-    }
-    res.redirect("/assignTeacher");
+
+      await Promise.all([
+        createEdgeTeacherTeachings(
+          db,
+          teacher,
+          teaching,
+          teacherCode,
+          subjectCode
+        ),
+        createEdgesSubjectTeachings(
+          db,
+          subject,
+          teaching,
+          subjectCode,
+          teacherCode
+        ),
+      ]);
+    });
+
+    await Promise.all(promises);
+
+    return res.redirect("/assignTeacher");
   } catch (error) {
-    res.status(500).send(`Internal Server Error: ${error.message}`);
+    return res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
 

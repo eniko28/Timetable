@@ -191,7 +191,7 @@ export async function getTeachingId(db, teacherId, subjectId, groupId) {
     const teaching = await db.query(query);
     return teaching;
   } catch (error) {
-    console.error(`Error getting teaching Id from the database:`, error);
+    console.error("Error getting teaching Id from the database:", error);
     throw error;
   }
 }
@@ -231,7 +231,7 @@ export async function getSubjectsByTeacherId(db, teacherId) {
     return teaching;
   } catch (error) {
     console.error(
-      `Error getting teaching with ID ${groupId} from the database:`,
+      `Error getting teaching with teacherID ${teacherId} from the database:`,
       error
     );
     throw error;

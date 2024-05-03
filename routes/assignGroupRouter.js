@@ -1,4 +1,5 @@
 import express from "express";
+import { v4 as uuidv4 } from "uuid";
 import * as subjectDB from "../db/subjectsDB.js";
 import * as groupDB from "../db/groupsDB.js";
 import * as teacherDB from "../db/teachersDB.js";
@@ -10,7 +11,6 @@ import {
   createEdgesSubjectTeachings,
 } from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
-import { v4 as uuidv4 } from "uuid";
 import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -50,13 +50,12 @@ router.post("/assignGroup", authMiddleware("Admin"), async (req, res) => {
       groupCode
     );
     if (existingTeaching.length !== 0) {
-      res.status(400).render("error", {
+      return res.status(400).render("error", {
         message: "Subject already assigned to selected group.",
       });
-      return;
     }
     const groupExists = await teachingDB.getGroupBySubjectId(db, subjectCode);
-    var teachingId = uuidv4();
+    let teachingId = uuidv4();
     if (groupExists.length === 0) {
       await teachingDB.insertSubjectAndGroup(
         db,
@@ -65,12 +64,12 @@ router.post("/assignGroup", authMiddleware("Admin"), async (req, res) => {
         groupCode
       );
     } else {
-      if (groupExists[0].groupId == groupCode) {
-        res.status(400).render("error", {
+      if (groupExists[0].groupId === groupCode) {
+        return res.status(400).render("error", {
           message: "Subject already assigned to selected group.",
         });
-        return;
-      } else if (groupExists[0].groupId) {
+      }
+      if (groupExists[0].groupId) {
         const teacherId = await teachingDB.getTeacherBySubjectId(
           db,
           subjectCode
@@ -111,12 +110,6 @@ router.post("/assignGroup", authMiddleware("Admin"), async (req, res) => {
             teacherId[0].teacherId
           );
         }
-        const teaching = await teachingDB.getTeachingById(db, teachingId);
-        const teacher = await teacherDB.getTeacherById(
-          db,
-          teacherId[0].teacherId
-        );
-        const subject = await subjectDB.getSubjectById(db, subjectCode);
       } else {
         await teachingDB.updateGroup(db, subjectCode, groupCode);
         const id = await teachingDB.getTeachingIdBySubjectAndGroup(
@@ -132,26 +125,31 @@ router.post("/assignGroup", authMiddleware("Admin"), async (req, res) => {
       groupCode,
       subjectCode
     );
-    for (const teachingRecord of all) {
-      const teaching = await teachingDB.getTeachingById(db, teachingRecord.id);
-      const group = await groupDB.getGroupById(db, groupCode);
-      await createEdgeGroupTeachings(
-        db,
-        group,
-        teaching,
-        groupCode,
-        subjectCode
-      );
-    }
-    res.redirect("/assignGroup");
+    await Promise.all(
+      all.map(async (teachingRecord) => {
+        const teaching = await teachingDB.getTeachingById(
+          db,
+          teachingRecord.id
+        );
+        const group = await groupDB.getGroupById(db, groupCode);
+        return createEdgeGroupTeachings(
+          db,
+          group,
+          teaching,
+          groupCode,
+          subjectCode
+        );
+      })
+    );
+    return res.redirect("/assignGroup");
   } catch (error) {
-    res.status(500).send(`Internal Server Error: ${error.message}`);
+    return res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
 
 router.get("/getGroupSubjects", async (req, res) => {
   try {
-    const groupId = req.query.groupId;
+    const { groupId } = req.query;
 
     if (!groupId) {
       return res.status(400).send("Missing groupId parameter.");
@@ -160,10 +158,10 @@ router.get("/getGroupSubjects", async (req, res) => {
     const groupSubjects = await groupTeaching.getSubjectsByGroup(db, groupId);
     const allSubjects = await subjectDB.getAllSubjects(db);
 
-    var unassignedSubjects = [];
-    for (var i = 0; i < allSubjects.length; i++) {
-      var isAssigned = false;
-      for (var j = 0; j < groupSubjects.length; j++) {
+    const unassignedSubjects = [];
+    for (let i = 0; i < allSubjects.length; i++) {
+      let isAssigned = false;
+      for (let j = 0; j < groupSubjects.length; j++) {
         if (groupSubjects[j].subjectId === allSubjects[i].id) {
           isAssigned = true;
           break;
@@ -173,9 +171,9 @@ router.get("/getGroupSubjects", async (req, res) => {
         unassignedSubjects.push(allSubjects[i]);
       }
     }
-    res.json(unassignedSubjects);
+    return res.json(unassignedSubjects);
   } catch (error) {
-    res.status(500).send(`Internal Server Error: ${error.message}`);
+    return res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 });
 

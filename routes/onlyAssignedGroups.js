@@ -21,7 +21,7 @@ router.get(
   authMiddleware(["Admin", "Student", "Teacher", "Scheduler"]),
   async (req, res) => {
     try {
-      var subjectId = req.query.subjectId;
+      const { subjectId } = req.query;
       const result = await groupDB.getGroupsBySubjectId(db, subjectId);
       res.send(result);
     } catch (error) {

@@ -17,15 +17,14 @@ async function setupDatabase() {
       });
 
       return createdDb;
-    } else {
-      const usedDb = await server.use({
-        name: "Timetable",
-        username: "root",
-        password: "root",
-      });
-
-      return usedDb;
     }
+    const usedDb = await server.use({
+      name: "Timetable",
+      username: "root",
+      password: "root",
+    });
+
+    return usedDb;
   } catch (error) {
     console.error("Error setting up database:", error);
     throw error;

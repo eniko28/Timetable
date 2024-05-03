@@ -23,7 +23,7 @@ router.use(
     try {
       const users = await usersDb.getAllUsers(db);
       res.render("users", {
-        users: users,
+        users,
       });
     } catch (error) {
       res.status(500).send(`Internal Server Error: ${error.message}`);

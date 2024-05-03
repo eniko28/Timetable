@@ -1,7 +1,7 @@
 import express from "express";
 import * as timetableDB from "../db/timetableDB.js";
 import * as teacherDB from "../db/teachersDB.js";
-import * as subjectBD from "../db/subjectsDB.js";
+import * as subjectDB from "../db/subjectsDB.js";
 import { authMiddleware } from "../middleware/auth.js";
 
 import setupDatabase from "../db/dbSetup.js";
@@ -28,17 +28,22 @@ router.get(
 
       const teachings = await timetableDB.selectTimetableByClassroom(db, name);
 
-      for (const teaching of teachings) {
-        const teacher = await teacherDB.getTeacherNameById(
-          db,
-          teaching.teacherId
-        );
-        const subject = await subjectBD.getSubjectById(db, teaching.subjectId);
+      const teacherPromises = teachings.map((teaching) =>
+        teacherDB.getTeacherNameById(db, teaching.teacherId)
+      );
+      const subjectPromises = teachings.map((teaching) =>
+        subjectDB.getSubjectById(db, teaching.subjectId)
+      );
 
-        teaching.teacherName = teacher;
-        teaching.subjectId = subject.name;
-        teaching.subjectType = subject.type;
-      }
+      const teachers = await Promise.all(teacherPromises);
+      const subjects = await Promise.all(subjectPromises);
+
+      teachings.forEach((teaching, index) => {
+        teaching.teacherName = teachers[index];
+        teaching.subjectId = subjects[index].name;
+        teaching.subjectType = subjects[index].type;
+      });
+
       res.render("classrooms", { teachings, name });
     } catch (error) {
       res.status(500).send(`Internal Server Error: ${error.message}`);

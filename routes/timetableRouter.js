@@ -22,20 +22,30 @@ setupDatabase()
 
 router.get("/timetable", authMiddleware(["Student"]), async (req, res) => {
   try {
-    const userId = req.session.userId;
+    const { userId } = req.session;
     const groupId = await studentDB.getGroupIdByStudentId(db, userId);
     const teachings = await timetableDB.selectTimetableByGroupId(db, groupId);
-    for (const teaching of teachings) {
-      const subject = await subjectDB.getSubjectById(db, teaching.subjectId);
-      teaching.subjectId = subject.name;
-      teaching.subjectType = subject.type;
-      teaching.classroomName = teaching.classroomName;
-      const teacher = await teacherDB.getTeacherById(db, teaching.teacherId);
-      teaching.teacherId = teacher.name;
-    }
+
+    await Promise.all(
+      teachings.map(async (teaching) => {
+        const subjectPromise = subjectDB.getSubjectById(db, teaching.subjectId);
+        const teacherPromise = teacherDB.getTeacherById(db, teaching.teacherId);
+
+        const [subject, teacher] = await Promise.all([
+          subjectPromise,
+          teacherPromise,
+        ]);
+
+        teaching.subjectName = subject.name;
+        teaching.subjectType = subject.type;
+        teaching.teacherName = teacher.name;
+      })
+    );
+
     const group = groupId;
     const groupName = await groupDB.getGroupsNameById(db, group);
     const groupsName = groupName[0].name;
+
     res.render("timetable", { teachings, groupsName, group });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
