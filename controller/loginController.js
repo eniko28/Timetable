@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import setupDatabase from "../db/dbSetup.js";
-import * as usersDB from "../db/usersDB.js";
+import * as usersDB from "../model/usersDB.js";
 
 dotenv.config();
 const secret = process.env.SECRET;

@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
-import * as usersDB from "../db/usersDB.js";
-import * as teachersDB from "../db/teachersDB.js";
-import * as studentsDB from "../db/studentsDB.js";
-import * as groupDB from "../db/groupsDB.js";
+import * as usersDB from "../model/usersDB.js";
+import * as teachersDB from "../model/teachersDB.js";
+import * as studentsDB from "../model/studentsDB.js";
+import * as groupDB from "../model/groupsDB.js";
 import { createEdgeStudentsGroups } from "../db/createEdges.js";
 import setupDatabase from "../db/dbSetup.js";
 

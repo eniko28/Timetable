@@ -1,4 +1,4 @@
-import * as subjectDB from "../db/subjectsDB.js";
+import * as subjectDB from "../model/subjectsDB.js";
 import setupDatabase from "../db/dbSetup.js";
 
 let db;

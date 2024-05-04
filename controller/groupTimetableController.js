@@ -1,4 +1,4 @@
-import * as groupDB from "../db/groupsDB.js";
+import * as groupDB from "../model/groupsDB.js";
 import setupDatabase from "../db/dbSetup.js";
 
 let db;

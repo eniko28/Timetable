@@ -2,11 +2,11 @@ import setupDatabase from "../db/dbSetup.js";
 import {
   getTeachersByGroupId,
   getSubjectsByTeacherId,
-} from "../db/teachingsDB.js";
-import * as groupDB from "../db/groupsDB.js";
-import * as classroomDB from "../db/classroomDB.js";
-import * as wishlistDB from "../db/wishlistsDB.js";
-import * as timetableDB from "../db/timetableDB.js";
+} from "../model/teachingsDB.js";
+import * as groupDB from "../model/groupsDB.js";
+import * as classroomDB from "../model/classroomDB.js";
+import * as wishlistDB from "../model/wishlistsDB.js";
+import * as timetableDB from "../model/timetableDB.js";
 
 let db;
 

@@ -1,11 +1,11 @@
 import express from "express";
 import { v4 as uuidv4 } from "uuid";
-import * as wishlistDB from "../db/wishlistsDB.js";
-import * as subjectDB from "../db/subjectsDB.js";
-import * as teachersSubjects from "../db/teachersTeachingEdge.js";
+import * as wishlistDB from "../model/wishlistsDB.js";
+import * as subjectDB from "../model/subjectsDB.js";
+import * as teachersSubjects from "../model/teachersTeachingEdge.js";
 import * as createEdge from "../db/createEdges.js";
-import * as groupDB from "../db/groupsDB.js";
-import * as teacherDB from "../db/teachersDB.js";
+import * as groupDB from "../model/groupsDB.js";
+import * as teacherDB from "../model/teachersDB.js";
 import setupDatabase from "../db/dbSetup.js";
 
 const router = express.Router();

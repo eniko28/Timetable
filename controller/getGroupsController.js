@@ -1,5 +1,5 @@
 import setupDatabase from "../db/dbSetup.js";
-import * as teachingDB from "../db/teachingsDB.js";
+import * as teachingDB from "../model/teachingsDB.js";
 
 let db;
 

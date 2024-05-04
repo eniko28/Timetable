@@ -1,9 +1,9 @@
 import { existsSync, copyFileSync, unlinkSync } from "fs";
 import { join, basename } from "path";
 import setupDatabase from "../db/dbSetup.js";
-import * as personalDB from "../db/personalDB.js";
-import { updateStudent } from "../db/studentsDB.js";
-import { updateTeachers } from "../db/teachersDB.js";
+import * as personalDB from "../model/personalDB.js";
+import { updateStudent } from "../model/studentsDB.js";
+import { updateTeachers } from "../model/teachersDB.js";
 
 let db;
 

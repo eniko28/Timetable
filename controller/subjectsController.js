@@ -1,6 +1,6 @@
-import * as timetableDB from "../db/timetableDB.js";
-import * as subjectBD from "../db/subjectsDB.js";
-import * as teacherBD from "../db/teachersDB.js";
+import * as timetableDB from "../model/timetableDB.js";
+import * as subjectBD from "../model/subjectsDB.js";
+import * as teacherBD from "../model/teachersDB.js";
 import setupDatabase from "../db/dbSetup.js";
 
 let db;

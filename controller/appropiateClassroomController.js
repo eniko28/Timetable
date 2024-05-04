@@ -1,6 +1,6 @@
 import setupDatabase from "../db/dbSetup.js";
-import * as classroomDB from "../db/classroomDB.js";
-import * as subjectBD from "../db/subjectsDB.js";
+import * as classroomDB from "../model/classroomDB.js";
+import * as subjectBD from "../model/subjectsDB.js";
 
 let db;
 

@@ -1,4 +1,4 @@
-import * as classroomDB from "../db/classroomDB.js";
+import * as classroomDB from "../model/classroomDB.js";
 import setupDatabase from "../db/dbSetup.js";
 
 let db;

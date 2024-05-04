@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
-import * as subjectDB from "../db/subjectsDB.js";
-import * as groupDB from "../db/groupsDB.js";
-import * as teacherDB from "../db/teachersDB.js";
-import * as teachingDB from "../db/teachingsDB.js";
-import * as groupTeaching from "../db/groupTeachingsEdge.js";
+import * as subjectDB from "../model/subjectsDB.js";
+import * as groupDB from "../model/groupsDB.js";
+import * as teacherDB from "../model/teachersDB.js";
+import * as teachingDB from "../model/teachingsDB.js";
+import * as groupTeaching from "../model/groupTeachingsEdge.js";
 import {
   createEdgeGroupTeachings,
   createEdgeTeacherTeachings,

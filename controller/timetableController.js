@@ -1,9 +1,9 @@
 import express from "express";
-import * as studentDB from "../db/studentsDB.js";
-import * as timetableDB from "../db/timetableDB.js";
-import * as groupDB from "../db/groupsDB.js";
-import * as teacherDB from "../db/teachersDB.js";
-import * as subjectDB from "../db/subjectsDB.js";
+import * as studentDB from "../model/studentsDB.js";
+import * as timetableDB from "../model/timetableDB.js";
+import * as groupDB from "../model/groupsDB.js";
+import * as teacherDB from "../model/teachersDB.js";
+import * as subjectDB from "../model/subjectsDB.js";
 import setupDatabase from "../db/dbSetup.js";
 
 const router = express.Router();

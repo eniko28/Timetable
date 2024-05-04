@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 import setupDatabase from "../db/dbSetup.js";
-import * as teachingDB from "../db/teachingsDB.js";
-import * as subjectDB from "../db/subjectsDB.js";
-import * as teacherDB from "../db/teachersDB.js";
-import * as groupDB from "../db/groupsDB.js";
-import * as classroomDB from "../db/classroomDB.js";
-import * as wishlistDB from "../db/wishlistsDB.js";
-import * as timetableDB from "../db/timetableDB.js";
+import * as teachingDB from "../model/teachingsDB.js";
+import * as subjectDB from "../model/subjectsDB.js";
+import * as teacherDB from "../model/teachersDB.js";
+import * as groupDB from "../model/groupsDB.js";
+import * as classroomDB from "../model/classroomDB.js";
+import * as wishlistDB from "../model/wishlistsDB.js";
+import * as timetableDB from "../model/timetableDB.js";
 
 let db;
 

@@ -1,8 +1,8 @@
 import setupDatabase from "../db/dbSetup.js";
-import * as timetableDB from "../db/timetableDB.js";
-import * as groupDB from "../db/groupsDB.js";
-import * as teacherDB from "../db/teachersDB.js";
-import * as subjectBD from "../db/subjectsDB.js";
+import * as timetableDB from "../model/timetableDB.js";
+import * as groupDB from "../model/groupsDB.js";
+import * as teacherDB from "../model/teachersDB.js";
+import * as subjectBD from "../model/subjectsDB.js";
 
 let db;
 

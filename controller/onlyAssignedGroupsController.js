@@ -1,6 +1,6 @@
 import express from "express";
 import setupDatabase from "../db/dbSetup.js";
-import * as groupDB from "../db/groupsDB.js";
+import * as groupDB from "../model/groupsDB.js";
 import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
