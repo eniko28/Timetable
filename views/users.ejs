@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Subjects</title>
+    <title>Users</title>
     <link rel="stylesheet" href="style/adminStyle.css">
 </head>
 
@@ -33,6 +33,14 @@
                 <div></div>
             </div>
             <% }); %>
+    </div>
+
+    <div class="pagination">
+        <% for(let i=1; i <=totalPages; i++) { %>
+            <a href="/users?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>">
+                <%= i %>
+            </a>
+            <% } %>
     </div>
 
     <script src="validation/filterUsers.js" defer></script>

@@ -1,8 +1,6 @@
-import express from "express";
 import * as usersDb from "../model/usersDB.js";
 import setupDatabase from "../db/dbSetup.js";
 
-const router = express.Router();
 let db;
 
 setupDatabase()
@@ -17,12 +15,18 @@ setupDatabase()
 export const renderUsersPage = async (req, res) => {
   try {
     const users = await usersDb.getAllUsers(db);
+    users.sort((a, b) => a.name.localeCompare(b.name));
+    const page = parseInt(req.query.page, 10) || 1;
+    const perPage = 9;
+
+    const usersOnPage = users.slice((page - 1) * perPage, page * perPage);
+
     res.render("users", {
-      users,
+      users: usersOnPage,
+      currentPage: page,
+      totalPages: Math.ceil(users.length / perPage),
     });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 };
-
-export default router;

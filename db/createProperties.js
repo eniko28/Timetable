@@ -221,6 +221,7 @@ function createPropertyTeachers(db, className) {
       Promise.all([
         createPropertyIfNotExists(classObj, "id", "String"),
         createPropertyIfNotExists(classObj, "name", "String"),
+        createPropertyIfNotExists(classObj, "credit", "Integer"),
         createPropertyIfNotExists(classObj, "personal", "Linkset", "Personal"),
       ])
     )

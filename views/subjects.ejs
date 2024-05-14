@@ -30,6 +30,14 @@
             <% }); %>
     </div>
 
+    <div class="pagination">
+        <% for(let i=1; i <=totalPages; i++) { %>
+            <a href="/subjects?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>">
+                <%= i %>
+            </a>
+            <% } %>
+    </div>
+
     <script src="validation/filterSubjects.js" defer></script>
     <a href="/admin" class="back-button">Back</a>
 </body>

@@ -18,9 +18,9 @@
                 </h4>
                 <% if (type==='Teacher' || type==='Student' ) { %>
                     <% if (!userData) { %>
-                        <button data-action="add">Add more information</button>
+                        <button class="home-button" data-action="add">Add more information</button>
                         <% } else { %>
-                            <button data-action="edit">Edit information</button>
+                            <button class="home-button" data-action="edit">Edit information</button>
                             <% } %>
                                 <% } %>
             </div>
@@ -81,7 +81,7 @@
                 <label for="phone">Phone:</label>
                 <input type="tel" id="phone" name="phone" value="<%= userData ? userData.phone : '' %>">
                 <br> <br>
-                <input type="submit" value="Save">
+                <input class="submit-button" type="submit" value="Save">
             </form>
         </div>
     </div>

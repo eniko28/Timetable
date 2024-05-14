@@ -94,7 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
     uniqueTeachers.forEach((teacher) => {
       const option = document.createElement("option");
       option.text = teacher;
-      teacherInput.add(option);
+      if (teacher !== undefined) {
+        teacherInput.add(option);
+      }
     });
   }
 
@@ -117,7 +119,9 @@ document.addEventListener("DOMContentLoaded", () => {
     availableSubjects.forEach((subject) => {
       const option = document.createElement("option");
       option.text = subject;
-      subjectInput.add(option);
+      if (subject !== undefined) {
+        subjectInput.add(option);
+      }
     });
   }
 
@@ -226,6 +230,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   timetableCells.forEach((cell) => {
     cell.addEventListener("click", () => {
+      timetableCells.forEach((cells) => {
+        cells.style.backgroundColor = "";
+      });
+      cell.style.backgroundColor = "white";
       formContainer.style.display = "block";
       const cellId = cell.id.split("-");
       const selectedDay = dayMappings[cellId[0]];

@@ -10,8 +10,7 @@
 <body>
     <div>
         <h1>Assign teachers to subjects!</h1>
-        <form action="/assignTeacher" method="POST" enctype="multipart/form-data">
-
+        <form id="assignTeacher" action="/assignTeacher" method="POST" enctype="multipart/form-data">
             <label for="teacherCode">Teacher Id:</label>
             <select id="teacherCode" name="teacherCode">
                 <option value="">Choose...</option>
@@ -21,6 +20,7 @@
                     </option>
                     <% }); %>
             </select> <br>
+            <span class="error-message" id="teacherIdError"></span><br>
 
             <label for="subjectCode">Subject:</label>
             <select id="subjectCode" name="subjectCode">
@@ -33,10 +33,12 @@
                     </option>
                     <% }); %>
             </select> <br>
+            <span class="error-message" id="subjectIdError"></span><br>
             <input class="submit-button" type="submit" value="Assign teacher">
         </form>
     </div>
     <a href="/admin" class="back-button">Back</a>
+    <script src="/validation/assignTeacherValidation.js"></script>
 </body>
 
 </html>

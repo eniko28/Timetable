@@ -24,6 +24,8 @@ setupDatabase()
 export const renderAddWishlistsPage = async (req, res) => {
   try {
     const id = req.session.userId;
+    const cr = await teacherDB.getCredit(db, id);
+    const { credit } = cr[0];
     const subjectIds = await teachersSubjects.getSubjectByUserId(db, id);
 
     await Promise.all(
@@ -35,7 +37,7 @@ export const renderAddWishlistsPage = async (req, res) => {
     );
 
     const groups = await groupDB.getAllGroups(db);
-    res.render("addWishlist", { id, subjectIds, groups });
+    res.render("addWishlist", { id, subjectIds, groups, credit });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }
@@ -44,23 +46,35 @@ export const renderAddWishlistsPage = async (req, res) => {
 export const handleAddWishlists = async (req, res) => {
   try {
     const { teacherCode, day, start, end } = req.fields;
+    let { credit } = req.fields;
 
     if (!teacherCode || !day || !start || !end) {
-      return res.status(400).send("Missing required data.");
+      return res
+        .status(400)
+        .render("error", { message: "Missing required data." });
+    }
+
+    if (credit <= 0) {
+      return res
+        .status(400)
+        .render("error", { message: "No more available credits." });
     }
 
     const timeFormat = /^(0[8-9]|1[0-9]|20):[0-5][0-9]$/;
     if (!start.match(timeFormat) || !end.match(timeFormat)) {
-      return res
-        .status(400)
-        .send("Invalid time format. Please use HH:mm between 8:00 and 20:00.");
+      return res.status(400).render("error", {
+        message:
+          "Invalid time format. Please use HH:mm between 8:00 and 20:00.",
+      });
     }
 
     const startTime = new Date(`2000-01-01T${start}:00Z`);
     const endTime = new Date(`2000-01-01T${end}:00Z`);
 
     if (startTime > endTime) {
-      return res.status(400).send("Start time must be before end time.");
+      return res
+        .status(400)
+        .render("error", { message: "Start time must be before end time." });
     }
 
     const wishlistId = uuidv4();
@@ -73,6 +87,9 @@ export const handleAddWishlists = async (req, res) => {
       start,
       end
     );
+
+    credit -= 1;
+    await teacherDB.updateTeachersCredit(db, teacherCode, credit);
 
     const teacher = await teacherDB.getTeacherById(db, teacherCode);
     const wishlist = await wishlistDB.getWishlistById(db, wishlistId);

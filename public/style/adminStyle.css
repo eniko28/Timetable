@@ -27,7 +27,7 @@ h4 {
 }
 
 form {
-  width: 50%;
+  width: 25%;
   margin: 0 auto;
   background-color: #f4e5d3;
   padding: 20px;
@@ -128,6 +128,18 @@ select.filter {
   border-color: #a0763f;
 }
 
+
+.home-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #d2b48c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -217,4 +229,13 @@ a.back-button:hover {
   width: 100px;
   height: 100px;
   border-radius: 50%;
+}
+
+.pagination {
+  text-align: center;
+}
+
+.pagination a {
+  text-decoration: none;
+  color: black;
 }

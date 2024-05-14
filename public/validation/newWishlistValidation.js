@@ -40,29 +40,47 @@ function updateGroups() {
 document.getElementById("addWishlists").addEventListener("submit", (event) => {
   const start = document.getElementsByName("start")[0].value.trim();
   const end = document.getElementsByName("end")[0].value.trim();
-  const groupId = document.getElementsByName("groupCode")[0].value;
-  const subjectId = document.getElementsByName("subjectCode")[0].value;
+  const day = document.getElementsByName("day")[0].value.trim();
 
   const startError = document.getElementById("startError");
   const endError = document.getElementById("endError");
+  const dayError = document.getElementById("dayError");
 
   startError.textContent = "";
   endError.textContent = "";
+  dayError.textContent = "";
 
-  if (start === "" || end === "" || groupId === "" || subjectId === "") {
-    startError.textContent = "Please fill in all fields";
+  if (!isValidTime(start)) {
+    startError.textContent = "Please enter valid start times (HH:mm)";
     event.preventDefault();
   }
-  if (!isValidTime(start) || !isValidTime(end)) {
-    startError.textContent = "Please enter valid start and end times (HH:mm)";
+  if (!isValidTime(end)) {
+    endError.textContent = "Please enter valid end times (HH:mm)";
     event.preventDefault();
   }
-  if (!isWithinWorkingHours(start) || !isWithinWorkingHours(end)) {
+  if (!isWithinWorkingHours(start)) {
     startError.textContent = "Please enter times between 08:00 and 20:00";
+    event.preventDefault();
+  }
+  if (!isWithinWorkingHours(end)) {
+    endError.textContent = "Please enter times between 08:00 and 20:00";
     event.preventDefault();
   }
   if (!isStartBeforeEnd(start, end)) {
     startError.textContent = "Start time must be before end time";
+    endError.textContent = "Start time must be before end time";
+    event.preventDefault();
+  }
+  if (start === "") {
+    startError.textContent = "Please select a start hour";
+    event.preventDefault();
+  }
+  if (end === "") {
+    endError.textContent = "Please select an end hour";
+    event.preventDefault();
+  }
+  if (day === "") {
+    dayError.textContent = "Please select day";
     event.preventDefault();
   }
 });

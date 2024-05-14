@@ -51,8 +51,16 @@ export const handleAddSubjects = async (req, res) => {
 export const renderSubjectsPage = async (req, res) => {
   try {
     const subjects = await subjectsDB.getAllSubjects(db);
+    subjects.sort((a, b) => a.name.localeCompare(b.name));
+    const page = parseInt(req.query.page, 10) || 1;
+    const perPage = 9;
+
+    const subjectsOnPage = subjects.slice((page - 1) * perPage, page * perPage);
+
     return res.render("subjects", {
-      subjects,
+      subjects: subjectsOnPage,
+      currentPage: page,
+      totalPages: Math.ceil(subjects.length / perPage),
     });
   } catch (error) {
     return res.status(500).send(`Internal Server Error: ${error.message}`);

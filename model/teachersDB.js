@@ -2,10 +2,32 @@ import { getUserData } from "./personalDB.js";
 
 export async function insertTeacherNameAndId(db, teacherCode, name) {
   try {
-    const query = `INSERT INTO Teachers SET id = '${teacherCode}', name = '${name}'`;
+    const credit = 5;
+    const query = `INSERT INTO Teachers SET id = '${teacherCode}', name = '${name}', credit = '${credit}'`;
     await db.query(query);
   } catch (error) {
     console.error("Error inserting teacher:", error);
+    throw error;
+  }
+}
+
+export async function updateTeachersCredit(db, teacherCode, credit) {
+  try {
+    const query = `UPDATE Teachers SET credit = '${credit}' WHERE id = '${teacherCode}'`;
+    await db.query(query);
+  } catch (error) {
+    console.error("Error updating teacher's credit:", error);
+    throw error;
+  }
+}
+
+export async function getCredit(db, teacherCode) {
+  try {
+    const query = `SELECT credit FROM Teachers WHERE id = '${teacherCode}'`;
+    const result = await db.query(query);
+    return result;
+  } catch (error) {
+    console.error("Error updating teacher's credit:", error);
     throw error;
   }
 }
