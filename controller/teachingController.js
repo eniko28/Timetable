@@ -1,12 +1,12 @@
-import { v4 as uuidv4 } from "uuid";
-import setupDatabase from "../db/dbSetup.js";
-import * as teachingDB from "../model/teachingsDB.js";
-import * as subjectDB from "../model/subjectsDB.js";
-import * as teacherDB from "../model/teachersDB.js";
-import * as groupDB from "../model/groupsDB.js";
-import * as classroomDB from "../model/classroomDB.js";
-import * as wishlistDB from "../model/wishlistsDB.js";
-import * as timetableDB from "../model/timetableDB.js";
+import { v4 as uuidv4 } from 'uuid';
+import setupDatabase from '../db/dbSetup.js';
+import * as teachingDB from '../model/teachingsDB.js';
+import * as subjectDB from '../model/subjectsDB.js';
+import * as teacherDB from '../model/teachersDB.js';
+import * as groupDB from '../model/groupsDB.js';
+import * as classroomDB from '../model/classroomDB.js';
+import * as wishlistDB from '../model/wishlistsDB.js';
+import * as timetableDB from '../model/timetableDB.js';
 
 let db;
 
@@ -15,7 +15,7 @@ setupDatabase()
     db = database;
   })
   .catch((error) => {
-    console.error("Error setting up database:", error);
+    console.error('Error setting up database:', error);
     process.exit(1);
   });
 
@@ -27,7 +27,7 @@ export const getWishlists = async (req, res) => {
     const timetable = await timetableDB.selectTimetable(db);
     const groups = await groupDB.getAllGroups(db);
 
-    res.render("wishlists", {
+    res.render('wishlists', {
       wishlists,
       classrooms,
       teachers,
@@ -41,89 +41,50 @@ export const getWishlists = async (req, res) => {
 
 export const postWishlists = async (req, res) => {
   try {
-    const { teacherId, subjectId, groupId, day, start, end, classroomName } =
-      req.fields;
-    if (
-      !groupId ||
-      !subjectId ||
-      !teacherId ||
-      !day ||
-      +!start ||
-      !end ||
-      !classroomName
-    ) {
-      res.status(400).render("error", {
-        message: "Missing required data.",
+    const { teacherId, subjectId, groupId, day, start, end, classroomName } = req.fields;
+    if (!groupId || !subjectId || !teacherId || !day || +!start || !end || !classroomName) {
+      res.status(400).render('error', {
+        message: 'Missing required data.',
       });
       return;
     }
-    const existsTeacher = await timetableDB.getFreeTeacher(
-      db,
-      teacherId,
-      start,
-      end,
-      day
-    );
+    const existsTeacher = await timetableDB.getFreeTeacher(db, teacherId, start, end, day);
 
     if (existsTeacher.length !== 0) {
-      if (
-        existsTeacher[0].groupId.substring(0, 2) !== groupId.substring(0, 2)
-      ) {
-        res.status(400).render("error", {
-          message: "The teacher already has a class scheduled for that time.",
+      if (existsTeacher[0].groupId.substring(0, 2) !== groupId.substring(0, 2)) {
+        res.status(400).render('error', {
+          message: 'The teacher already has a class scheduled for that time.',
         });
         return;
       }
     }
 
-    const existsGroup = await timetableDB.getFreeGroup(
-      db,
-      groupId,
-      day,
-      start,
-      end
-    );
+    const existsGroup = await timetableDB.getFreeGroup(db, groupId, day, start, end);
 
     if (existsGroup.length !== 0) {
-      res.status(400).render("error", {
-        message: "The group already has a class scheduled for that time.",
+      res.status(400).render('error', {
+        message: 'The group already has a class scheduled for that time.',
       });
       return;
     }
-    const existingSubject = await timetableDB.getTeachingsByGroupAndSubjectId(
-      db,
-      groupId,
-      subjectId
-    );
+    const existingSubject = await timetableDB.getTeachingsByGroupAndSubjectId(db, groupId, subjectId);
     if (existingSubject.length !== 0) {
-      res.status(400).render("error", {
-        message:
-          "The group already has this subject scheduled in their timetable.",
+      res.status(400).render('error', {
+        message: 'The group already has this subject scheduled in their timetable.',
       });
       return;
     }
 
-    const isFreeClassroom = await timetableDB.getFreeClassroom(
-      db,
-      classroomName,
-      start,
-      end,
-      day
-    );
+    const isFreeClassroom = await timetableDB.getFreeClassroom(db, classroomName, start, end, day);
     if (isFreeClassroom.length !== 0) {
-      res.status(400).render("error", {
-        message: "The classroom is booked at this time.",
+      res.status(400).render('error', {
+        message: 'The classroom is booked at this time.',
       });
       return;
     }
     const timetableId = uuidv4();
 
-    const teachingId = await teachingDB.getTeachingId(
-      db,
-      teacherId,
-      subjectId,
-      groupId
-    );
+    const teachingId = await teachingDB.getTeachingId(db, teacherId, subjectId, groupId);
     const teaching = await teachingDB.getTeachingById(db, teachingId[0].id);
     const classroom = await classroomDB.getClassroomByName(db, classroomName);
 
@@ -138,12 +99,12 @@ export const postWishlists = async (req, res) => {
       end,
       classroomName,
       teaching,
-      classroom
+      classroom,
     );
 
-    res.redirect("/wishlists");
+    res.redirect('/wishlists');
   } catch (error) {
-    console.error("Error processing wishlist data:", error);
+    console.error('Error processing wishlist data:', error);
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 };
@@ -151,23 +112,14 @@ export const postWishlists = async (req, res) => {
 export const fetchWishlists = async (req, res) => {
   try {
     const { day, start, subject } = req.query;
-    const timetable = await timetableDB.getTimetableByDayAndTime(
-      db,
-      day,
-      start
-    );
+    const timetable = await timetableDB.getTimetableByDayAndTime(db, day, start);
     const subjectType = await subjectDB.getSubjectTypeById(db, subject);
     const occupiedClassrooms = timetable.map((slot) => slot.classroomName);
-    const allClassrooms = await classroomDB.getClassroomByType(
-      db,
-      subjectType.type
-    );
-    const freeClassrooms = allClassrooms.filter(
-      (classroom) => !occupiedClassrooms.includes(classroom.name)
-    );
+    const allClassrooms = await classroomDB.getClassroomByType(db, subjectType.type);
+    const freeClassrooms = allClassrooms.filter((classroom) => !occupiedClassrooms.includes(classroom.name));
     res.json(freeClassrooms);
   } catch (error) {
-    console.error("Error fetching free classrooms:", error);
+    console.error('Error fetching free classrooms:', error);
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 };

@@ -1,7 +1,7 @@
-import { basename, join } from "path";
-import { existsSync } from "fs";
+import { basename, join } from 'path';
+import { existsSync } from 'fs';
 
-const uploadDir = join(process.cwd(), "uploadDir");
+const uploadDir = join(process.cwd(), 'uploadDir');
 
 export const renderStudentPage = (req, res) => {
   try {
@@ -14,7 +14,7 @@ export const renderStudentPage = (req, res) => {
       imagePath = basename(profilePicturePath);
     }
 
-    res.render("student.ejs", { userId, type, imagePath });
+    res.render('student.ejs', { userId, type, imagePath });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }

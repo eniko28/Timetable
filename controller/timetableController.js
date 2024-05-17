@@ -1,10 +1,10 @@
-import express from "express";
-import * as studentDB from "../model/studentsDB.js";
-import * as timetableDB from "../model/timetableDB.js";
-import * as groupDB from "../model/groupsDB.js";
-import * as teacherDB from "../model/teachersDB.js";
-import * as subjectDB from "../model/subjectsDB.js";
-import setupDatabase from "../db/dbSetup.js";
+import express from 'express';
+import * as studentDB from '../model/studentsDB.js';
+import * as timetableDB from '../model/timetableDB.js';
+import * as groupDB from '../model/groupsDB.js';
+import * as teacherDB from '../model/teachersDB.js';
+import * as subjectDB from '../model/subjectsDB.js';
+import setupDatabase from '../db/dbSetup.js';
 
 const router = express.Router();
 let db;
@@ -14,7 +14,7 @@ setupDatabase()
     db = database;
   })
   .catch((error) => {
-    console.error("Error setting up database:", error);
+    console.error('Error setting up database:', error);
     process.exit(1);
   });
 
@@ -29,22 +29,19 @@ export const renderTimetablePage = async (req, res) => {
         const subjectPromise = subjectDB.getSubjectById(db, teaching.subjectId);
         const teacherPromise = teacherDB.getTeacherById(db, teaching.teacherId);
 
-        const [subject, teacher] = await Promise.all([
-          subjectPromise,
-          teacherPromise,
-        ]);
+        const [subject, teacher] = await Promise.all([subjectPromise, teacherPromise]);
 
         teaching.subjectName = subject.name;
         teaching.subjectType = subject.type;
         teaching.teacherName = teacher.name;
-      })
+      }),
     );
 
     const group = groupId;
     const groupName = await groupDB.getGroupsNameById(db, group);
     const groupsName = groupName[0].name;
 
-    res.render("timetable", { teachings, groupsName, group });
+    res.render('timetable', { teachings, groupsName, group });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }

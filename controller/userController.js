@@ -1,5 +1,5 @@
-import * as usersDb from "../model/usersDB.js";
-import setupDatabase from "../db/dbSetup.js";
+import * as usersDb from '../model/usersDB.js';
+import setupDatabase from '../db/dbSetup.js';
 
 let db;
 
@@ -8,7 +8,7 @@ setupDatabase()
     db = database;
   })
   .catch((error) => {
-    console.error("Error setting up database:", error);
+    console.error('Error setting up database:', error);
     process.exit(1);
   });
 
@@ -21,7 +21,7 @@ export const renderUsersPage = async (req, res) => {
 
     const usersOnPage = users.slice((page - 1) * perPage, page * perPage);
 
-    res.render("users", {
+    res.render('users', {
       users: usersOnPage,
       currentPage: page,
       totalPages: Math.ceil(users.length / perPage),

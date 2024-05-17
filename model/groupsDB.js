@@ -1,10 +1,10 @@
 export async function getAllGroups(db) {
   try {
-    const query = "SELECT FROM Groups";
+    const query = 'SELECT FROM Groups';
     const groups = await db.query(query);
     return groups;
   } catch (error) {
-    console.error("Error getting groups from the database:", error);
+    console.error('Error getting groups from the database:', error);
     throw error;
   }
 }
@@ -15,10 +15,7 @@ export async function getGroupById(db, groupId) {
     const group = await db.query(query);
     return group[0];
   } catch (error) {
-    console.error(
-      `Error getting group with ID ${groupId} from the database:`,
-      error
-    );
+    console.error(`Error getting group with ID ${groupId} from the database:`, error);
     throw error;
   }
 }
@@ -29,10 +26,7 @@ export async function getGroupIdByRid(db, groupRid) {
     const groups = await db.query(query);
     return groups;
   } catch (error) {
-    console.error(
-      `Error getting group with RID ${groupRid} from the database:`,
-      error
-    );
+    console.error(`Error getting group with RID ${groupRid} from the database:`, error);
     throw error;
   }
 }
@@ -43,21 +37,18 @@ export async function getGroupsNameById(db, groupId) {
     const groups = await db.query(query);
     return groups;
   } catch (error) {
-    console.error(
-      `Error getting group with Id ${groupId} from the database:`,
-      error
-    );
+    console.error(`Error getting group with Id ${groupId} from the database:`, error);
     throw error;
   }
 }
 
 export async function getAllGroupIds(db) {
   try {
-    const query = "SELECT id FROM Groups ";
+    const query = 'SELECT id FROM Groups ';
     const groups = await db.query(query);
     return groups;
   } catch (error) {
-    console.error("Error getting groupNames from the database:", error);
+    console.error('Error getting groupNames from the database:', error);
     throw error;
   }
 }
@@ -68,10 +59,7 @@ export async function getGroupsByNameAndGradeLevel(db, name, gradeLevel) {
     const groups = await db.query(query);
     return groups;
   } catch (error) {
-    console.error(
-      `Error getting group with name ${name}  AND gradeLevel ${gradeLevel}from the database:`,
-      error
-    );
+    console.error(`Error getting group with name ${name}  AND gradeLevel ${gradeLevel}from the database:`, error);
     throw error;
   }
 }

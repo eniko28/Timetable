@@ -1,10 +1,10 @@
 export async function selectTimetable(db) {
   try {
-    const query = "SELECT FROM Timetable";
+    const query = 'SELECT FROM Timetable';
     const result = await db.query(query);
     return result;
   } catch (error) {
-    console.error("Error selecting timetable by group ID:", error);
+    console.error('Error selecting timetable by group ID:', error);
     throw error;
   }
 }
@@ -15,7 +15,7 @@ export async function selectTimetableByGroupId(db, groupId) {
     const result = await db.query(query);
     return result;
   } catch (error) {
-    console.error("Error selecting timetable by group ID:", error);
+    console.error('Error selecting timetable by group ID:', error);
     throw error;
   }
 }
@@ -26,7 +26,7 @@ export async function selectTimetableByClassroom(db, classroomName) {
     const result = await db.query(query);
     return result;
   } catch (error) {
-    console.error("Error selecting timetable by classroom:", error);
+    console.error('Error selecting timetable by classroom:', error);
     throw error;
   }
 }
@@ -37,7 +37,7 @@ export async function selectTimetableByTeacherId(db, teacherId) {
     const result = await db.query(query);
     return result;
   } catch (error) {
-    console.error("Error selecting timetable by teacher ID:", error);
+    console.error('Error selecting timetable by teacher ID:', error);
     throw error;
   }
 }
@@ -48,7 +48,7 @@ export async function selectTimetableBySubjectId(db, subjectId) {
     const result = await db.query(query);
     return result;
   } catch (error) {
-    console.error("Error selecting timetable by subject ID:", error);
+    console.error('Error selecting timetable by subject ID:', error);
     throw error;
   }
 }
@@ -59,40 +59,29 @@ export async function getTimetableById(db, timetableId) {
     const result = await db.query(query);
     return result[0];
   } catch (error) {
-    console.error("Error selecting timetable by timetable ID:", error);
+    console.error('Error selecting timetable by timetable ID:', error);
     throw error;
   }
 }
 
-export async function getTimetebaleByTeacherId(
-  db,
-  teacherId,
-  subjectId,
-  groupId
-) {
+export async function getTimetebaleByTeacherId(db, teacherId, subjectId, groupId) {
   try {
     const query = `SELECT FROM Timetable WHERE teacherId = '${teacherId}' AND subjectId = '${subjectId}' AND groupId = '${groupId}'`;
     const result = await db.query(query);
     return result;
   } catch (error) {
-    console.error("Error selecting timetable by timetable ID:", error);
+    console.error('Error selecting timetable by timetable ID:', error);
     throw error;
   }
 }
 
-export async function getTimetableByTeacherAndTime(
-  db,
-  teacherId,
-  startTime,
-  endTime,
-  day
-) {
+export async function getTimetableByTeacherAndTime(db, teacherId, startTime, endTime, day) {
   try {
     const query = `SELECT FROM Timetable WHERE teacherId = '${teacherId}' AND start = '${startTime}' AND end = '${endTime}' AND day = '${day}'`;
     const result = await db.query(query);
     return result;
   } catch (error) {
-    console.error("Error selecting timetable by teacher and time:", error);
+    console.error('Error selecting timetable by teacher and time:', error);
     throw error;
   }
 }
@@ -103,10 +92,7 @@ export async function getFreeTeacher(db, teacherId, start, end, day) {
     const teacher = await db.query(query);
     return teacher;
   } catch (error) {
-    console.error(
-      `Error getting teaching with ID ${teacherId} from the database:`,
-      error
-    );
+    console.error(`Error getting teaching with ID ${teacherId} from the database:`, error);
     throw error;
   }
 }
@@ -117,10 +103,7 @@ export async function getFreeGroup(db, groupId, start, end, day) {
     const teacher = await db.query(query);
     return teacher;
   } catch (error) {
-    console.error(
-      `Error getting teaching with ID ${groupId} from the database:`,
-      error
-    );
+    console.error(`Error getting teaching with ID ${groupId} from the database:`, error);
     throw error;
   }
 }
@@ -131,10 +114,7 @@ export async function getTeachingsByGroupAndSubjectId(db, groupId, subjectId) {
     const teacher = await db.query(query);
     return teacher;
   } catch (error) {
-    console.error(
-      `Error getting teaching with ID ${subjectId} from the database:`,
-      error
-    );
+    console.error(`Error getting teaching with ID ${subjectId} from the database:`, error);
     throw error;
   }
 }
@@ -145,10 +125,7 @@ export async function getFreeClassroom(db, classroomName, start, end, day) {
     const classroom = await db.query(query);
     return classroom;
   } catch (error) {
-    console.error(
-      `Error getting classroom with name: ${classroomName} from the database:`,
-      error
-    );
+    console.error(`Error getting classroom with name: ${classroomName} from the database:`, error);
     throw error;
   }
 }
@@ -159,72 +136,60 @@ export async function getTimetableByDayAndTime(db, day, start) {
     const result = await db.query(query);
     return result;
   } catch (error) {
-    console.error("Error selecting timetable by teacher and time:", error);
+    console.error('Error selecting timetable by teacher and time:', error);
     throw error;
   }
 }
 
 export async function insertTimetable(
   db,
-  timetableId,
+  timetableCode,
   teacherCode,
   subjectCode,
   groupCode,
-  day,
-  start,
-  end,
-  classroomName,
+  timetableDay,
+  timetableStart,
+  timetableEnd,
+  timetableClassroomName,
   teaching,
-  classroom
+  classroom,
 ) {
   await db
-    .let("newTimetable", (nt) => {
-      nt.insert()
-        .into("Timetable")
-        .set({
-          timetableId,
-          teacherId: teacherCode,
-          subjectId: subjectCode,
-          groupId: groupCode,
-          day,
-          start,
-          end,
-          classroomName,
-        })
-        .return("@rid");
+    .let('newTimetable', (nt) => {
+      nt.insert().into('Timetable').set({
+        timetableId: timetableCode,
+        teacherId: teacherCode,
+        subjectId: subjectCode,
+        groupId: groupCode,
+        day: timetableDay,
+        start: timetableStart,
+        end: timetableEnd,
+        classroomName: timetableClassroomName,
+      });
     })
-    .let("classroomTimetableEdge", (cte) => {
-      cte
-        .create("EDGE", "ClassroomsTimetable")
-        .from("$newTimetable")
-        .to(classroom["@rid"])
-        .set({
-          teacherId: teacherCode,
-          subjectId: subjectCode,
-          groupId: groupCode,
-          start,
-          end,
-          day,
-          classroomName,
-        });
+    .let('classroomTimetableEdge', (cte) => {
+      cte.create('EDGE', 'ClassroomsTimetable').from('$newTimetable').to(classroom['@rid']).set({
+        teacherId: teacherCode,
+        subjectId: subjectCode,
+        groupId: groupCode,
+        start: timetableStart,
+        end: timetableEnd,
+        day: timetableDay,
+        classroomName: timetableClassroomName,
+      });
     })
-    .let("teachingTimetableEdge", (tte) => {
-      tte
-        .create("edge", "TeachingTimetable")
-        .from(teaching["@rid"])
-        .to("$newTimetable")
-        .set({
-          teacherId: teacherCode,
-          subjectId: subjectCode,
-          groupId: groupCode,
-          start,
-          end,
-          day,
-          classroomName,
-        });
+    .let('teachingTimetableEdge', (tte) => {
+      tte.create('edge', 'TeachingTimetable').from(teaching['@rid']).to('$newTimetable').set({
+        teacherId: teacherCode,
+        subjectId: subjectCode,
+        groupId: groupCode,
+        start: timetableStart,
+        end: timetableEnd,
+        day: timetableDay,
+        classroomName: timetableClassroomName,
+      });
     })
     .commit()
-    .return("$newTimetable")
-    .all()
-    .then(() => {});
+    .return('$newTimetable')
+    .all();
 }

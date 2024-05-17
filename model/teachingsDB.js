@@ -1,29 +1,19 @@
-export async function insertSubjectAndTeacher(
-  db,
-  teachingId,
-  teacherCode,
-  subjectCode
-) {
+export async function insertSubjectAndTeacher(db, teachingId, teacherCode, subjectCode) {
   try {
     const query = `INSERT INTO Teachings SET id = '${teachingId}', teacherId = '${teacherCode}', subjectId = '${subjectCode}'`;
     await db.query(query);
   } catch (error) {
-    console.error("Error inserting teaching:", error);
+    console.error('Error inserting teaching:', error);
     throw error;
   }
 }
 
-export async function insertSubjectAndGroup(
-  db,
-  teachingId,
-  subjectCode,
-  groupCode
-) {
+export async function insertSubjectAndGroup(db, teachingId, subjectCode, groupCode) {
   try {
     const query = `INSERT INTO Teachings SET id = '${teachingId}', subjectId = '${subjectCode}', groupId = '${groupCode}'`;
     await db.query(query);
   } catch (error) {
-    console.error("Error inserting teaching:", error);
+    console.error('Error inserting teaching:', error);
     throw error;
   }
 }
@@ -33,23 +23,17 @@ export async function updateTeacher(db, teacherCode, subjectCode) {
     const query = `UPDATE Teachings SET  teacherId = '${teacherCode}' WHERE subjectId = '${subjectCode}'`;
     await db.query(query);
   } catch (error) {
-    console.error("Error inserting teaching:", error);
+    console.error('Error inserting teaching:', error);
     throw error;
   }
 }
 
-export async function insertTeaching(
-  db,
-  teachingId,
-  teacherCode,
-  subjectCode,
-  groupCode
-) {
+export async function insertTeaching(db, teachingId, teacherCode, subjectCode, groupCode) {
   try {
     const query = `INSERT INTO Teachings SET id = '${teachingId}', teacherId = '${teacherCode}', subjectId = '${subjectCode}', groupId = '${groupCode}'`;
     await db.query(query);
   } catch (error) {
-    console.error("Error inserting teaching:", error);
+    console.error('Error inserting teaching:', error);
     throw error;
   }
 }
@@ -59,7 +43,7 @@ export async function updateGroup(db, subjectCode, groupCode) {
     const query = `UPDATE Teachings SET  groupId = '${groupCode}' WHERE subjectId = '${subjectCode}'`;
     await db.query(query);
   } catch (error) {
-    console.error("Error inserting teaching:", error);
+    console.error('Error inserting teaching:', error);
     throw error;
   }
 }
@@ -70,10 +54,7 @@ export async function getTeachingById(db, teachingId) {
     const teaching = await db.query(query);
     return teaching.length > 0 ? teaching[0] : null;
   } catch (error) {
-    console.error(
-      `Error getting teaching with ID ${teachingId} from the database:`,
-      error
-    );
+    console.error(`Error getting teaching with ID ${teachingId} from the database:`, error);
     throw error;
   }
 }
@@ -84,22 +65,18 @@ export async function getTeachingsByGroupAndSubjectId(db, groupId, subjectId) {
     const wishlist = await db.query(query);
     return wishlist;
   } catch (error) {
-    console.error("Error getting teachings from the database:", error);
+    console.error('Error getting teachings from the database:', error);
     throw error;
   }
 }
 
-export async function getTeachingsByTeacherAndSubject(
-  db,
-  teacherId,
-  subjectId
-) {
+export async function getTeachingsByTeacherAndSubject(db, teacherId, subjectId) {
   try {
     const query = `SELECT FROM Teachings WHERE teacherId = '${teacherId}' AND subjectId = '${subjectId}' `;
     const wishlist = await db.query(query);
     return wishlist;
   } catch (error) {
-    console.error("Error getting teachings from the database:", error);
+    console.error('Error getting teachings from the database:', error);
     throw error;
   }
 }
@@ -110,7 +87,7 @@ export async function getTeachingByGroupId(db, groupId) {
     const wishlist = await db.query(query);
     return wishlist;
   } catch (error) {
-    console.error("Error getting teachings from the database:", error);
+    console.error('Error getting teachings from the database:', error);
     throw error;
   }
 }
@@ -121,7 +98,7 @@ export async function getTeacherBySubjectId(db, subjectId) {
     const wishlist = await db.query(query);
     return wishlist;
   } catch (error) {
-    console.error("Error getting teachings from the database:", error);
+    console.error('Error getting teachings from the database:', error);
     throw error;
   }
 }
@@ -132,7 +109,7 @@ export async function getAllBySubjectId(db, subjectId) {
     const wishlist = await db.query(query);
     return wishlist;
   } catch (error) {
-    console.error("Error getting teachings from the database:", error);
+    console.error('Error getting teachings from the database:', error);
     throw error;
   }
 }
@@ -143,7 +120,7 @@ export async function getGroupBySubjectId(db, subjectId) {
     const wishlist = await db.query(query);
     return wishlist;
   } catch (error) {
-    console.error("Error getting teachings from the database:", error);
+    console.error('Error getting teachings from the database:', error);
     throw error;
   }
 }
@@ -154,22 +131,18 @@ export async function getTeachingIdBySubjectAndGroup(db, subjectId, groupId) {
     const wishlist = await db.query(query);
     return wishlist;
   } catch (error) {
-    console.error("Error getting teachings from the database:", error);
+    console.error('Error getting teachings from the database:', error);
     throw error;
   }
 }
 
-export async function getTeachingIdByTeacherAndSubject(
-  db,
-  subjectId,
-  teacherId
-) {
+export async function getTeachingIdByTeacherAndSubject(db, subjectId, teacherId) {
   try {
     const query = `SELECT id FROM Teachings WHERE teacherId = '${teacherId}' AND subjectId = '${subjectId}'`;
     const wishlist = await db.query(query);
     return wishlist;
   } catch (error) {
-    console.error("Error getting teachings from the database:", error);
+    console.error('Error getting teachings from the database:', error);
     throw error;
   }
 }
@@ -180,7 +153,7 @@ export async function getSubjectByUserId(db, teacherId) {
     const wishlist = await db.query(query);
     return wishlist;
   } catch (error) {
-    console.error("Error getting teachings from the database:", error);
+    console.error('Error getting teachings from the database:', error);
     throw error;
   }
 }
@@ -191,7 +164,7 @@ export async function getTeachingId(db, teacherId, subjectId, groupId) {
     const teaching = await db.query(query);
     return teaching;
   } catch (error) {
-    console.error("Error getting teaching Id from the database:", error);
+    console.error('Error getting teaching Id from the database:', error);
     throw error;
   }
 }
@@ -202,10 +175,7 @@ export async function getTeachersByGroupId(db, groupId) {
     const teaching = await db.query(query);
     return teaching;
   } catch (error) {
-    console.error(
-      `Error getting teaching with ID ${groupId} from the database:`,
-      error
-    );
+    console.error(`Error getting teaching with ID ${groupId} from the database:`, error);
     throw error;
   }
 }
@@ -216,10 +186,7 @@ export async function getSubjectByGroupId(db, groupId) {
     const teaching = await db.query(query);
     return teaching;
   } catch (error) {
-    console.error(
-      `Error getting teaching with ID ${groupId} from the database:`,
-      error
-    );
+    console.error(`Error getting teaching with ID ${groupId} from the database:`, error);
     throw error;
   }
 }
@@ -230,10 +197,7 @@ export async function getSubjectsByTeacherId(db, teacherId) {
     const teaching = await db.query(query);
     return teaching;
   } catch (error) {
-    console.error(
-      `Error getting teaching with teacherID ${teacherId} from the database:`,
-      error
-    );
+    console.error(`Error getting teaching with teacherID ${teacherId} from the database:`, error);
     throw error;
   }
 }

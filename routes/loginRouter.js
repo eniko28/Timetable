@@ -1,7 +1,7 @@
-import express from "express";
-import session from "express-session";
-import dotenv from "dotenv";
-import { getLoginPage, postLogin } from "../controller/loginController.js";
+import express from 'express';
+import session from 'express-session';
+import dotenv from 'dotenv';
+import { getLoginPage, postLogin } from '../controller/loginController.js';
 
 const router = express.Router();
 
@@ -15,9 +15,9 @@ router.use(
     secret,
     resave: false,
     saveUninitialized: true,
-  })
+  }),
 );
-router.get("/", getLoginPage);
-router.post("/login", postLogin);
+router.get('/', getLoginPage);
+router.post('/login', postLogin);
 
 export default router;

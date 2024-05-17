@@ -4,7 +4,7 @@ export async function getSubjectsGroups(db, subjectId, groupId) {
     const teacher = await db.query(query);
     return teacher;
   } catch (error) {
-    console.error("Error getting  from the database:", error);
+    console.error('Error getting  from the database:', error);
     throw error;
   }
 }
@@ -15,7 +15,7 @@ export async function getSubjectsByGroup(db, groupId) {
     const teacher = await db.query(query);
     return teacher;
   } catch (error) {
-    console.error("Error getting  from the database:", error);
+    console.error('Error getting  from the database:', error);
     throw error;
   }
 }

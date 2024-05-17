@@ -1,6 +1,6 @@
-import setupDatabase from "../db/dbSetup.js";
-import * as classroomDB from "../model/classroomDB.js";
-import * as subjectBD from "../model/subjectsDB.js";
+import setupDatabase from '../db/dbSetup.js';
+import * as classroomDB from '../model/classroomDB.js';
+import * as subjectBD from '../model/subjectsDB.js';
 
 let db;
 
@@ -9,7 +9,7 @@ setupDatabase()
     db = database;
   })
   .catch((error) => {
-    console.error("Error setting up database:", error);
+    console.error('Error setting up database:', error);
     process.exit(1);
   });
 
@@ -21,7 +21,7 @@ export const getClassroomBySubject = async (req, res) => {
     const classrooms = await classroomDB.getClassroomByType(db, type);
     res.json(classrooms);
   } catch (error) {
-    console.error("Error getting classrooms by subject from database:", error);
-    res.status(500).send("Internal Server Error");
+    console.error('Error getting classrooms by subject from database:', error);
+    res.status(500).send('Internal Server Error');
   }
 };

@@ -1,5 +1,5 @@
-import setupDatabase from "../db/dbSetup.js";
-import * as teachingDB from "../model/teachingsDB.js";
+import setupDatabase from '../db/dbSetup.js';
+import * as teachingDB from '../model/teachingsDB.js';
 
 let db;
 
@@ -8,7 +8,7 @@ setupDatabase()
     db = database;
   })
   .catch((error) => {
-    console.error("Error setting up database:", error);
+    console.error('Error setting up database:', error);
     process.exit(1);
   });
 

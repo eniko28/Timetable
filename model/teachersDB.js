@@ -1,4 +1,4 @@
-import { getUserData } from "./personalDB.js";
+import { getUserData } from './personalDB.js';
 
 export async function insertTeacherNameAndId(db, teacherCode, name) {
   try {
@@ -6,7 +6,7 @@ export async function insertTeacherNameAndId(db, teacherCode, name) {
     const query = `INSERT INTO Teachers SET id = '${teacherCode}', name = '${name}', credit = '${credit}'`;
     await db.query(query);
   } catch (error) {
-    console.error("Error inserting teacher:", error);
+    console.error('Error inserting teacher:', error);
     throw error;
   }
 }
@@ -38,31 +38,28 @@ export async function updateTeachers(db, userId) {
 
     const linkset = [
       {
-        "@type": "d",
-        "@class": "Personal",
-        "@rid": personal["@rid"],
+        '@type': 'd',
+        '@class': 'Personal',
+        '@rid': personal['@rid'],
       },
     ];
 
-    await db.query(
-      `UPDATE Teachers SET personal = ${JSON.stringify(
-        linkset
-      )} WHERE id = :userId`,
-      { params: { userId } }
-    );
+    await db.query(`UPDATE Teachers SET personal = ${JSON.stringify(linkset)} WHERE id = :userId`, {
+      params: { userId },
+    });
   } catch (error) {
-    console.error("Error updating teachers:", error);
+    console.error('Error updating teachers:', error);
     throw error;
   }
 }
 
 export async function getAllTeachers(db) {
   try {
-    const query = "SELECT FROM Teachers";
+    const query = 'SELECT FROM Teachers';
     const teachers = await db.query(query);
     return teachers;
   } catch (error) {
-    console.error("Error getting teachers from the database:", error);
+    console.error('Error getting teachers from the database:', error);
     throw error;
   }
 }
@@ -73,10 +70,7 @@ export async function getTeacherById(db, teacherId) {
     const teacher = await db.query(query);
     return teacher.length > 0 ? teacher[0] : null;
   } catch (error) {
-    console.error(
-      `Error getting teacher with ID ${teacherId} from the database:`,
-      error
-    );
+    console.error(`Error getting teacher with ID ${teacherId} from the database:`, error);
     throw error;
   }
 }
@@ -87,10 +81,7 @@ export async function getTeacherNameById(db, teacherId) {
     const teacher = await db.query(query);
     return teacher.length > 0 ? teacher[0].name : null;
   } catch (error) {
-    console.error(
-      `Error getting teacher with id ${teacherId} from the database:`,
-      error
-    );
+    console.error(`Error getting teacher with id ${teacherId} from the database:`, error);
     throw error;
   }
 }

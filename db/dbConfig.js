@@ -1,8 +1,8 @@
 const dbConfig = {
-  host: "localhost",
+  host: 'localhost',
   port: 2424,
-  username: "root",
-  password: "root",
+  username: 'root',
+  password: 'root',
   useToken: true,
 };
 

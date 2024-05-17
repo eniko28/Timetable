@@ -239,3 +239,7 @@ a.back-button:hover {
   text-decoration: none;
   color: black;
 }
+
+.pagination a:active {
+  background-color: white
+}
