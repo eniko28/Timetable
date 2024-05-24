@@ -36,13 +36,12 @@
             </select><br>
             <span class="error-message" id="dayError"></span><br>
 
-
             <label for="start">Start:</label>
-            <input type="text" name="start" placeholder="HH:mm">
+            <input type="text" id="start" name="start" placeholder="HH:mm">
             <span class="error-message" id="startError"></span><br>
 
             <label for="end">End:</label>
-            <input type="text" name="end" placeholder="HH:mm">
+            <input type="text" id="end" name="end" placeholder="HH:mm" readonly>
             <span class="error-message" id="endError"></span><br>
 
             <input class="submit-button" type="submit" value="Send">
@@ -50,6 +49,21 @@
     </div>
     <a href="/teacher" class="back-button">Back</a>
     <script src="/validation/newWishlistValidation.js"></script>
+    <script>
+        document.getElementById('start').addEventListener('change', function () {
+            const startTime = this.value;
+            if (startTime) {
+                const [hours, minutes] = startTime.split(':').map(Number);
+                const endDate = new Date();
+                endDate.setHours(hours + 2, minutes);
+
+                const endHours = endDate.getHours().toString().padStart(2, '0');
+                const endMinutes = endDate.getMinutes().toString().padStart(2, '0');
+
+                document.getElementById('end').value = `${endHours}:${endMinutes}`;
+            }
+        });
+    </script>
 </body>
 
 </html>

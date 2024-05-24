@@ -67,6 +67,7 @@ export const postWishlists = async (req, res) => {
       });
       return;
     }
+
     const existingSubject = await timetableDB.getTeachingsByGroupAndSubjectId(db, groupId, subjectId);
     if (existingSubject.length !== 0) {
       res.status(400).render('error', {

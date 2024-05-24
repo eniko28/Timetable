@@ -6,7 +6,7 @@ function isValidTime(time) {
 function isWithinWorkingHours(time) {
   const parts = time.split(':');
   const hours = parseInt(parts[0], 10);
-  return hours >= 8 && hours < 20;
+  return hours >= 8 && hours <= 20;
 }
 
 function convertTimeToMinutes(time) {
@@ -86,3 +86,17 @@ document.getElementById('addWishlists').addEventListener('submit', (event) => {
 });
 
 document.getElementById('subjectCode').addEventListener('change', updateGroups);
+
+document.getElementById('start').addEventListener('change', function func() {
+  const startTime = this.value;
+  if (startTime) {
+    const [hours, minutes] = startTime.split(':').map(Number);
+    const endDate = new Date();
+    endDate.setHours(hours + 2, minutes);
+
+    const endHours = endDate.getHours().toString().padStart(2, '0');
+    const endMinutes = endDate.getMinutes().toString().padStart(2, '0');
+
+    document.getElementById('end').value = `${endHours}:${endMinutes}`;
+  }
+});

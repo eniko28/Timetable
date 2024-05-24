@@ -97,7 +97,7 @@ export async function getFreeTeacher(db, teacherId, start, end, day) {
   }
 }
 
-export async function getFreeGroup(db, groupId, start, end, day) {
+export async function getFreeGroup(db, groupId, day, start, end) {
   try {
     const query = `SELECT FROM Timetable WHERE groupId = '${groupId}' AND start = '${start}' AND end = '${end}' AND day = '${day}'`;
     const teacher = await db.query(query);
