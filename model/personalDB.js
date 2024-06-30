@@ -1,8 +1,16 @@
 export async function insertPersonal(db, id, photo, address, email, phone) {
   try {
-    await db.query(
-      `INSERT INTO Personal SET id = '${id}', profilePicture = '${photo}', address = '${address}', email = '${email}', phone = '${phone}'`,
-    );
+    const query =
+      'INSERT INTO Personal (id, profilePicture, address, email, phone) VALUES (:id, :photo, :address, :email, :phone)';
+    await db.query(query, {
+      params: {
+        id,
+        photo,
+        address,
+        email,
+        phone,
+      },
+    });
   } catch (error) {
     console.error('Error inserting Personal:', error);
     throw error;
@@ -11,11 +19,19 @@ export async function insertPersonal(db, id, photo, address, email, phone) {
 
 export async function updatePersonal(db, id, photo, address, email, phone) {
   try {
-    await db.query(
-      `UPDATE Personal SET profilePicture = '${photo}', address = '${address}', email = '${email}', phone = '${phone}' WHERE id = '${id}'`,
-    );
+    const query =
+      'UPDATE Personal SET profilePicture = :photo, address = :address, email = :email, phone = :phone WHERE id = :id';
+    await db.query(query, {
+      params: {
+        id,
+        photo,
+        address,
+        email,
+        phone,
+      },
+    });
   } catch (error) {
-    console.error('Error inserting Personal:', error);
+    console.error('Error updating Personal:', error);
     throw error;
   }
 }

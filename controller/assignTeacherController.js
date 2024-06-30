@@ -25,8 +25,10 @@ setupDatabase()
 export const assignTeacherGet = async (req, res) => {
   try {
     const teachers = await teacherDB.getAllTeachers(db);
+    const sortedTeachers = teachers.sort((a, b) => a.name.localeCompare(b.name));
     const subjects = await subjectDB.getAllSubjects(db);
-    res.render('assignTeacher', { teachers, subjects });
+    const sortedSubjects = subjects.sort((a, b) => a.name.localeCompare(b.name));
+    res.render('assignTeacher', { teachers: sortedTeachers, subjects: sortedSubjects });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }
@@ -37,16 +39,17 @@ export const assignTeacherPost = async (req, res) => {
     const { teacherCode, subjectCode } = req.fields;
 
     if (!teacherCode || !subjectCode) {
-      return res.status(400).send('Missing required data.');
+      return res.status(400).json({ error: 'Missing required data.' });
     }
+
     const existingTeaching = await teacherTeaching.getTeachersSubjects(db, teacherCode, subjectCode);
     if (existingTeaching.length !== 0) {
-      return res.status(400).render('error', {
-        message: 'Teacher already assigned to selected subject.',
-      });
+      return res.status(400).json({ error: 'Teacher already assigned to selected subject.' });
     }
+
     const teacherExists = await teachingDB.getAllBySubjectId(db, subjectCode);
     let teachingId = uuidv4();
+
     if (teacherExists.length === 0) {
       await teachingDB.insertSubjectAndTeacher(db, teachingId, teacherCode, subjectCode);
     } else if (teacherExists[0].teacherId !== teacherCode && teacherExists[0].teacherId) {
@@ -63,6 +66,7 @@ export const assignTeacherPost = async (req, res) => {
       const id = await teachingDB.getTeachingIdByTeacherAndSubject(db, subjectCode, teacherCode);
       teachingId = id[0].id;
     }
+
     const all = await teachingDB.getTeachingsByTeacherAndSubject(db, teacherCode, subjectCode);
 
     const promises = all.map(async (teachingRecord) => {
@@ -78,8 +82,8 @@ export const assignTeacherPost = async (req, res) => {
 
     await Promise.all(promises);
 
-    return res.redirect('/assignTeacher');
+    return res.status(200).json({ message: 'Teacher assigned successfully.' });
   } catch (error) {
-    return res.status(500).send(`Internal Server Error: ${error.message}`);
+    return res.status(500).json({ error: `Internal Server Error: ${error.message}` });
   }
 };

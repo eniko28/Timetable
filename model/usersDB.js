@@ -1,7 +1,14 @@
 export async function insertUsers(db, userName, userId, password, type) {
   try {
-    const query = `INSERT INTO Users SET userId = '${userId}', name = '${userName}', password = '${password}', type = '${type}'`;
-    await db.query(query);
+    const query = 'INSERT INTO Users SET userId = :userId, name = :userName, password = :password, type = :type';
+    await db.query(query, {
+      params: {
+        userId,
+        userName,
+        password,
+        type,
+      },
+    });
   } catch (error) {
     console.error('Error inserting user:', error);
     throw error;

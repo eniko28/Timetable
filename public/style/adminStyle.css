@@ -243,3 +243,15 @@ a.back-button:hover {
 .pagination a:active {
   background-color: white
 }
+
+.message {
+  display: none;
+  padding: 10px;
+  margin: 20px 0;
+  border: 1px solid #d4edda;
+  background-color: #d4edda;
+  color: #155724;
+  border-radius: 5px;
+  font-size: 16px;
+  text-align: center;
+}

@@ -49,25 +49,23 @@ export const handleAddWishlists = async (req, res) => {
     let { credit } = req.fields;
 
     if (!teacherCode || !day || !start || !end) {
-      return res.status(400).render('error', { message: 'Missing required data.' });
+      return res.status(400).json({ error: 'Missing required data.' });
     }
 
     if (credit <= 0) {
-      return res.status(400).render('error', { message: 'No more available credits.' });
+      return res.status(400).json({ error: 'No more available credits.' });
     }
 
     const timeFormat = /^(0[8-9]|1[0-9]|20):[0-5][0-9]$/;
     if (!start.match(timeFormat) || !end.match(timeFormat)) {
-      return res.status(400).render('error', {
-        message: 'Invalid time format. Please use HH:mm between 8:00 and 20:00.',
-      });
+      return res.status(400).json({ error: 'Invalid time format. Please use HH:mm between 8:00 and 20:00.' });
     }
 
     const startTime = new Date(`2000-01-01T${start}:00Z`);
     const endTime = new Date(`2000-01-01T${end}:00Z`);
 
     if (startTime > endTime) {
-      return res.status(400).render('error', { message: 'Start time must be before end time.' });
+      return res.status(400).json({ error: 'Start time must be before end time.' });
     }
 
     const wishlistId = uuidv4();
@@ -82,9 +80,9 @@ export const handleAddWishlists = async (req, res) => {
 
     await createEdge.createEdgeTeachersWishlists(db, wishlist, teacher, day, start, end);
 
-    return res.redirect('/addWishlists');
+    return res.status(200).json({ message: 'Wishlist added successfully.' });
   } catch (error) {
-    return res.status(500).send(`Internal Server Error: ${error.message}`);
+    return res.status(500).json({ message: `Internal Server Error: ${error.message}` });
   }
 };
 

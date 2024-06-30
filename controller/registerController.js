@@ -30,15 +30,13 @@ export const registerUser = async (req, res) => {
     const { name, userId, password, type } = req.fields;
 
     if (!name || !userId || !password || !type) {
-      return res.status(400).send('Missing required data.');
+      return res.status(400).json({ error: 'Missing required data.' });
     }
 
     const user = await usersDB.getUsernameById(db, userId);
 
     if (user !== null) {
-      return res.status(400).render('error', {
-        message: 'The provided userId is already taken!',
-      });
+      return res.status(400).json({ error: 'The provided userId is already taken!' });
     }
 
     const hashWithSalt = await bcrypt.hash(password, 10);
@@ -53,8 +51,8 @@ export const registerUser = async (req, res) => {
       const group = await groupDB.getGroupById(db, groupId);
       await createEdgeStudentsGroups(db, student, group, userId, groupId);
     }
-    return res.redirect('/register');
+    return res.status(200).json({ message: 'Successful addition!' });
   } catch (error) {
-    return res.status(500).send(`Internal Server Error: ${error.message}`);
+    return res.status(500).json({ error: `Internal Server Error: ${error.message}` });
   }
 };

@@ -25,22 +25,20 @@ export const handleAddSubjects = async (req, res) => {
     const { code, name, type } = req.fields;
 
     if (!code || !name || !type) {
-      return res.status(400).send('Missing required data.');
+      return res.status(400).json({ error: 'Missing required data.' });
     }
 
     const existingSubject = await subjectsDB.getSubjectById(db, code);
     const existingNameAndType = await subjectsDB.getAllSubjectsByNameAndType(db, name, type);
 
     if (existingSubject !== null || existingNameAndType.length !== 0) {
-      return res.status(400).render('error', {
-        message: 'Subject already exists.',
-      });
+      return res.status(400).json({ error: 'Subject already exists.' });
     }
 
     await subjectsDB.insertSubject(db, code, name, type);
-    return res.redirect('/addSubjects');
+    return res.status(200).json({ message: 'Successful addition!' });
   } catch (error) {
-    return res.status(500).send(`Internal Server Error: ${error.message}`);
+    return res.status(500).json({ error: `Internal Server Error: ${error.message}` });
   }
 };
 

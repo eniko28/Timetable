@@ -81,8 +81,9 @@
                 <input type="text" id="address" name="address" value="<%= userData ? userData.address : '' %>">
                 <span class="error-message" id="addressError"></span>
                 <label id="phone" for="phone">Phone:</label>
-                <input type="tel" id="phone" name="phone" value="<%= userData ? userData.phone : '' %>"> <br>
+                <input type="phone" id="phone" name="phone" pattern="\d{10}" required>
                 <span class="error-message" id="phoneError"></span><br>
+
 
                 <br> <br>
                 <input class="submit-button" type="submit" value="Save">

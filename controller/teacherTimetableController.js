@@ -11,6 +11,7 @@ setupDatabase()
     console.error('Error setting up database:', error);
     process.exit(1);
   });
+
 export const renderTeacherTimetablePage = async (req, res) => {
   try {
     const teachers = await teacherDB.getAllTeachers(db);

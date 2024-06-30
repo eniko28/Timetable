@@ -25,8 +25,11 @@ setupDatabase()
 export const assignGroupGet = async (req, res) => {
   try {
     const groups = await groupDB.getAllGroups(db);
+    const sortedGroups = groups.sort((a, b) => a.id.localeCompare(b.id));
     const subjects = await subjectDB.getAllSubjects(db);
-    res.render('assignGroup', { groups, subjects });
+    const sortedSubjects = subjects.sort((a, b) => a.name.localeCompare(b.name));
+
+    res.render('assignGroup', { groups: sortedGroups, subjects: sortedSubjects });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
   }
@@ -37,14 +40,12 @@ export const assignGroupPost = async (req, res) => {
     const { groupCode, subjectCode } = req.fields;
 
     if (!groupCode || !subjectCode) {
-      return res.status(400).send('Missing required data.');
+      return res.status(400).json({ error: 'Missing required data.' });
     }
 
     const existingTeaching = await groupTeaching.getSubjectsGroups(db, subjectCode, groupCode);
     if (existingTeaching.length !== 0) {
-      return res.status(400).render('error', {
-        message: 'Subject already assigned to selected group.',
-      });
+      return res.status(400).json({ error: 'Subject already assigned to selected group.' });
     }
     const groupExists = await teachingDB.getGroupBySubjectId(db, subjectCode);
     let teachingId = uuidv4();
@@ -52,9 +53,7 @@ export const assignGroupPost = async (req, res) => {
       await teachingDB.insertSubjectAndGroup(db, teachingId, subjectCode, groupCode);
     } else {
       if (groupExists[0].groupId === groupCode) {
-        return res.status(400).render('error', {
-          message: 'Subject already assigned to selected group.',
-        });
+        return res.status(400).json({ error: 'Subject already assigned to selected group.' });
       }
       if (groupExists[0].groupId) {
         const teacherId = await teachingDB.getTeacherBySubjectId(db, subjectCode);
@@ -82,9 +81,9 @@ export const assignGroupPost = async (req, res) => {
         return createEdgeGroupTeachings(db, group, teaching, groupCode, subjectCode);
       }),
     );
-    return res.redirect('/assignGroup');
+    return res.status(200).json({ message: 'Group assigned successfully.' });
   } catch (error) {
-    return res.status(500).send(`Internal Server Error: ${error.message}`);
+    return res.status(500).json({ error: `Internal Server Error: ${error.message}` });
   }
 };
 

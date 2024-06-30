@@ -8,6 +8,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const subjectInput = document.getElementById('subjectInput');
   const timetableCells = document.querySelectorAll('#timetable td');
   const formContainer = document.getElementById('form-container');
+  const messageDiv = document.getElementById('message');
+
+  function showMessage(message, isSuccess) {
+    messageDiv.innerText = message;
+    messageDiv.style.display = 'block';
+    messageDiv.style.backgroundColor = isSuccess ? '#d4edda' : '#f8d7da';
+    messageDiv.style.borderColor = isSuccess ? '#c3e6cb' : '#f5c6cb';
+    messageDiv.style.color = isSuccess ? '#155724' : '#721c24';
+
+    setTimeout(() => {
+      messageDiv.style.display = 'none';
+    }, 4000);
+  }
 
   function sendWishlist(data) {
     fetch('/wishlists', {
@@ -17,25 +30,19 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       body: JSON.stringify(data),
     })
-      .then((response) => {
-        if (response.ok) {
-          // location.reload();
-        } else if (response.headers.get('content-type').includes('text/html')) {
-          response.text().then((errorMessage) => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(errorMessage, 'text/html');
-            const message = doc.body.textContent.trim();
-
-            alert(message);
-          });
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.message) {
+          showMessage('Inserted successfully!', true);
         } else {
-          response.json().then((errorData) => {
-            alert(errorData.message);
-          });
+          showMessage(result.error, false);
         }
+        submitClicked = false;
       })
       .catch((error) => {
         console.error('Error sending wishlist data:', error);
+        showMessage('Error sending wishlist data.', false);
+        submitClicked = false;
       });
   }
 
@@ -51,6 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateTimetable(timetable) {
     timetableCells.forEach((cell) => {
       cell.classList.remove('group-time');
+      cell.style.cursor = 'pointer';
+      cell.classList.remove('disabled-cell');
     });
 
     timetable.forEach((slot) => {
@@ -81,6 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (startCell) {
         startCell.classList.add('group-time');
+        startCell.style.cursor = 'not-allowed';
+        startCell.classList.add('disabled-cell');
       }
     });
   }
@@ -186,6 +197,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
               updateTimetable(response.timetable);
             });
+
+            teacherInput.dispatchEvent(new Event('change'));
           } else {
             teacherInput.innerHTML = '<option disabled selected>No teachers in this group</option>';
           }
@@ -206,9 +219,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   timetableCells.forEach((cell) => {
     cell.addEventListener('click', () => {
+      if (cell.classList.contains('group-time') || cell.classList.contains('start-time')) {
+        alert('This cell is already occupied.');
+        return;
+      }
+
       timetableCells.forEach((cells) => {
         cells.style.backgroundColor = '';
       });
+
       cell.style.backgroundColor = 'white';
       formContainer.style.display = 'block';
       const cellId = cell.id.split('-');

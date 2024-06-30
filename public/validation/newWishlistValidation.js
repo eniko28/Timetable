@@ -37,7 +37,9 @@ function updateGroups() {
       });
     });
 }
-document.getElementById('addWishlists').addEventListener('submit', (event) => {
+document.getElementById('addWishlists').addEventListener('submit', async (event) => {
+  event.preventDefault();
+
   const start = document.getElementsByName('start')[0].value.trim();
   const end = document.getElementsByName('end')[0].value.trim();
   const day = document.getElementsByName('day')[0].value.trim();
@@ -46,42 +48,95 @@ document.getElementById('addWishlists').addEventListener('submit', (event) => {
   const endError = document.getElementById('endError');
   const dayError = document.getElementById('dayError');
 
+  const messageDiv = document.getElementById('message');
+
+  let valid = true;
+
   startError.textContent = '';
   endError.textContent = '';
   dayError.textContent = '';
 
   if (!isValidTime(start)) {
     startError.textContent = 'Please enter valid start times (HH:mm)';
-    event.preventDefault();
+    valid = false;
   }
   if (!isValidTime(end)) {
     endError.textContent = 'Please enter valid end times (HH:mm)';
-    event.preventDefault();
+    valid = false;
   }
   if (!isWithinWorkingHours(start)) {
     startError.textContent = 'Please enter times between 08:00 and 20:00';
-    event.preventDefault();
+    valid = false;
   }
   if (!isWithinWorkingHours(end)) {
     endError.textContent = 'Please enter times between 08:00 and 20:00';
-    event.preventDefault();
+    valid = false;
   }
   if (!isStartBeforeEnd(start, end)) {
     startError.textContent = 'Start time must be before end time';
     endError.textContent = 'Start time must be before end time';
-    event.preventDefault();
+    valid = false;
   }
   if (start === '') {
     startError.textContent = 'Please select a start hour';
-    event.preventDefault();
+    valid = false;
   }
   if (end === '') {
     endError.textContent = 'Please select an end hour';
-    event.preventDefault();
+    valid = false;
   }
   if (day === '') {
     dayError.textContent = 'Please select day';
-    event.preventDefault();
+    valid = false;
+  }
+
+  if (!valid) {
+    return;
+  }
+
+  const formData = new FormData(event.target);
+
+  try {
+    const response = await fetch(event.target.action, {
+      method: event.target.method,
+      body: formData,
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      messageDiv.innerText = result.message;
+      messageDiv.style.display = 'block';
+      messageDiv.style.backgroundColor = '#d4edda';
+      messageDiv.style.borderColor = '#c3e6cb';
+      messageDiv.style.color = '#155724';
+      event.target.reset();
+
+      setTimeout(() => {
+        messageDiv.style.display = 'none';
+        window.location.reload();
+      }, 3000);
+    } else {
+      messageDiv.innerText = result.error;
+      messageDiv.style.display = 'block';
+      messageDiv.style.backgroundColor = '#f8d7da';
+      messageDiv.style.borderColor = '#f5c6cb';
+      messageDiv.style.color = '#721c24';
+
+      setTimeout(() => {
+        messageDiv.style.display = 'none';
+      }, 4000);
+    }
+  } catch (error) {
+    messageDiv.innerText = `Error: ${error.message}`;
+    messageDiv.style.display = 'block';
+    messageDiv.style.backgroundColor = '#f8d7da';
+    messageDiv.style.borderColor = '#f5c6cb';
+    messageDiv.style.color = '#721c24';
+
+    setTimeout(() => {
+      messageDiv.style.display = 'none';
+    }, 4000);
   }
 });
 

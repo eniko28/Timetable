@@ -24,15 +24,17 @@ export const getWishlists = async (req, res) => {
     const wishlists = await wishlistDB.getAllWishlists(db);
     const classrooms = await classroomDB.getAllClassrooms(db);
     const teachers = await teacherDB.getAllTeachers(db);
+    const sortedTeachers = teachers.sort((a, b) => a.id.localeCompare(b.id));
     const timetable = await timetableDB.selectTimetable(db);
     const groups = await groupDB.getAllGroups(db);
+    const sortedGroups = groups.sort((a, b) => a.id.localeCompare(b.id));
 
     res.render('wishlists', {
       wishlists,
       classrooms,
-      teachers,
+      teachers: sortedTeachers,
       timetable,
-      groups,
+      groups: sortedGroups,
     });
   } catch (error) {
     res.status(500).send(`Internal Server Error: ${error.message}`);
@@ -43,46 +45,33 @@ export const postWishlists = async (req, res) => {
   try {
     const { teacherId, subjectId, groupId, day, start, end, classroomName } = req.fields;
     if (!groupId || !subjectId || !teacherId || !day || +!start || !end || !classroomName) {
-      res.status(400).render('error', {
-        message: 'Missing required data.',
-      });
-      return;
+      return res.status(400).json({ error: 'Missing required data.' });
     }
+
     const existsTeacher = await timetableDB.getFreeTeacher(db, teacherId, start, end, day);
 
     if (existsTeacher.length !== 0) {
       if (existsTeacher[0].groupId.substring(0, 2) !== groupId.substring(0, 2)) {
-        res.status(400).render('error', {
-          message: 'The teacher already has a class scheduled for that time.',
-        });
-        return;
+        return res.status(400).json({ error: 'The teacher already has a class scheduled for that time.' });
       }
     }
 
     const existsGroup = await timetableDB.getFreeGroup(db, groupId, day, start, end);
 
     if (existsGroup.length !== 0) {
-      res.status(400).render('error', {
-        message: 'The group already has a class scheduled for that time.',
-      });
-      return;
+      return res.status(400).json({ error: 'The group already has a class scheduled for that time.' });
     }
 
     const existingSubject = await timetableDB.getTeachingsByGroupAndSubjectId(db, groupId, subjectId);
     if (existingSubject.length !== 0) {
-      res.status(400).render('error', {
-        message: 'The group already has this subject scheduled in their timetable.',
-      });
-      return;
+      return res.status(400).json({ error: 'The group already has this subject scheduled in their timetable.' });
     }
 
     const isFreeClassroom = await timetableDB.getFreeClassroom(db, classroomName, start, end, day);
     if (isFreeClassroom.length !== 0) {
-      res.status(400).render('error', {
-        message: 'The classroom is booked at this time.',
-      });
-      return;
+      return res.status(400).json({ error: 'The classroom is booked at this time.' });
     }
+
     const timetableId = uuidv4();
 
     const teachingId = await teachingDB.getTeachingId(db, teacherId, subjectId, groupId);
@@ -103,10 +92,10 @@ export const postWishlists = async (req, res) => {
       classroom,
     );
 
-    res.redirect('/wishlists');
+    return res.status(200).json({ message: 'Inserted successfully!' });
   } catch (error) {
     console.error('Error processing wishlist data:', error);
-    res.status(500).send(`Internal Server Error: ${error.message}`);
+    return res.status(500).json({ error: `Internal Server Error: ${error.message}` });
   }
 };
 

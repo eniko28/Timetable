@@ -28,4 +28,16 @@ document.getElementById('home').addEventListener('submit', (event) => {
     photoError.innerHTML = 'Please select a photo';
     event.preventDefault();
   }
+  const phoneInput = document.getElementById('phone');
+  const phoneError = document.getElementById('phoneError');
+  phoneInput.addEventListener('input', () => {
+    const phoneValue = phoneInput.value;
+    const isValid = /^\d{10}$/.test(phoneValue);
+
+    if (!isValid) {
+      phoneError.textContent = 'Phone number must be exactly 10 digits.';
+    } else {
+      phoneError.textContent = '';
+    }
+  });
 });

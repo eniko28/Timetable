@@ -15,8 +15,7 @@
         <div class="row">
             <% teachers.forEach(function(teacher, index) { %>
                 <div class="col-md-4">
-                    <button class="table timetable"
-                        onclick="window.location.href='/teachers?name=<%= teacher.name %>&id=<%= teacher.id %>'">
+                    <button class="table timetable" onclick="window.location.href='/teachers?name=<%= teacher.name %>'">
                         <%= teacher.name %>
                     </button>
                 </div>

@@ -3,8 +3,14 @@ import { getUserData } from './personalDB.js';
 export async function insertTeacherNameAndId(db, teacherCode, name) {
   try {
     const credit = 5;
-    const query = `INSERT INTO Teachers SET id = '${teacherCode}', name = '${name}', credit = '${credit}'`;
-    await db.query(query);
+    const query = 'INSERT INTO Teachers (id, name, credit) VALUES (:teacherCode, :name, :credit)';
+    await db.query(query, {
+      params: {
+        teacherCode,
+        name,
+        credit,
+      },
+    });
   } catch (error) {
     console.error('Error inserting teacher:', error);
     throw error;
@@ -13,8 +19,13 @@ export async function insertTeacherNameAndId(db, teacherCode, name) {
 
 export async function updateTeachersCredit(db, teacherCode, credit) {
   try {
-    const query = `UPDATE Teachers SET credit = '${credit}' WHERE id = '${teacherCode}'`;
-    await db.query(query);
+    const query = 'UPDATE Teachers SET credit = :credit WHERE id = :teacherCode';
+    await db.query(query, {
+      params: {
+        teacherCode,
+        credit,
+      },
+    });
   } catch (error) {
     console.error("Error updating teacher's credit:", error);
     throw error;
@@ -82,6 +93,17 @@ export async function getTeacherNameById(db, teacherId) {
     return teacher.length > 0 ? teacher[0].name : null;
   } catch (error) {
     console.error(`Error getting teacher with id ${teacherId} from the database:`, error);
+    throw error;
+  }
+}
+
+export async function getTeacherIdByName(db, name) {
+  try {
+    const query = `SELECT id FROM Teachers WHERE name = '${name}'`;
+    const teacher = await db.query(query);
+    return teacher.length > 0 ? teacher[0] : null;
+  } catch (error) {
+    console.error(`Error getting teacher with name ${name} from the database:`, error);
     throw error;
   }
 }

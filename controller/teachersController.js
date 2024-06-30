@@ -1,5 +1,6 @@
 import * as timetableDB from '../model/timetableDB.js';
 import * as subjectBD from '../model/subjectsDB.js';
+import * as teacherDB from '../model/teachersDB.js';
 import setupDatabase from '../db/dbSetup.js';
 
 let db;
@@ -15,9 +16,11 @@ setupDatabase()
 
 export const renderTeachersPage = async (req, res) => {
   try {
-    const { name, id } = req.query;
+    const { name } = req.query;
 
-    const teachings = await timetableDB.selectTimetableByTeacherId(db, id);
+    const id = await teacherDB.getTeacherIdByName(db, name);
+
+    const teachings = await timetableDB.selectTimetableByTeacherId(db, id.id);
 
     await Promise.all(
       teachings.map(async (teaching) => {

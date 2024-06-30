@@ -13,11 +13,12 @@
         <h1>Subjects's timetable:</h1>
         <div class="row">
             <% var displayedSubjects=[]; subjects.forEach(function(subject, index) {
-                if(!displayedSubjects.includes(subject.name)) { if (index> 0 && index % 3 === 0) { %>
+                if(!displayedSubjects.includes(subject.name)) { displayedSubjects.push(subject.name); if
+                (displayedSubjects.length % 3===1 && index> 0) { %>
         </div>
         <div class="row">
-            <% } displayedSubjects.push(subject.name); %>
-                <div class="col-sm-4">
+            <% } %>
+                <div id="names" class="col-sm-4">
                     <button class="table timetable" onclick="window.location.href='/subject?name=<%= subject.name %>'">
                         <%= subject.name %>
                     </button>

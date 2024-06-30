@@ -1,7 +1,13 @@
 export async function insertSubjectAndTeacher(db, teachingId, teacherCode, subjectCode) {
   try {
-    const query = `INSERT INTO Teachings SET id = '${teachingId}', teacherId = '${teacherCode}', subjectId = '${subjectCode}'`;
-    await db.query(query);
+    const query = 'INSERT INTO Teachings (id, teacherId, subjectId) VALUES (:teachingId, :teacherCode, :subjectCode)';
+    await db.query(query, {
+      params: {
+        teachingId,
+        teacherCode,
+        subjectCode,
+      },
+    });
   } catch (error) {
     console.error('Error inserting teaching:', error);
     throw error;
@@ -10,8 +16,14 @@ export async function insertSubjectAndTeacher(db, teachingId, teacherCode, subje
 
 export async function insertSubjectAndGroup(db, teachingId, subjectCode, groupCode) {
   try {
-    const query = `INSERT INTO Teachings SET id = '${teachingId}', subjectId = '${subjectCode}', groupId = '${groupCode}'`;
-    await db.query(query);
+    const query = 'INSERT INTO Teachings (id, subjectId, groupId) VALUES (:teachingId, :subjectCode, :groupCode)';
+    await db.query(query, {
+      params: {
+        teachingId,
+        subjectCode,
+        groupCode,
+      },
+    });
   } catch (error) {
     console.error('Error inserting teaching:', error);
     throw error;
@@ -20,18 +32,31 @@ export async function insertSubjectAndGroup(db, teachingId, subjectCode, groupCo
 
 export async function updateTeacher(db, teacherCode, subjectCode) {
   try {
-    const query = `UPDATE Teachings SET  teacherId = '${teacherCode}' WHERE subjectId = '${subjectCode}'`;
-    await db.query(query);
+    const query = 'UPDATE Teachings SET teacherId = :teacherCode WHERE subjectId = :subjectCode';
+    await db.query(query, {
+      params: {
+        teacherCode,
+        subjectCode,
+      },
+    });
   } catch (error) {
-    console.error('Error inserting teaching:', error);
+    console.error('Error updating teaching:', error);
     throw error;
   }
 }
 
 export async function insertTeaching(db, teachingId, teacherCode, subjectCode, groupCode) {
   try {
-    const query = `INSERT INTO Teachings SET id = '${teachingId}', teacherId = '${teacherCode}', subjectId = '${subjectCode}', groupId = '${groupCode}'`;
-    await db.query(query);
+    const query =
+      'INSERT INTO Teachings (id, teacherId, subjectId, groupId) VALUES (:teachingId, :teacherCode, :subjectCode, :groupCode)';
+    await db.query(query, {
+      params: {
+        teachingId,
+        teacherCode,
+        subjectCode,
+        groupCode,
+      },
+    });
   } catch (error) {
     console.error('Error inserting teaching:', error);
     throw error;
@@ -40,10 +65,15 @@ export async function insertTeaching(db, teachingId, teacherCode, subjectCode, g
 
 export async function updateGroup(db, subjectCode, groupCode) {
   try {
-    const query = `UPDATE Teachings SET  groupId = '${groupCode}' WHERE subjectId = '${subjectCode}'`;
-    await db.query(query);
+    const query = 'UPDATE Teachings SET groupId = :groupCode WHERE subjectId = :subjectCode';
+    await db.query(query, {
+      params: {
+        groupCode,
+        subjectCode,
+      },
+    });
   } catch (error) {
-    console.error('Error inserting teaching:', error);
+    console.error('Error updating teaching:', error);
     throw error;
   }
 }

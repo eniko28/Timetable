@@ -2,7 +2,14 @@ import { getUserData } from './personalDB.js';
 
 export async function insertStudent(db, code, name, groupId) {
   try {
-    await db.query(`INSERT INTO Students SET id = '${code}', name = '${name}', group = '${groupId}'`);
+    const query = 'INSERT INTO Students (id, name, group) VALUES (:code, :name, :groupId)';
+    await db.query(query, {
+      params: {
+        code,
+        name,
+        groupId,
+      },
+    });
   } catch (error) {
     console.error('Error inserting students:', error);
     throw error;

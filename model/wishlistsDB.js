@@ -1,7 +1,19 @@
 export async function insertWishlist(db, wishlistId, teacherCode, day, start, end) {
   try {
-    const query = `INSERT INTO Wishlists SET wishlistId = '${wishlistId}', teacherId = '${teacherCode}', day = '${day}', start = '${start}', end = '${end}', status = 'waiting'`;
-    await db.query(query);
+    const query =
+      'INSERT INTO Wishlists (wishlistId, teacherId, day, start, end, status) VALUES (:wishlistId, :teacherCode, :day, :start, :end, :status)';
+    await db
+      .query(query, {
+        params: {
+          wishlistId,
+          teacherCode,
+          day,
+          start,
+          end,
+          status: 'waiting',
+        },
+      })
+      .all();
   } catch (error) {
     console.error('Error inserting wishlist:', error);
     throw error;
